@@ -21,5 +21,17 @@ int main()
 
   cout << Ncities << " cities, first of which is " << cityNames[0] << " at x=" << xpos[0] << ", y=" << ypos[0] << endl;
 
+  if (!writeToOutputFile("test output", true))
+  {
+    cout << "Error: Problem with writing to ouput file" << endl;
+    return -1;
+  }
+
+  if (!writeToOutputFile("another test", false))
+  {
+    cout << "Error: Problem with writing to ouput file" << endl;
+    return -1;
+  }
+
   return 0;
 }

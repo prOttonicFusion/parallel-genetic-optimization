@@ -59,3 +59,32 @@ bool parseXYZFile(int &Ncities, std::string *&cityNames, float *&xpos, float *&y
   }
   return true;
 }
+
+/**
+ * A function for saving calculation output to a file
+ * 
+ **/
+bool writeToOutputFile(std::string outputString, bool overWrite)
+{
+  std::ofstream outputFile;
+  if (overWrite)
+  {
+    outputFile.open("output.dat");
+  }
+  else
+  {
+    outputFile.open("output.dat", std::ios_base::app);
+  }
+
+  outputFile << outputString << std::endl;
+
+  outputFile.close();
+}
+
+/**
+ * A function for printing calculation output to the screen/stdout
+ * 
+ **/
+void writeToScreen()
+{
+}
