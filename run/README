@@ -1,0 +1,19 @@
+This directory contains the input and output of a successful run of the program. 
+The structure of the directory is as follows:
+
+run/
+├── README --------------------- This file
+├── cityCoordinates.xyz -------- Coordinates for the cities, given in xyz-format 
+└── output.dat ----------------- Output of the program
+
+
+
+Running:
+---------------------
+The program is executed by running: 
+
+mpirun -n N ../src/tsp_ga 
+
+with N being the desired number of cores
+
+

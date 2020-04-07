@@ -1,0 +1,17 @@
+
+
+Compilation instructions
+-------------------------------
+
+
+
+Contents of this directory
+-------------------------------
+
+src/
+├── README --------------------- This file
+├── main.cpp ------------------- The main program file 
+├── Makefile ------------------- A makefile for compiling the program
+└── silica_amorph_void.data ---- The 
+
+
