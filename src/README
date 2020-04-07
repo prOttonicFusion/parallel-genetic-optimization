@@ -2,7 +2,9 @@
 
 Compilation instructions
 -------------------------------
+The program, in its entirety, is compiled using the attached Makefile, i.e. by running:
 
+make
 
 
 Contents of this directory
@@ -12,6 +14,9 @@ src/
 ├── README --------------------- This file
 ├── main.cpp ------------------- The main program file 
 ├── Makefile ------------------- A makefile for compiling the program
+├── IO.cpp --------------------- A module containing functions for parsing input files
+│                                and writing output 
+├── IO.hpp --------------------- The C++ header for the above file
 └── silica_amorph_void.data ---- The 
 
 
