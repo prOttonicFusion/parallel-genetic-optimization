@@ -2,14 +2,14 @@
 # Optimization level
 OPT=-O2 
 
-tsp_ga: main.o
-	g++ main.o logic.o ${OPT} -o tsp_ga
+tsp_ga: IO.o main.o
+	g++ main.o IO.o ${OPT} -o tsp_ga
 
-logic.o:
-	g++ -c src/logic.cpp ${OPT}
+IO.o:
+	g++ -c IO.cpp ${OPT}
 
 main.o:
-	g++ -c src/main.cpp ${OPT}
+	g++ -c main.cpp ${OPT}
 	
 clean:
 	rm -f *.o
