@@ -85,6 +85,7 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
  * A function for printing calculation output to the screen/stdout
  * 
  **/
-void writeToScreen()
+void writeToScreen(std::string outputString)
 {
+    std::cout << outputString << std::endl;
 }

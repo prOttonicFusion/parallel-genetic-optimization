@@ -7,4 +7,4 @@ bool parseXYZFile(int &Ncities, std::string*& cityNames, float*& xpos, float*& y
 
 bool writeToOutputFile(std::string outputString, bool overWrite);
 
-void writeToScreen();
+void writeToScreen(std::string outputString);
