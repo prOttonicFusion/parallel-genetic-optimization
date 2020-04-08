@@ -14,6 +14,8 @@ src/
 ├── README --------------------- This file
 ├── main.cpp ------------------- The main program file 
 ├── Makefile ------------------- A makefile for compiling the program
+├── genetics.cpp --------------- A module containing genetics related functions
+├── genetics.hpp --------------- The C++ header for the above file
 ├── IO.cpp --------------------- A module containing functions for parsing input files
 │                                and writing output 
 ├── IO.hpp --------------------- The C++ header for the above file
