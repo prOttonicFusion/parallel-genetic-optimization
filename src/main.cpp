@@ -2,6 +2,7 @@
  * Main program
  *******************************************************************/
 #include "IO.hpp"
+#include "genetics.hpp"
 #include <iostream>
 
 using namespace std;
@@ -20,18 +21,18 @@ int main()
     return -1;
   }
 
+  int route[] = {0,1,2,3,4};
+  Individ individ(route, xpos, ypos, Ncities);
 
-  // TODO: Generate initial population; 
+  cout << individ.getRouteAsString(cityNames, Ncities) << endl;
 
+  // TODO: Generate initial population;
 
   // TODO: Implement fitness function
 
-
   // TODO: Implement selection & crossover
 
-
   // TODO: Implement mutation
-
 
   if (!writeToOutputFile("test output", true))
   {

@@ -6,16 +6,15 @@
 
 /**
  * Class for storing one solution
- * Route should contain the indices of the cities in the order they 
- * are visited
  **/
 class Individ
 {
   private:
   public:
+  float distance; // The squared total distance travelled
+  int *route;     // An array containin the visited cities' indices in visiting order
   Individ(int route[], float xpos[], float ypos[], int Ncities);
-  float distance;
-  int *route;
+  std::string getRouteAsString(std::string cityNames[], int Ncities);
 };
 
 void mutateIndivid();
