@@ -32,15 +32,11 @@ int main()
   for (int i = 0; i < Ncities; i++)
     route[i] = i;
 
-  //////////////// Initialize random number generator ///////////////
-  // Random seed generator
-  static std::random_device rd;
+  // -------------- Initialize random number generator --------------
+  static std::random_device rd;  // Random seed generator
+  static std::mt19937 rng(rd()); // RNG (Mersenne Twister)
 
-  // Random number generator (Mersenne Twister)
-  static std::mt19937 rng(rd());
-
-  /////////////////// Generate initial population ///////////////////
-  // TODO: generate based on heuristics rather than random
+  // ----------------- Generate initial population ------------------
   for (int i = 0; i < popSize; i++)
   {
     std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
@@ -52,17 +48,17 @@ int main()
   bool hasConverged = false;
   while (!hasConverged)
   {
-    //////////////////////// Compute fitness ////////////////////////
+    // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on distance
     std::sort(std::begin(population), std::end(population));
 
-    /////////////////////////// Selection ///////////////////////////
+    // ----------------------- Selection ----------------------------
 
-    /////////////////////////// Crossover ///////////////////////////
+    // ----------------------- Crossover ----------------------------
 
-    /////////////////////////// Mutation ////////////////////////////
+    // ------------------------ Mutation ----------------------------
 
-    /////////////////// Check convergence status ////////////////////
+    // ---------------- Check convergence status --------------------
     hasConverged = true;
   }
 
