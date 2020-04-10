@@ -52,11 +52,18 @@ int main()
   cout << population[0].getRouteAsString(cityNames, Ncities) << endl;
   cout << population[5].getRouteAsString(cityNames, Ncities) << endl;
 
-  // TODO: Implement fitness function
-
-  // TODO: Implement selection & crossover
-
-  // TODO: Implement mutation
+  ////////////////////// Main calculation loop //////////////////////
+  bool hasNotConverged = true;
+  while (hasNotConverged)
+  {
+    // Compute fitness
+    // Selection
+    // Crossover
+    // Mutation
+    // Check convergence status
+    hasNotConverged = false;
+  }
+  
 
   if (!writeToOutputFile("test output", true))
   {
