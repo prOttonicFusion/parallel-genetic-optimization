@@ -69,3 +69,29 @@ std::string Individ::getRouteAsString(std::string cityNames[], int Ncities)
   }
   return routeStr;
 }
+
+///////////////////// Individ operator overloads ////////////////////
+
+// >
+bool operator>(const Individ &i1, const Individ &i2)
+{
+  return i1.distance > i2.distance;
+}
+
+// <
+bool operator<(const Individ &i1, const Individ &i2)
+{
+  return i1.distance < i2.distance;
+}
+
+// ==
+bool operator==(const Individ &i1, const Individ &i2)
+{
+  return (i1.distance == i2.distance && i1.route == i2.route);
+}
+
+// !=
+bool operator!=(const Individ &i1, const Individ &i2)
+{
+  return !(i1 == i2);
+}

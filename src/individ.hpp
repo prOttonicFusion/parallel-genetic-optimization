@@ -17,4 +17,11 @@ class Individ
   void init(int route[], float xpos[], float ypos[], int Ncities);
   void setRoute(int route[], float xpos[], float ypos[], int Ncities);
   std::string getRouteAsString(std::string cityNames[], int Ncities);
+
+  // Operator overloads
+  friend bool operator>(const Individ &i1, const Individ &i2);
+  friend bool operator<(const Individ &i1, const Individ &i2);
+  friend bool operator==(const Individ &i1, const Individ &i2);
+  friend bool operator!=(const Individ &i1, const Individ &i2);
 };
+
