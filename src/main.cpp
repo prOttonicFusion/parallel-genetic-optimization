@@ -3,16 +3,24 @@
  *******************************************************************/
 #include "IO.hpp"
 #include "genetics.hpp"
+#include <algorithm>
+#include <array>
 #include <iostream>
+#include <random>
+#include <vector>
 
 using namespace std;
 
 int main()
 {
-  int Ncities;            // Number of cities to use in calculationst
-  float *xpos;            // The x-coordinates of each city
-  float *ypos;            // The y-coordinates of each city
+  const int popSize = 1000; // Size of population
+
+  int Ncities; // Number of cities to use in calculationst
+  float *xpos; // The x-coordinates of each city
+  float *ypos; // The y-coordinates of each city
+  int *route;
   std::string *cityNames; // Names of each city
+  Individ population[popSize];
 
   // Read city coordinates from input file
   if (!parseXYZFile(Ncities, cityNames, xpos, ypos))
@@ -21,12 +29,25 @@ int main()
     return -1;
   }
 
-  int route[] = {0,1,2,3,4};
-  Individ individ(route, xpos, ypos, Ncities);
+  // Initialize route array
+  route = new int[Ncities];
+  for (int i = 0; i < Ncities; i++)
+    route[i] = i;
 
-  cout << individ.getRouteAsString(cityNames, Ncities) << endl;
+  //////////////// Initialize random number generator ///////////////
+  // Random seed generator
+  static std::random_device rd;
 
-  // TODO: Generate initial population;
+  // Random number generator (Mersenne Twister)
+  static std::mt19937 rng(rd());
+
+  // Individ ind1(route, xpos, ypos, Ncities);
+  // cout << ind1.getRouteAsString(cityNames, Ncities) << endl;
+
+  /////////////////// Generate initial population ///////////////////
+  // Shuffle route
+  std::shuffle(&route[0], &route[Ncities], rng);
+  std::fill(population, population + popSize, Individ(route, xpos, ypos, Ncities));
 
   // TODO: Implement fitness function
 
