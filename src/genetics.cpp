@@ -11,7 +11,10 @@
  **/
 Individ::Individ(int route[], float xpos[], float ypos[], int Ncities)
 {
-  this->route = route;
+  // Allocate & init route
+  this->route = new int[Ncities];
+  for (int i = 0; i < Ncities; i++)
+    this->route[i] = route[i];
 
   // Calculate the distance
   float d = 0.0, xdiff, ydiff;
@@ -22,6 +25,14 @@ Individ::Individ(int route[], float xpos[], float ypos[], int Ncities)
     d += xdiff * xdiff + ydiff * ydiff;
   }
   this->distance = d;
+}
+
+/**
+ * Individ destructor
+ **/
+Individ::~Individ()
+{
+  delete[] route;
 }
 
 /**
