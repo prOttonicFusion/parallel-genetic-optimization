@@ -14,9 +14,9 @@ Individ::Individ()
 }
 
 /**
- * Individ constructor (with params)
+ * Iinitialize new Individ
  **/
-Individ::Individ(int route[], float xpos[], float ypos[], int Ncities)
+void Individ::init(int route[], float xpos[], float ypos[], int Ncities)
 {
   // Allocate & init route array
   this->route = new int[Ncities];
@@ -30,7 +30,9 @@ void Individ::setRoute(int route[], float xpos[], float ypos[], int Ncities)
 {
   // Copy route to Individ's internal route
   for (int i = 0; i < Ncities; i++)
+  {
     this->route[i] = route[i];
+  }
 
   // Calculate the distance
   float d = 0.0, xdiff, ydiff;
@@ -58,6 +60,7 @@ Individ::~Individ()
 std::string Individ::getRouteAsString(std::string cityNames[], int Ncities)
 {
   std::string routeStr;
+  //std::cout << this->route[0] << this->route[1] << this->route[2] << this->route[3] << this->route[4] << std::endl;
   for (int i = 0; i < Ncities; i++)
   {
     int index = this->route[i];
