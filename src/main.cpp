@@ -3,6 +3,7 @@
  *******************************************************************/
 #include "IO.hpp"
 #include "genetics.hpp"
+#include "individ.hpp"
 #include <algorithm>
 #include <array>
 #include <iostream>
