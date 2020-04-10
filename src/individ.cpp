@@ -44,6 +44,9 @@ void Individ::setRoute(int route[], float xpos[], float ypos[], int Ncities)
     ydiff = (ypos[route[i]] - ypos[route[i - 1]]);
     d += xdiff * xdiff + ydiff * ydiff;
   }
+  xdiff = (xpos[route[0]] - xpos[route[Ncities - 1]]);
+  ydiff = (ypos[route[0]] - ypos[route[Ncities - 1]]);
+  d += xdiff * xdiff + ydiff * ydiff;
   this->distance = d;
 }
 
