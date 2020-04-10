@@ -41,13 +41,16 @@ int main()
   // Random number generator (Mersenne Twister)
   static std::mt19937 rng(rd());
 
-  // Individ ind1(route, xpos, ypos, Ncities);
-  // cout << ind1.getRouteAsString(cityNames, Ncities) << endl;
-
   /////////////////// Generate initial population ///////////////////
-  // Shuffle route
-  std::shuffle(&route[0], &route[Ncities], rng);
-  std::fill(population, population + popSize, Individ(route, xpos, ypos, Ncities));
+
+  for (int i = 0; i < popSize; i++)
+  {
+    std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
+    population[i].init(route, xpos, ypos, Ncities);
+  }
+
+  cout << population[0].getRouteAsString(cityNames, Ncities) << endl;
+  cout << population[5].getRouteAsString(cityNames, Ncities) << endl;
 
   // TODO: Implement fitness function
 
