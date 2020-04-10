@@ -5,18 +5,15 @@
 #include "genetics.hpp"
 #include "individ.hpp"
 #include <algorithm>
-#include <array>
 #include <iostream>
 #include <random>
-#include <vector>
-
-using namespace std;
 
 int main()
 {
-  const int popSize = 1000; // Size of population
+  const int popSize = 1000;        // Size of population
+  const int crossPerIteration = 2; // Number of individs to crossover each iteration
 
-  int Ncities; // Number of cities to use in calculationst
+  int Ncities; // Number of cities to use in calculations
   float *xpos; // The x-coordinates of each city
   float *ypos; // The y-coordinates of each city
   int *route;
@@ -26,7 +23,7 @@ int main()
   // Read city coordinates from input file
   if (!parseXYZFile(Ncities, cityNames, xpos, ypos))
   {
-    cout << "Error: Could not read coordinate file" << endl;
+    std::cout << "Error: Could not read coordinate file" << std::endl;
     return -1;
   }
 
@@ -50,25 +47,32 @@ int main()
     population[i].init(route, xpos, ypos, Ncities);
   }
 
-  cout << population[0].getRouteAsString(cityNames, Ncities) << endl;
-  cout << population[5].getRouteAsString(cityNames, Ncities) << endl;
+  //std::cout << population[0].getRouteAsString(cityNames, Ncities) << " dist = " << population[0].distance << std::endl;
+  //std::cout << population[5].getRouteAsString(cityNames, Ncities) << " dist = " << population[5].distance << std::endl;
+  //std::cout << "is " << population[0].distance << " > " << population[5].distance << ": " << (population[0] > population[5]) << std::endl;
 
   ////////////////////// Main calculation loop //////////////////////
+  Individ fittest[crossPerIteration];
   bool hasNotConverged = true;
   while (hasNotConverged)
   {
-    // Compute fitness
-    // Selection
-    // Crossover
-    // Mutation
-    // Check convergence status
+    //////////////////////// Compute fitness ////////////////////////
+    // Sort population in ascending order based on distance
+    std::sort(std::begin(population), std::end(population));
+
+    /////////////////////////// Selection ///////////////////////////
+
+    /////////////////////////// Crossover ///////////////////////////
+
+    /////////////////////////// Mutation ////////////////////////////
+
+    /////////////////// Check convergence status ////////////////////
     hasNotConverged = false;
   }
-  
 
   if (!writeToOutputFile("test output", true))
   {
-    cout << "Error: Problem with writing to ouput file" << endl;
+    std::cout << "Error: Problem with writing to ouput file" << std::endl;
     return -1;
   }
 

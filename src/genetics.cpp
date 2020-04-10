@@ -3,3 +3,5 @@
  *******************************************************************/
 
 #include "genetics.hpp"
+#include <algorithm>
+#include <iostream>

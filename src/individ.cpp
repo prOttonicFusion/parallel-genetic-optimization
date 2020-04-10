@@ -3,6 +3,8 @@
  *******************************************************************/
 
 #include "individ.hpp"
+#include <iostream>
+#include <stdio.h>
 
 ////////////////////// Individ-class functions //////////////////////
 
@@ -48,11 +50,11 @@ void Individ::setRoute(int route[], float xpos[], float ypos[], int Ncities)
 /**
  * Individ destructor
  **/
-Individ::~Individ()
-{
-  delete[] route; // Clear memory allocated for the array
-  route = NULL;   // Clear pointer
-}
+// Individ::~Individ()
+// {
+//   delete[] route; // Clear memory allocated for the array
+//   route = NULL;   // Clear pointer
+// }
 
 /**
  * Return the route as a string
@@ -60,7 +62,6 @@ Individ::~Individ()
 std::string Individ::getRouteAsString(std::string cityNames[], int Ncities)
 {
   std::string routeStr;
-  //std::cout << this->route[0] << this->route[1] << this->route[2] << this->route[3] << this->route[4] << std::endl;
   for (int i = 0; i < Ncities; i++)
   {
     int index = this->route[i];
