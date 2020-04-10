@@ -3,7 +3,7 @@
 OPT=-O2 
 
 tsp_ga: IO.o individ.o genetics.o main.o
-	g++ main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
+	g++ -g main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
 
 IO.o:
 	g++ -c IO.cpp ${OPT}
