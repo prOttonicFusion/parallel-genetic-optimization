@@ -28,7 +28,7 @@ void breedIndivids(int indexToBreed1, int indexToBreed2, Individ population[], f
   Individ parent2 = population[indexToBreed2];
 
   childRoutes[0][0] = parent1.route[0];
-  childRoutes[0][1] = parent1.route[0];
+  childRoutes[1][0] = parent1.route[0];
 
   for (int k = 0; k < 2; k++)
     for (int i = 1; i < Ncities; i++)
