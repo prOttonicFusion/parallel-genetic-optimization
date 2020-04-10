@@ -32,7 +32,8 @@ Individ::Individ(int route[], float xpos[], float ypos[], int Ncities)
  **/
 Individ::~Individ()
 {
-  delete[] route;
+  delete[] route; // Clear memory allocated for the array
+  route = NULL;   // Clear pointer
 }
 
 /**
