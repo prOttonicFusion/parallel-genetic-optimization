@@ -7,12 +7,28 @@
 ////////////////////// Individ-class functions //////////////////////
 
 /**
- * Individ constructor
+ * Individ constructor (no params)
+ **/
+Individ::Individ()
+{
+}
+
+/**
+ * Individ constructor (with params)
  **/
 Individ::Individ(int route[], float xpos[], float ypos[], int Ncities)
 {
-  // Allocate & init route
+  // Allocate & init route array
   this->route = new int[Ncities];
+  this->setRoute(route, xpos, ypos, Ncities);
+}
+
+/**
+ * Set the individs solution (route) & calculate the distance
+ **/
+void Individ::setRoute(int route[], float xpos[], float ypos[], int Ncities)
+{
+  // Copy route to Individ's internal route
   for (int i = 0; i < Ncities; i++)
     this->route[i] = route[i];
 
