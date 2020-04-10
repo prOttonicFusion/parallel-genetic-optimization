@@ -9,7 +9,7 @@
 
 /**
  * Merge the genome of two individs to produce offspring
- * This operation replaces the parents with two children
+ * This operation replaces the 2 least fittest individs with the new offspring
  **/
 void breedIndivids(int indexToBreed1, int indexToBreed2, Individ population[], float xpos[], float ypos[], int popSize, int Ncities);
 

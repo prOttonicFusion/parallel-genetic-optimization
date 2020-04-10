@@ -61,6 +61,7 @@ void breedIndivids(int indexToBreed1, int indexToBreed2, Individ population[], f
       childRoutes[k][i] = nextCity;
     }
 
-    population[indexToBreed1].setRoute(childRoutes[0], xpos, ypos, Ncities);
-    population[indexToBreed2].setRoute(childRoutes[1], xpos, ypos, Ncities);
+    // Replace the 2 least fit individs in population with the new offspring
+    population[popSize-1].setRoute(childRoutes[0], xpos, ypos, Ncities);
+    population[popSize-2].setRoute(childRoutes[1], xpos, ypos, Ncities);
 }
