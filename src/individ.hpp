@@ -2,6 +2,8 @@
  * Header file for individ.cpp. Contains the Individ-class
  *******************************************************************/
 
+#ifndef INDIVID_H
+#define INDIVID_H
 #include <iostream>
 
 /**
@@ -25,3 +27,4 @@ class Individ
   friend bool operator!=(const Individ &i1, const Individ &i2);
 };
 
+#endif
