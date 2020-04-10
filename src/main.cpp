@@ -40,21 +40,17 @@ int main()
   static std::mt19937 rng(rd());
 
   /////////////////// Generate initial population ///////////////////
-
+  // TODO: generate based on heuristics rather than random
   for (int i = 0; i < popSize; i++)
   {
     std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
     population[i].init(route, xpos, ypos, Ncities);
   }
 
-  //std::cout << population[0].getRouteAsString(cityNames, Ncities) << " dist = " << population[0].distance << std::endl;
-  //std::cout << population[5].getRouteAsString(cityNames, Ncities) << " dist = " << population[5].distance << std::endl;
-  //std::cout << "is " << population[0].distance << " > " << population[5].distance << ": " << (population[0] > population[5]) << std::endl;
-
   ////////////////////// Main calculation loop //////////////////////
   Individ fittest[crossPerIteration];
-  bool hasNotConverged = true;
-  while (hasNotConverged)
+  bool hasConverged = false;
+  while (!hasConverged)
   {
     //////////////////////// Compute fitness ////////////////////////
     // Sort population in ascending order based on distance
@@ -67,7 +63,7 @@ int main()
     /////////////////////////// Mutation ////////////////////////////
 
     /////////////////// Check convergence status ////////////////////
-    hasNotConverged = false;
+    hasConverged = true;
   }
 
   if (!writeToOutputFile("test output", true))
