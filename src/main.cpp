@@ -45,13 +45,16 @@ int main()
 
   ////////////////////// Main calculation loop //////////////////////
   Individ fittest[crossPerIteration];
-  int indexToBreed1, indexToBreed2;
+  int indexToBreed1, indexToBreed2, iterCount = 0;
   bool hasConverged = false;
   while (!hasConverged)
   {
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on distance
     std::sort(std::begin(population), std::end(population));
+
+    // --------------- Write data to screen & file ------------------
+    writeToScreen(iterCount, population[0].getRouteAsString(cityNames, Ncities), population[0].distance);
 
     // ----------------------- Selection ----------------------------
     // We choose the two fittest individs for breeding
@@ -66,6 +69,8 @@ int main()
 
     // ---------------- Check convergence status --------------------
     hasConverged = true;
+
+    iterCount++;
   }
 
   if (!writeToOutputFile("test output", true))

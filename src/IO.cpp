@@ -85,7 +85,8 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
  * A function for printing calculation output to the screen/stdout
  * 
  **/
-void writeToScreen(std::string outputString)
+void writeToScreen(int iterCount, std::string bestRouteStr, float bestRouteLen)
 {
-    std::cout << outputString << std::endl;
+    std::cout << "Iteration " << iterCount << ": " << std::endl;
+    std::cout << "  Shortest route = " << bestRouteLen << "\n  " << bestRouteStr << std::endl;
 }
