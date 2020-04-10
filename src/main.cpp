@@ -45,6 +45,7 @@ int main()
 
   ////////////////////// Main calculation loop //////////////////////
   Individ fittest[crossPerIteration];
+  int indexToBreed1, indexToBreed2;
   bool hasConverged = false;
   while (!hasConverged)
   {
@@ -53,8 +54,13 @@ int main()
     std::sort(std::begin(population), std::end(population));
 
     // ----------------------- Selection ----------------------------
+    // We choose the two fittest individs for breeding
+    indexToBreed1 = 0;
+    indexToBreed2 = 1;
 
-    // ----------------------- Crossover ----------------------------
+    // ------------------------ Breeding ----------------------------
+    // Pair two fittest individs
+    breedIndivids(indexToBreed1, indexToBreed2, population, xpos, ypos, popSize, Ncities);
 
     // ------------------------ Mutation ----------------------------
 
