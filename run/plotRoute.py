@@ -22,6 +22,7 @@ ypos = [c[2] for c in cities]
 # Read routes from outputFile
 iterCounts = []
 routes = []
+routeLengths = []
 with open(outputFile) as f:
     lines = f.readlines()
     for line in lines:
@@ -34,6 +35,10 @@ with open(outputFile) as f:
             newRoute = [int(i) for i in spltdLine[1:]]
             routes.append(newRoute)
 
+        if ('length:' in line):
+            spltdLine = line.split()
+            routeLengths.append(float(spltdLine[1]))
+
 # Generate plottable route
 def plottableRoute(index):
     routeXCoords = [xpos[i] for i in routes[index]]
@@ -42,19 +47,29 @@ def plottableRoute(index):
     routeYCoords.append(ypos[routes[index][0]])
     return routeXCoords, routeYCoords
 
-routeX, routeY = plottableRoute(-1)
 
-############################ Draw figure ############################
+############################ Draw figures ############################
+# Optimal route plot
 plt.figure(num=1, figsize=[8, 5])
 plt.xlabel('x-position')
 plt.ylabel('y-position')
 
+routeX, routeY = plottableRoute(-1)
 plt.plot(routeX, routeY, ':')
-
 plt.scatter(xpos, ypos)
 
 for i, txt in enumerate(names):
     plt.annotate(txt, (xpos[i], ypos[i]))
 
 plt.savefig('routes.png')
+plt.show()
+
+# Convergence plot
+plt.figure(num=2, figsize=[8, 5])
+plt.xlabel('Iteration count')
+plt.ylabel('Length of shortest route')
+
+plt.plot(iterCounts, routeLengths)
+
+plt.savefig('convergence.png')
 plt.show()
