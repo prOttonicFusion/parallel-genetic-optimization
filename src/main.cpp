@@ -11,11 +11,13 @@
 int main(int argc, char *argv[])
 {
   const int popSize = 50;                 // Size of population
-  const int crossPerIteration = 2;        // Number of individs to crossover each iteration
-  const int maxIterations = 1000000;      // Max. number of iterations if solution doesn't converge
+  const float replaceProportion = 0.5;    // Proportion population be replaced by offspring every iteration
+  const int maxIterations = 100000;       // Max. number of iterations if solution doesn't converge
   const float mutationProbability = 0.05; // The probability of offspring getting mutated
   const int writeToScreenInterval = 100;  // Output data to screen every this many iterations
   const int writeToFileInterval = 100;    // Output data to file every this many iterations
+
+  const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
   // Parse command line arguments
   if (argc < 2)
@@ -65,7 +67,6 @@ int main(int argc, char *argv[])
   }
 
   ////////////////////// Main calculation loop //////////////////////
-  Individ fittest[crossPerIteration];
   int indexToBreed1, indexToBreed2, iterCount = 0;
   bool hasConverged = false;
   while (!hasConverged && iterCount < maxIterations)
@@ -84,17 +85,17 @@ int main(int argc, char *argv[])
     if (iterCount % writeToFileInterval == 0)
       writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
 
-    // ----------------------- Selection ----------------------------
-    // We choose the two fittest individs for breeding
-    indexToBreed1 = 0;
-    indexToBreed2 = 1;
-
     // ------------------------ Breeding ----------------------------
-    // Pair two fittest individs
-    Individ child = breedIndivids(population[0], population[1], xpos, ypos, popSize, Ncities);
-    // Replace the 2 least fit individs in population with the new offspring
-    population[popSize - 1] = child;
-    //population[popSize - 2].setRoute(childRoutes[1], xpos, ypos, Ncities);
+    // Pair a fraction of the population; select parents from the most fit
+    // and replace those less fit with offspring
+    for (int i = 1; i <= crossPerIter; i++)
+    {
+      int parent1 = uniformRand(rng) * 10; // TODO: change hardcoded number to variable
+      int parent2 = uniformRand(rng) * 10;
+      parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
+      Individ child = breedIndivids(population[parent1], population[parent2], xpos, ypos, popSize, Ncities);
+      population[popSize - i] = child;
+    }
 
     // ------------------------ Mutation ----------------------------
     if (uniformRand(rng) < mutationProbability)
