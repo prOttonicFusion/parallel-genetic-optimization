@@ -11,11 +11,11 @@
 int main(int argc, char *argv[])
 {
   // Parse command line arguments
-  if (argc < 2)
+  if (argc < 3)
   {
     std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter>" << std::endl;
-    std::cerr << "   coordFile    A xyz-file containin the city coordinates" << std::endl;
-    std::cerr << "   maxIter      The maximum number of generations to allow" << std::endl;
+    std::cerr << "      coordFile --- A xyz-file containin the city coordinates" << std::endl;
+    std::cerr << "      maxIter ----- The maximum number of generations to allow" << std::endl;
     return -1;
   }
 
@@ -75,8 +75,6 @@ int main(int argc, char *argv[])
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on distance
     std::sort(std::begin(population), std::end(population));
-    //std::cout << "Best: " << population[0].distance << std::endl;
-    //std::cout << "Worst: " << population[popSize-1].distance << std::endl;
 
     // --------------- Write data to screen & file ------------------
     std::string bestRouteStr = population[0].getRouteAsString(cityNames, Ncities);
