@@ -10,12 +10,12 @@
 
 int main(int argc, char *argv[])
 {
-  const int popSize = 50;                 // Size of population
-  const float replaceProportion = 0.5;    // Proportion population be replaced by offspring every iteration
-  const int maxIterations = 100000;       // Max. number of iterations if solution doesn't converge
-  const float mutationProbability = 0.05; // The probability of offspring getting mutated
-  const int writeToScreenInterval = 100;  // Output data to screen every this many iterations
-  const int writeToFileInterval = 100;    // Output data to file every this many iterations
+  const int popSize = 100;                 // Size of population
+  const float replaceProportion = 0.85;    // Proportion population be replaced by offspring every iteration
+  const int maxIterations = 10000;          // Max. number of iterations if solution doesn't converge
+  const float mutationProbability = 0.1; // The probability of offspring getting mutated
+  const int writeToScreenInterval = 1;    // Output data to screen every this many iterations
+  const int writeToFileInterval = 1;      // Output data to file every this many iterations
 
   const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
