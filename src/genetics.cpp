@@ -5,6 +5,7 @@
 #include "genetics.hpp"
 #include <algorithm>
 #include <iostream>
+#include <random>
 
 float distanceBetweenCities(int index1, int index2, float xpos[], float ypos[])
 {
@@ -61,7 +62,20 @@ void breedIndivids(int indexToBreed1, int indexToBreed2, Individ population[], f
       childRoutes[k][i] = nextCity;
     }
 
-    // Replace the 2 least fit individs in population with the new offspring
-    population[popSize-1].setRoute(childRoutes[0], xpos, ypos, Ncities);
-    population[popSize-2].setRoute(childRoutes[1], xpos, ypos, Ncities);
+  // Replace the 2 least fit individs in population with the new offspring
+  population[popSize - 1].setRoute(childRoutes[0], xpos, ypos, Ncities);
+  population[popSize - 2].setRoute(childRoutes[1], xpos, ypos, Ncities);
+}
+
+void mutateIndivid(int indexToMutate, Individ population[], int Ncities, std::mt19937 rng)
+{
+  // Generate two random array indices two switch places on
+  std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
+  int ind1 = (int)(Ncities * uniformRand(rng));
+  int ind2 = (int)(Ncities * uniformRand(rng));
+  
+  // Swap array elements
+  int element1 = population[indexToMutate].route[ind1];
+  population[indexToMutate].route[ind1] = population[indexToMutate].route[ind2];
+  population[indexToMutate].route[ind2] = element1;
 }

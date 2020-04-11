@@ -10,8 +10,9 @@
 
 int main()
 {
-  const int popSize = 5;           // Size of population
-  const int crossPerIteration = 2; // Number of individs to crossover each iteration
+  const int popSize = 5;                 // Size of population
+  const int crossPerIteration = 2;       // Number of individs to crossover each iteration
+  const float mutationProbability = 0.2; // The probability of offspring getting mutated
 
   int Ncities; // Number of cities to use in calculations
   float *xpos; // The x-coordinates of each city
@@ -35,6 +36,7 @@ int main()
   // -------------- Initialize random number generator --------------
   static std::random_device rd;  // Random seed generator
   static std::mt19937 rng(rd()); // RNG (Mersenne Twister)
+  static std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
 
   // ----------------- Generate initial population ------------------
   for (int i = 0; i < popSize; i++)
@@ -44,7 +46,7 @@ int main()
   }
 
   // -------------------- Initialize output file --------------------
-    if (!writeToOutputFile("", true))
+  if (!writeToOutputFile("", true))
   {
     std::cout << "Error: Problem with writing to ouput file" << std::endl;
     return -1;
@@ -76,6 +78,12 @@ int main()
     breedIndivids(indexToBreed1, indexToBreed2, population, xpos, ypos, popSize, Ncities);
 
     // ------------------------ Mutation ----------------------------
+    if (uniformRand(rng) < mutationProbability)
+    {
+      // Mutate last individ in population (latest offspring)
+      mutateIndivid(popSize - 1, population, Ncities, rng);
+      std::cout << "  Mutation occured" << std::endl;
+    }
 
     // ---------------- Check convergence status --------------------
     if (iterCount > 100) hasConverged = true;
