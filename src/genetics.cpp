@@ -72,7 +72,7 @@ Individ breedIndivids(Individ parent1, Individ parent2, float xpos[], float ypos
   return Individ(childRoute, xpos, ypos, Ncities);
 }
 
-void mutateIndivid(int indexToMutate, Individ population[], int Ncities, std::mt19937 rng)
+void mutateIndivid(Individ individ, int Ncities, std::mt19937 rng)
 {
   // Generate two random array indices two switch places on
   std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
@@ -80,7 +80,7 @@ void mutateIndivid(int indexToMutate, Individ population[], int Ncities, std::mt
   int ind2 = (int)(Ncities * uniformRand(rng));
 
   // Swap array elements
-  int element1 = population[indexToMutate].route[ind1];
-  population[indexToMutate].route[ind1] = population[indexToMutate].route[ind2];
-  population[indexToMutate].route[ind2] = element1;
+  int element1 = individ.route[ind1];
+  individ.route[ind1] = individ.route[ind2];
+  individ.route[ind2] = element1;
 }

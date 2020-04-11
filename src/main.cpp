@@ -90,18 +90,17 @@ int main(int argc, char *argv[])
     // and replace those less fit with offspring
     for (int i = 1; i <= crossPerIter; i++)
     {
-      int parent1 = uniformRand(rng) * 10; // TODO: change hardcoded number to variable
-      int parent2 = uniformRand(rng) * 10;
+      int parent1 = uniformRand(rng) * 20; // TODO: change hardcoded number to variable
+      int parent2 = uniformRand(rng) * 20;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
-      Individ child = breedIndivids(population[parent1], population[parent2], xpos, ypos, popSize, Ncities);
-      population[popSize - i] = child;
-    }
 
-    // ------------------------ Mutation ----------------------------
-    if (uniformRand(rng) < mutationProbability)
-    {
-      // Mutate last individ in population (latest offspring)
-      mutateIndivid(popSize - 1, population, Ncities, rng);
+      Individ child = breedIndivids(population[parent1], population[parent2], xpos, ypos, popSize, Ncities);
+
+      // Mutation
+      if (uniformRand(rng) < mutationProbability)
+        mutateIndivid(child, Ncities, rng);
+
+      population[popSize - i] = child;
     }
 
     // ---------------- Check convergence status --------------------
