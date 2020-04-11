@@ -16,9 +16,9 @@
  * ...
  * 
  **/
-bool parseXYZFile(int &Ncities, std::string *&cityNames, float *&xpos, float *&ypos)
+bool parseXYZFile(std::string inpuFile, int &Ncities, std::string *&cityNames, float *&xpos, float *&ypos)
 {
-  std::ifstream infile("cityCoordinates.xyz");
+  std::ifstream infile(inpuFile);
   std::string line;
 
   // On error

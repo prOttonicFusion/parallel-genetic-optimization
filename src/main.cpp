@@ -8,11 +8,21 @@
 #include <iostream>
 #include <random>
 
-int main()
+int main(int argc, char *argv[])
 {
   const int popSize = 5;                 // Size of population
   const int crossPerIteration = 2;       // Number of individs to crossover each iteration
+  const int maxIterations = 10000;       // Max. number of iterations if solution doesn't converge
   const float mutationProbability = 0.2; // The probability of offspring getting mutated
+
+  // Parse command line arguments
+  if (argc < 2)
+  {
+    std::cerr << "Usage: " << argv[0] << " <coordinate-file>" << std::endl;
+    return -1;
+  }
+
+  std::string inpuFile = argv[1];
 
   int Ncities; // Number of cities to use in calculations
   float *xpos; // The x-coordinates of each city
@@ -22,7 +32,7 @@ int main()
   Individ population[popSize];
 
   // Read city coordinates from input file
-  if (!parseXYZFile(Ncities, cityNames, xpos, ypos))
+  if (!parseXYZFile(inpuFile, Ncities, cityNames, xpos, ypos))
   {
     std::cout << "Error: Could not read coordinate file" << std::endl;
     return -1;
@@ -56,7 +66,7 @@ int main()
   Individ fittest[crossPerIteration];
   int indexToBreed1, indexToBreed2, iterCount = 0;
   bool hasConverged = false;
-  while (!hasConverged)
+  while (!hasConverged && iterCount < maxIterations)
   {
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on distance
@@ -86,7 +96,6 @@ int main()
     }
 
     // ---------------- Check convergence status --------------------
-    if (iterCount > 100) hasConverged = true;
 
     iterCount++;
   }
