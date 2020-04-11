@@ -12,7 +12,7 @@
  * Merge the genome of two individs to produce offspring
  * This operation replaces the 2 least fittest individs with the new offspring
  **/
-void breedIndivids(int indexToBreed1, int indexToBreed2, Individ population[], float xpos[], float ypos[], int popSize, int Ncities);
+Individ breedIndivids(Individ parent1, Individ parent2, float xpos[], float ypos[], int popSize, int Ncities);
 
 void mutateIndivid(int indexToMutate, Individ population[], int Ncities, std::mt19937 rng);
 

@@ -15,6 +15,7 @@ class Individ
   float distance; // The squared total distance travelled
   int *route;     // An array containin the visited cities' indices in visiting order
   Individ();      // Constructor
+  Individ(int route[], float xpos[], float ypos[], int Ncities);
   // ~Individ();     // Desturctor
   void init(int route[], float xpos[], float ypos[], int Ncities);
   void setRoute(int route[], float xpos[], float ypos[], int Ncities);

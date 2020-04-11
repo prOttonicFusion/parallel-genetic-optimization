@@ -16,6 +16,14 @@ Individ::Individ()
 }
 
 /**
+ * Individ constructor (with params)
+ **/
+Individ::Individ(int route[], float xpos[], float ypos[], int Ncities)
+{
+  this->init(route, xpos, ypos, Ncities);
+}
+
+/**
  * Iinitialize new Individ
  **/
 void Individ::init(int route[], float xpos[], float ypos[], int Ncities)
