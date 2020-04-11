@@ -12,7 +12,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 ####################### Load calculation data #######################
-coordinateFile = 'cityCoordinates.xyz'
+coordinateFile = 'randomCities.xyz'
 outputFile = 'output.dat'
 cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None, names=['name', 'xpos', 'ypos'], encoding=None)
 names = [c[0] for c in cities]

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
   std::string inpuFile = argv[1];          // The name/path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
   const int popSize = 100;                 // Size of population
-  const float replaceProportion = 0.85;    // Proportion population be replaced by offspring every iteration
+  const float replaceProportion = 0.85;    // Proportion of population be replaced by offspring every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
   const int writeToScreenInterval = 1;     // Output data to screen every this many iterations
   const int writeToFileInterval = 1;       // Output data to file every this many iterations
