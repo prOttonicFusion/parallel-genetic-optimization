@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
   std::string inpuFile = argv[1];          // The name/path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
   const int popSize = 100;                 // Size of population
+  const int fittestSize = 20;              // Number of top-fitness individs to be allowed to breed
   const float replaceProportion = 0.85;    // Proportion of population be replaced by offspring every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
   const int writeToScreenInterval = 1;     // Output data to screen every this many iterations
@@ -89,8 +90,8 @@ int main(int argc, char *argv[])
     // and replace those less fit with offspring
     for (int i = 1; i <= crossPerIter; i++)
     {
-      int parent1 = uniformRand(rng) * 20; // TODO: change hardcoded number to variable
-      int parent2 = uniformRand(rng) * 20;
+      int parent1 = uniformRand(rng) * fittestSize;
+      int parent2 = uniformRand(rng) * fittestSize;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
       Individ child = breedIndivids(population[parent1], population[parent2], xpos, ypos, popSize, Ncities);
