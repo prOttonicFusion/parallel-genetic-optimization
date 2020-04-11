@@ -14,17 +14,42 @@ from matplotlib import pyplot as plt
 ####################### Load calculation data #######################
 coordinateFile = 'cityCoordinates.xyz'
 outputFile = 'output.dat'
-cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None, names = ['name','xpos','ypos'], encoding=None)
+cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None, names=['name', 'xpos', 'ypos'], encoding=None)
 names = [c[0] for c in cities]
 xpos = [c[1] for c in cities]
 ypos = [c[2] for c in cities]
 
-# TODO: Read route from outputFile
+# Read routes from outputFile
+iterCounts = []
+routes = []
+with open(outputFile) as f:
+    lines = f.readlines()
+    for line in lines:
+        if ('Iteration' in line):
+            spltdLine = line.split()
+            iterCounts.append(int(spltdLine[1][0:-1]))
+
+        if ('routeIndices' in line):
+            spltdLine = line.split()
+            newRoute = [int(i) for i in spltdLine[1:]]
+            routes.append(newRoute)
+
+# Generate plottable route
+def plottableRoute(index):
+    routeXCoords = [xpos[i] for i in routes[index]]
+    routeYCoords = [ypos[i] for i in routes[index]]
+    routeXCoords.append(xpos[routes[index][0]])
+    routeYCoords.append(ypos[routes[index][0]])
+    return routeXCoords, routeYCoords
+
+routeX, routeY = plottableRoute(-1)
 
 ############################ Draw figure ############################
 plt.figure(num=1, figsize=[8, 5])
 plt.xlabel('x-position')
 plt.ylabel('y-position')
+
+plt.plot(routeX, routeY, ':')
 
 plt.scatter(xpos, ypos)
 
