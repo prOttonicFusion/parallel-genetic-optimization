@@ -61,7 +61,7 @@ bool parseXYZFile(int &Ncities, std::string *&cityNames, float *&xpos, float *&y
 }
 
 /**
- * A function for saving calculation output to a file
+ * A function for writing output to file
  * 
  **/
 bool writeToOutputFile(std::string outputString, bool overWrite)
@@ -75,10 +75,21 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
   {
     outputFile.open("output.dat", std::ios_base::app);
   }
-
   outputFile << outputString << std::endl;
-
   outputFile.close();
+}
+
+bool writeToOutputFile(int iterCount, int bestRoute[], std::string bestRouteStr, float bestRouteLen, int Ncities, bool overWrite)
+{
+  std::ostringstream stringStream;
+  stringStream << "Iteration " << iterCount << ":" << std::endl;
+  stringStream << "length: " << bestRouteLen << std::endl;
+  stringStream << "routeIndices: ";
+  for (int i = 0; i < Ncities; i++)
+    stringStream << bestRoute[i] << " ";
+  stringStream << std::endl;
+  stringStream << "routeString: " << bestRouteStr << std::endl;
+  writeToOutputFile(stringStream.str(), overWrite);
 }
 
 /**
@@ -87,6 +98,6 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
  **/
 void writeToScreen(int iterCount, std::string bestRouteStr, float bestRouteLen)
 {
-    std::cout << "Iteration " << iterCount << ": " << std::endl;
-    std::cout << "  Shortest route = " << bestRouteLen << "\n  " << bestRouteStr << std::endl;
+  std::cout << "Iteration " << iterCount << ": " << std::endl;
+  std::cout << "  Shortest route = " << bestRouteLen << "\n  " << bestRouteStr << std::endl;
 }

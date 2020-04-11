@@ -10,7 +10,7 @@
 
 int main()
 {
-  const int popSize = 1000;        // Size of population
+  const int popSize = 5;           // Size of population
   const int crossPerIteration = 2; // Number of individs to crossover each iteration
 
   int Ncities; // Number of cities to use in calculations
@@ -43,6 +43,13 @@ int main()
     population[i].init(route, xpos, ypos, Ncities);
   }
 
+  // -------------------- Initialize output file --------------------
+    if (!writeToOutputFile("", true))
+  {
+    std::cout << "Error: Problem with writing to ouput file" << std::endl;
+    return -1;
+  }
+
   ////////////////////// Main calculation loop //////////////////////
   Individ fittest[crossPerIteration];
   int indexToBreed1, indexToBreed2, iterCount = 0;
@@ -54,7 +61,10 @@ int main()
     std::sort(std::begin(population), std::end(population));
 
     // --------------- Write data to screen & file ------------------
-    writeToScreen(iterCount, population[0].getRouteAsString(cityNames, Ncities), population[0].distance);
+    std::string bestRouteStr = population[0].getRouteAsString(cityNames, Ncities);
+    float bestRouteLen = population[0].distance;
+    writeToScreen(iterCount, bestRouteStr, bestRouteLen);
+    writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
 
     // ----------------------- Selection ----------------------------
     // We choose the two fittest individs for breeding
@@ -68,15 +78,9 @@ int main()
     // ------------------------ Mutation ----------------------------
 
     // ---------------- Check convergence status --------------------
-    hasConverged = true;
+    if (iterCount > 100) hasConverged = true;
 
     iterCount++;
-  }
-
-  if (!writeToOutputFile("test output", true))
-  {
-    std::cout << "Error: Problem with writing to ouput file" << std::endl;
-    return -1;
   }
 
   return 0;
