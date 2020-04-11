@@ -4,7 +4,8 @@ The structure of the directory is as follows:
 run/
 ├── README --------------------- This file
 ├── cityCoordinates.xyz -------- Coordinates for the cities, given in xyz-format 
-└── output.dat ----------------- Output of the program
+├── output.dat ----------------- Output of the program
+└── plotRoute.py --------------- Script for plotting the results of a calculation
 
 
 
