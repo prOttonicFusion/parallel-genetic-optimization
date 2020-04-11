@@ -10,23 +10,24 @@
 
 int main(int argc, char *argv[])
 {
-  const int popSize = 100;                 // Size of population
-  const float replaceProportion = 0.85;    // Proportion population be replaced by offspring every iteration
-  const int maxIterations = 10000;          // Max. number of iterations if solution doesn't converge
-  const float mutationProbability = 0.1; // The probability of offspring getting mutated
-  const int writeToScreenInterval = 1;    // Output data to screen every this many iterations
-  const int writeToFileInterval = 1;      // Output data to file every this many iterations
-
-  const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
-
   // Parse command line arguments
   if (argc < 2)
   {
-    std::cerr << "Usage: " << argv[0] << " <coordinate-file>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter>" << std::endl;
+    std::cerr << "   coordFile    A xyz-file containin the city coordinates" << std::endl;
+    std::cerr << "   maxIter      The maximum number of generations to allow" << std::endl;
     return -1;
   }
 
-  std::string inpuFile = argv[1];
+  std::string inpuFile = argv[1];          // The name/path of the coordinate file
+  const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
+  const int popSize = 100;                 // Size of population
+  const float replaceProportion = 0.85;    // Proportion population be replaced by offspring every iteration
+  const float mutationProbability = 0.1;   // The probability of offspring getting mutated
+  const int writeToScreenInterval = 1;     // Output data to screen every this many iterations
+  const int writeToFileInterval = 1;       // Output data to file every this many iterations
+
+  const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
   int Ncities; // Number of cities to use in calculations
   float *xpos; // The x-coordinates of each city
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
   // Read city coordinates from input file
   if (!parseXYZFile(inpuFile, Ncities, cityNames, xpos, ypos))
   {
-    std::cout << "Error: Could not read coordinate file" << std::endl;
+    std::cerr << "Error: Could not read coordinate file" << std::endl;
     return -1;
   }
 
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
   // -------------------- Initialize output file --------------------
   if (!writeToOutputFile("", true))
   {
-    std::cout << "Error: Problem with writing to ouput file" << std::endl;
+    std::cerr << "Error: Problem with writing to ouput file" << std::endl;
     return -1;
   }
 
