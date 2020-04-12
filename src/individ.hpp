@@ -7,7 +7,8 @@
 #include <iostream>
 
 /**
- * Class for storing one solution
+ * Class for storing one solution to the problem, i.e. one route
+ * and a corresponding total distance
  **/
 class Individ
 {
