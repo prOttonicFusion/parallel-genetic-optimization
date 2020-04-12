@@ -1,7 +1,9 @@
 /********************************************************************
  * Functions for handling input & output
  *******************************************************************/
+#include "city.hpp"
 #include "IO.hpp"
+#include "genetics.hpp"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -16,7 +18,7 @@
  * ...
  * 
  **/
-bool parseXYZFile(std::string inpuFile, int &Ncities, std::string *&cityNames, float *&xpos, float *&ypos)
+bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities)
 {
   std::ifstream infile(inpuFile);
   std::string line;
@@ -29,10 +31,8 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, std::string *&cityNames, f
   std::istringstream iss(line);
   if (!(iss >> Ncities)) return false;
 
-  // Initialize arrays accordingly
-  cityNames = new std::string[Ncities];
-  xpos = new float[Ncities];
-  ypos = new float[Ncities];
+  // Initialize city array accordingly
+  cities = new City[Ncities];
 
   // Skip comment line
   std::getline(infile, line);
@@ -51,9 +51,9 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, std::string *&cityNames, f
       break;
     }
 
-    cityNames[i] = name;
-    xpos[i] = x;
-    ypos[i] = y;
+    cities[i].name = name;
+    cities[i].xpos = x;
+    cities[i].ypos = y;
 
     i++;
   }

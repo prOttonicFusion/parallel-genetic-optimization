@@ -2,7 +2,7 @@
 # Optimization level
 OPT=-O2 
 
-tsp_ga: IO.o individ.o genetics.o main.o
+tsp_ga: individ.o genetics.o IO.o main.o
 	g++ -g main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
 
 IO.o:

@@ -1,6 +1,7 @@
 /********************************************************************
  * Main program
  *******************************************************************/
+#include "city.hpp"
 #include "IO.hpp"
 #include "genetics.hpp"
 #include "individ.hpp"
@@ -31,14 +32,12 @@ int main(int argc, char *argv[])
   const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
   int Ncities; // Number of cities to use in calculations
-  float *xpos; // The x-coordinates of each city
-  float *ypos; // The y-coordinates of each city
   int *route;
-  std::string *cityNames; // Names of each city
+  City *cities; // Array containing all citites
   Individ population[popSize];
 
   // Read city coordinates from input file
-  if (!parseXYZFile(inpuFile, Ncities, cityNames, xpos, ypos))
+  if (!parseXYZFile(inpuFile, Ncities, cities))
   {
     std::cerr << "Error: Could not read coordinate file" << std::endl;
     return -1;
@@ -58,7 +57,7 @@ int main(int argc, char *argv[])
   for (int i = 0; i < popSize; i++)
   {
     std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
-    population[i].init(route, xpos, ypos, Ncities);
+    population[i].init(route, cities, Ncities);
   }
 
   // -------------------- Initialize output file --------------------
@@ -78,7 +77,7 @@ int main(int argc, char *argv[])
     std::sort(std::begin(population), std::end(population));
 
     // --------------- Write data to screen & file ------------------
-    std::string bestRouteStr = population[0].getRouteAsString(cityNames, Ncities);
+    std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
     float bestRouteLen = population[0].distance;
     if (iterCount % writeToScreenInterval == 0)
       writeToScreen(iterCount, bestRouteStr, bestRouteLen);
@@ -94,7 +93,7 @@ int main(int argc, char *argv[])
       int parent2 = uniformRand(rng) * fittestSize;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
-      Individ child = breedIndivids(population[parent1], population[parent2], xpos, ypos, popSize, Ncities);
+      Individ child = breedIndivids(population[parent1], population[parent2], cities, popSize, Ncities);
 
       // Mutation
       if (uniformRand(rng) < mutationProbability)

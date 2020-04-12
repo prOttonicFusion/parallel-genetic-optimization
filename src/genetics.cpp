@@ -2,19 +2,21 @@
  * Functions related to genetic operations
  *******************************************************************/
 
-#include "genetics.hpp"
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include "city.hpp"
+#include "individ.hpp"
+#include "genetics.hpp"
 
-float distanceBetweenCities(int index1, int index2, float xpos[], float ypos[])
+float distanceBetweenCities(City city1, City city2)
 {
-  int xdiff = (xpos[index1] - xpos[index2]);
-  int ydiff = (ypos[index1] - ypos[index2]);
+  int xdiff = (city1.xpos - city2.xpos);
+  int ydiff = (city1.ypos - city2.ypos);
   return xdiff * xdiff + ydiff * ydiff;
 }
 
-Individ breedIndivids(Individ parent1, Individ parent2, float xpos[], float ypos[], int popSize, int Ncities)
+Individ breedIndivids(Individ parent1, Individ parent2, City cities[], int popSize, int Ncities)
 {
   /** 
      * Generate 2 children genoms heuristically:
@@ -55,8 +57,8 @@ Individ breedIndivids(Individ parent1, Individ parent2, float xpos[], float ypos
     else
     {
       // Neither was found --> choose closest
-      int dist1 = distanceBetweenCities(childRoute[i - 1], parent1.route[i], xpos, ypos);
-      int dist2 = distanceBetweenCities(childRoute[i - 1], parent2.route[i], xpos, ypos);
+      int dist1 = distanceBetweenCities(cities[childRoute[i - 1]], cities[parent1.route[i]]);
+      int dist2 = distanceBetweenCities(cities[childRoute[i - 1]], cities[parent2.route[i]]);
       if (dist1 < dist2)
       {
         nextCity = parent1.route[i];
@@ -69,7 +71,7 @@ Individ breedIndivids(Individ parent1, Individ parent2, float xpos[], float ypos
     childRoute[i] = nextCity;
   }
 
-  return Individ(childRoute, xpos, ypos, Ncities);
+  return Individ(childRoute, cities, Ncities);
 }
 
 void mutateIndivid(Individ individ, int Ncities, std::mt19937 rng)

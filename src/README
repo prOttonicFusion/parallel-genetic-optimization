@@ -12,6 +12,7 @@ Contents of this directory
 
 src/
 ├── README --------------------- This file
+├── city.hpp ------------------- A header file where the City data structure is defined
 ├── main.cpp ------------------- The main program file 
 ├── Makefile ------------------- A makefile for compiling the program
 ├── genetics.cpp --------------- A module containing genetics related functions
