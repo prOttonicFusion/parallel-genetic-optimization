@@ -99,14 +99,18 @@ int main(int argc, char *argv[])
     std::sort(std::begin(population), std::end(population));
 
     // --------------- Write data to screen & file ------------------
-    std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
-    float bestRouteLen = population[0].distance;
-    if (writeToScreenInterval)
-      if (iterCount % writeToScreenInterval == 0)
-        writeToScreen(iterCount, bestRouteStr, bestRouteLen);
-    if (writeToFileInterval)
-      if (iterCount % writeToFileInterval == 0)
-        writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
+    if (rank == 0)
+    {
+      // TODO: collect data from the other processes
+      std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
+      float bestRouteLen = population[0].distance;
+      if (writeToScreenInterval)
+        if (iterCount % writeToScreenInterval == 0)
+          writeToScreen(iterCount, bestRouteStr, bestRouteLen);
+      if (writeToFileInterval)
+        if (iterCount % writeToFileInterval == 0)
+          writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
+    }
 
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
