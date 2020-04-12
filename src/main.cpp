@@ -13,9 +13,9 @@
 int main(int argc, char *argv[])
 {
   // Parse command line arguments
-  if (argc < 4)
+  if (argc < 3)
   {
-    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter> <popSize> [wrtToScreen] [wrtToFile]" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter> [wrtToScreen] [wrtToFile]" << std::endl;
     std::cerr << "      coordFile --- A xyz-file containin the city coordinates" << std::endl;
     std::cerr << "      maxIter ----- The maximum number of generations to allow" << std::endl;
     std::cerr << "      wrtToScreen - Write results to screen every this many iterations. Default = 1" << std::endl;
@@ -25,14 +25,12 @@ int main(int argc, char *argv[])
 
   std::string inpuFile = argv[1];          // The name/path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
-  const int popSize = 100;                 // Combined size of all populations
+  const int globalPopSize = 100;           // Combined size of all populations
   const int eliteSize = 20;                // Number of top-fitness individs to be allowed to breed
   const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
   const int eliteMigrationInterval = 100;  // Send fittest individuals to neighbor CPUs every this many iterations
   const float replaceProportion = 0.85;    // Fraction of population to be replaced by children every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
-
-  const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
   // Set screen & output file update intervals
   const int writeToScreenInterval = (argc > 3) ? atoi(argv[3]) : 1;
@@ -41,7 +39,6 @@ int main(int argc, char *argv[])
   int Ncities; // Number of cities to use in calculations
   int *route;
   City *cities; // Array containing all citites
-  Individ population[popSize];
 
   // Read city coordinates from input file
   if (!parseXYZFile(inpuFile, Ncities, cities))
@@ -84,6 +81,10 @@ int main(int argc, char *argv[])
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);          // rank = id of current process
   MPI_Get_processor_name(procName, &nameLenght); // procName = name of current process
 
+  // Per-process population size
+  const int popSize = (int)(globalPopSize / Ntasks + 0.5f);
+  const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
+
   // Map the processes to a 2D grid topology
   int ndims = 2; // Number of dimensions
   //int p = (int)sqrt(Ntasks);   // Number of CPUs per dim (p x p grid)
@@ -95,6 +96,7 @@ int main(int argc, char *argv[])
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ----------------- Generate initial population ------------------
+  Individ population[popSize];
   for (int i = 0; i < popSize; i++)
   {
     std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
@@ -102,7 +104,7 @@ int main(int argc, char *argv[])
   }
 
   // Sort population in ascending order based on distance
-  std::sort(std::begin(population), std::end(population));
+  std::sort(population, population + popSize);
 
   ////////////////////// Main calculation loop //////////////////////
   int indexToBreed1, indexToBreed2, iterCount = 0;
@@ -129,7 +131,7 @@ int main(int argc, char *argv[])
 
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on distance
-    std::sort(std::begin(population), std::end(population));
+    std::sort(population, population + popSize);
 
     // --------------- Write data to screen & file ------------------
     if (rank == 0)
