@@ -1,21 +1,23 @@
+# Compiler
+CMP=mpic++
 
 # Optimization level
 OPT=-O2 
 
 tsp_ga: individ.o genetics.o IO.o main.o
-	g++ -g main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
+	${CMP} main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
 
 IO.o:
-	g++ -c IO.cpp ${OPT}
+	${CMP} -c IO.cpp ${OPT}
 
 individ.o:
-	g++ -c individ.cpp ${OPT}
+	${CMP} -c individ.cpp ${OPT}
 
 genetics.o:
-	g++ -c genetics.cpp ${OPT}
+	${CMP} -c genetics.cpp ${OPT}
 
 main.o:
-	g++ -c main.cpp ${OPT}
+	${CMP} -c main.cpp ${OPT}
 	
 clean:
 	rm -f *.o

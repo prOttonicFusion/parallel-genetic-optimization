@@ -7,6 +7,7 @@
 #include "individ.hpp"
 #include <algorithm>
 #include <iostream>
+#include <mpi.h>
 #include <random>
 
 int main(int argc, char *argv[])
@@ -57,18 +58,35 @@ int main(int argc, char *argv[])
   static std::mt19937 rng(rd()); // RNG (Mersenne Twister)
   static std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
 
-  // ----------------- Generate initial population ------------------
-  for (int i = 0; i < popSize; i++)
-  {
-    std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
-    population[i].init(route, cities, Ncities);
-  }
-
   // -------------------- Initialize output file --------------------
   if (!writeToOutputFile("", true))
   {
     std::cerr << "Error: Problem with writing to ouput file" << std::endl;
     return -1;
+  }
+
+  // ------------------------ Initialize MPI ------------------------
+  const int tag = 50;
+  int numProc, rank, nameLenght;
+  char procName[MPI_MAX_PROCESSOR_NAME];
+  MPI_Status status;
+
+  if (MPI_Init(&argc, &argv) != MPI_SUCCESS)
+  {
+    std::cout << "MPI initialization failed" << std::endl;
+    return -1;
+  }
+
+  // Query process information
+  MPI_Comm_size(MPI_COMM_WORLD, &numProc);       // numProc = number of processes/CPUs
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);          // rank = id of current process
+  MPI_Get_processor_name(procName, &nameLenght); // procName = name of current process
+
+  // ----------------- Generate initial population ------------------
+  for (int i = 0; i < popSize; i++)
+  {
+    std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
+    population[i].init(route, cities, Ncities);
   }
 
   ////////////////////// Main calculation loop //////////////////////
@@ -111,5 +129,7 @@ int main(int argc, char *argv[])
     iterCount++;
   }
 
+  // Finalize MPI & quit program
+  MPI_Finalize();
   return 0;
 }
