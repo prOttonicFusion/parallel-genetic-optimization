@@ -5,7 +5,7 @@ CMP=mpic++
 OPT=-O2 
 
 tsp_ga: individ.o genetics.o IO.o main.o
-	${CMP} main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
+	${CMP} -g main.o IO.o individ.o genetics.o ${OPT} -o tsp_ga
 
 IO.o:
 	${CMP} -c IO.cpp ${OPT}
