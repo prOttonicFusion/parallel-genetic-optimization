@@ -99,5 +99,6 @@ bool writeToOutputFile(int iterCount, int bestRoute[], std::string bestRouteStr,
 void writeToScreen(int iterCount, std::string bestRouteStr, float bestRouteLen)
 {
   std::cout << "Iteration " << iterCount << ": " << std::endl;
-  std::cout << "  Shortest route = " << bestRouteLen << "\n  " << bestRouteStr << std::endl;
+  std::cout << "  Shortest route = " << bestRouteLen << std::endl;
+  //std::cout << bestRouteStr << std::endl;
 }
