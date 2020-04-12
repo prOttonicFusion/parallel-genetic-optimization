@@ -4,6 +4,7 @@ The structure of the directory is as follows:
 run/
 ├── README --------------------- This file
 ├── cityCoordinates.xyz -------- Coordinates for the cities, given in xyz-format 
+├── generateCities.py ---------- A script for creating a random city coordinate file
 ├── output.dat ----------------- Output of the program
 └── plotRoute.py --------------- Script for plotting the results of a calculation
 
@@ -13,8 +14,11 @@ Running:
 ---------------------
 The program is executed by running: 
 
-mpirun -n N ../src/tsp_ga 
+mpiexec -n <N> ../src/tsp_ga <coordinate-file> <Niterations> [toScreenInt] [toFileInt]
 
-with N being the desired number of cores
+with <N> being the desired number of cores, <coordinate-file> the city coordinate file 
+and <Niterations> the total number of iterations/generations. E.g.
+
+mpiexec -n 4 ../src/tsp_ga cityCoordinates.xyz 1000 10 1
 
 
