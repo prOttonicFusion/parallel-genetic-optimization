@@ -13,9 +13,9 @@
 int main(int argc, char *argv[])
 {
   // Parse command line arguments
-  if (argc < 3)
+  if (argc < 4)
   {
-    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter> [wrtToScreen] [wrtToFile]" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter> <popSize> [wrtToScreen] [wrtToFile]" << std::endl;
     std::cerr << "      coordFile --- A xyz-file containin the city coordinates" << std::endl;
     std::cerr << "      maxIter ----- The maximum number of generations to allow" << std::endl;
     std::cerr << "      wrtToScreen - Write results to screen every this many iterations. Default = 1" << std::endl;
@@ -25,8 +25,10 @@ int main(int argc, char *argv[])
 
   std::string inpuFile = argv[1];          // The name/path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
-  const int popSize = 100;                 // Size of population
-  const int fittestSize = 20;              // Number of top-fitness individs to be allowed to breed
+  const int popSize = 100;                 // Combined size of all populations
+  const int eliteSize = 20;                // Number of top-fitness individs to be allowed to breed
+  const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
+  const int eliteMigrationInterval = 100;  // Send fittest individuals to neighbor CPUs every this many iterations
   const float replaceProportion = 0.85;    // Fraction of population to be replaced by children every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
 
@@ -67,7 +69,7 @@ int main(int argc, char *argv[])
 
   // ------------------------ Initialize MPI ------------------------
   const int tag = 50;
-  int numProc, rank, nameLenght;
+  int Ntasks, rank, nameLenght, dest_id, source_id;
   char procName[MPI_MAX_PROCESSOR_NAME];
   MPI_Status status;
 
@@ -78,9 +80,19 @@ int main(int argc, char *argv[])
   }
 
   // Query process information
-  MPI_Comm_size(MPI_COMM_WORLD, &numProc);       // numProc = number of processes/CPUs
+  MPI_Comm_size(MPI_COMM_WORLD, &Ntasks);        // Ntasks = number of processes/CPUs
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);          // rank = id of current process
   MPI_Get_processor_name(procName, &nameLenght); // procName = name of current process
+
+  // Map the processes to a 2D grid topology
+  int ndims = 2; // Number of dimensions
+  //int p = (int)sqrt(Ntasks);   // Number of CPUs per dim (p x p grid)
+  int dims[ndims] = {0, 0};    // Number of nodes along each dim (0 --> let MPI_Dims determine )
+  int reorder = 0;             // Should MPI determine optimal process ordering?
+  int periods[ndims] = {1, 1}; // Periodicity (0 or 1) in each direction?
+  MPI_Comm GRID_COMM;
+  MPI_Dims_create(Ntasks, ndims, dims);
+  MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ----------------- Generate initial population ------------------
   for (int i = 0; i < popSize; i++)
@@ -102,8 +114,8 @@ int main(int argc, char *argv[])
     // and replace those less fit with offspring
     for (int i = 1; i <= crossPerIter; i++)
     {
-      int parent1 = uniformRand(rng) * fittestSize;
-      int parent2 = uniformRand(rng) * fittestSize;
+      int parent1 = uniformRand(rng) * eliteSize;
+      int parent2 = uniformRand(rng) * eliteSize;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
       Individ child = breedIndivids(population[parent1], population[parent2], cities, popSize, Ncities);
@@ -133,8 +145,24 @@ int main(int argc, char *argv[])
           writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
     }
 
-    // ----------------- Share data across processes ----------------
+    // ------------ Share data with closest neighbor CPUs -----------
+    if (iterCount % eliteMigrationInterval == 0 && iterCount > 0)
+    {
+      int recvdRoute[Ncities];
+      for (int i = 0; i < eliteMigrationSize; i++)
+        for (int j = 0; j < 2; j++)
+        {
+          MPI_Cart_shift(GRID_COMM, j, 1, &source_id, &dest_id);
+          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, dest_id, tag, recvdRoute,
+                       Ncities, MPI_INT, source_id, tag, GRID_COMM, &status);
+          population[Ncities - (i * 2 + j)].setRoute(recvdRoute, cities, Ncities);
 
+          MPI_Cart_shift(GRID_COMM, j, -1, &source_id, &dest_id);
+          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, dest_id, tag, recvdRoute,
+                       Ncities, MPI_INT, source_id, tag, GRID_COMM, &status);
+          population[Ncities - (i * 2 + j)].setRoute(recvdRoute, cities, Ncities);
+        }
+    }
     iterCount++;
   }
 
