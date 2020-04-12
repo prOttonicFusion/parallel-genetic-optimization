@@ -9,15 +9,6 @@
 #include <sstream>
 #include <string>
 
-/**
- * A function for reading in city coordinates from a xyz-file of the
- * format: 
- * <number of cities>
- * comment line
- * <name> <X> <Y>
- * ...
- * 
- **/
 bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities)
 {
   std::ifstream infile(inpuFile);
@@ -60,10 +51,7 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities)
   return true;
 }
 
-/**
- * A function for writing output to file
- * 
- **/
+
 bool writeToOutputFile(std::string outputString, bool overWrite)
 {
   std::ofstream outputFile;
@@ -92,10 +80,6 @@ bool writeToOutputFile(int iterCount, int bestRoute[], std::string bestRouteStr,
   writeToOutputFile(stringStream.str(), overWrite);
 }
 
-/**
- * A function for printing calculation output to the screen/stdout
- * 
- **/
 void writeToScreen(int iterCount, std::string bestRouteStr, float bestRouteLen)
 {
   std::cout << "Iteration " << iterCount << ": " << std::endl;

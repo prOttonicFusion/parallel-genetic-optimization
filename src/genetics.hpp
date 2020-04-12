@@ -11,18 +11,32 @@
 
 /**
  * Merge the genome of two individs to produce offspring
- * This operation replaces the 2 least fittest individs with the new offspring
- **/
+ * 
+ * @param parent1 [in] Mother individ
+ * @param parent2 [in] Father individ
+ * @param cities [in] Array of City structs
+ * @param popSize [in] Size of population
+ * @param Ncities [in] Number of cities in one route
+ * @return Individ The offspring
+ */
 Individ breedIndivids(Individ parent1, Individ parent2, City cities[], int popSize, int Ncities);
 
 /**
- * Switch places of two random cities individs route
- **/
+ * Switch places of two random cities on an individ's route
+ * 
+ * @param individ [in/out] The target of the mutation 
+ * @param Ncities [in] Array of City structs
+ * @param rng [in] Random engine
+ */
 void mutateIndivid(Individ individ, int Ncities, std::mt19937 rng);
 
 /**
- * Get the squared distance between two cities
- **/
+ * Get the squared distance between two cities 
+ * 
+ * @param city1 
+ * @param city2 
+ * @return float Distance between city1 & city2
+ */
 float distanceBetweenCities(City city1, City city2);
 
 #endif

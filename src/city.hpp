@@ -9,6 +9,12 @@
 /**
  * A data structure for storing all properties of a single city (gene)
  **/
+
+/**
+ * Data structure for storing a city's name and position as
+ * (string) City.name, (float) City.xpos, (float) City.ypos
+ * 
+ */
 struct City
 {
   std::string name;

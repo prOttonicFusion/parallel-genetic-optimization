@@ -9,24 +9,15 @@
 
 ////////////////////// Individ-class functions //////////////////////
 
-/**
- * Individ constructor (no params)
- **/
 Individ::Individ()
 {
 }
 
-/**
- * Individ constructor (with params)
- **/
 Individ::Individ(int route[], City cities[], int Ncities)
 {
   this->init(route, cities, Ncities);
 }
 
-/**
- * Iinitialize new Individ
- **/
 void Individ::init(int route[], City cities[], int Ncities)
 {
   // Allocate & init route array
@@ -34,9 +25,6 @@ void Individ::init(int route[], City cities[], int Ncities)
   this->setRoute(route, cities, Ncities);
 }
 
-/**
- * Set the individs solution (route) & calculate the distance
- **/
 void Individ::setRoute(int route[], City cities[], int Ncities)
 {
   // Copy route to Individ's internal route
@@ -59,18 +47,6 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
   this->distance = d;
 }
 
-/**
- * Individ destructor
- **/
-// Individ::~Individ()
-// {
-//   delete[] route; // Clear memory allocated for the array
-//   route = NULL;   // Clear pointer
-// }
-
-/**
- * Return the route as a string
- **/
 std::string Individ::getRouteAsString(City cities[], int Ncities)
 {
   std::string routeStr;
