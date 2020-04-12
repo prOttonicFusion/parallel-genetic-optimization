@@ -1,8 +1,8 @@
 /********************************************************************
  * Main program
  *******************************************************************/
-#include "city.hpp"
 #include "IO.hpp"
+#include "city.hpp"
 #include "genetics.hpp"
 #include "individ.hpp"
 #include <algorithm>
@@ -14,9 +14,11 @@ int main(int argc, char *argv[])
   // Parse command line arguments
   if (argc < 3)
   {
-    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter> [wrtToScreen] [wrtToFile]" << std::endl;
     std::cerr << "      coordFile --- A xyz-file containin the city coordinates" << std::endl;
     std::cerr << "      maxIter ----- The maximum number of generations to allow" << std::endl;
+    std::cerr << "      wrtToScreen - Write results to screen every this many iterations. Default = 1" << std::endl;
+    std::cerr << "      wrtToFile --- Write results to file every this many iterations. Default = 1" << std::endl;
     return -1;
   }
 
@@ -24,12 +26,14 @@ int main(int argc, char *argv[])
   const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
   const int popSize = 100;                 // Size of population
   const int fittestSize = 20;              // Number of top-fitness individs to be allowed to breed
-  const float replaceProportion = 0.85;    // Proportion of population be replaced by offspring every iteration
+  const float replaceProportion = 0.85;    // Fraction of population to be replaced by children every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
-  const int writeToScreenInterval = 1;     // Output data to screen every this many iterations
-  const int writeToFileInterval = 1;       // Output data to file every this many iterations
 
   const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
+
+  // Set screen & output file update intervals
+  const int writeToScreenInterval = (argc > 3) ? atoi(argv[3]) : 1;
+  const int writeToFileInterval = (argc > 4) ? atoi(argv[4]) : 1;
 
   int Ncities; // Number of cities to use in calculations
   int *route;
@@ -79,10 +83,12 @@ int main(int argc, char *argv[])
     // --------------- Write data to screen & file ------------------
     std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
     float bestRouteLen = population[0].distance;
-    if (iterCount % writeToScreenInterval == 0)
-      writeToScreen(iterCount, bestRouteStr, bestRouteLen);
-    if (iterCount % writeToFileInterval == 0)
-      writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
+    if (writeToScreenInterval)
+      if (iterCount % writeToScreenInterval == 0)
+        writeToScreen(iterCount, bestRouteStr, bestRouteLen);
+    if (writeToFileInterval)
+      if (iterCount % writeToFileInterval == 0)
+        writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
 
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
