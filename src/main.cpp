@@ -157,12 +157,12 @@ int main(int argc, char *argv[])
           MPI_Cart_shift(GRID_COMM, j, 1, &source_id, &dest_id);
           MPI_Sendrecv(population[i].route, Ncities, MPI_INT, dest_id, tag, recvdRoute,
                        Ncities, MPI_INT, source_id, tag, GRID_COMM, &status);
-          population[Ncities - (i * 2 + j)].setRoute(recvdRoute, cities, Ncities);
+          population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities, Ncities);
 
           MPI_Cart_shift(GRID_COMM, j, -1, &source_id, &dest_id);
           MPI_Sendrecv(population[i].route, Ncities, MPI_INT, dest_id, tag, recvdRoute,
                        Ncities, MPI_INT, source_id, tag, GRID_COMM, &status);
-          population[Ncities - (i * 2 + j)].setRoute(recvdRoute, cities, Ncities);
+          population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities, Ncities);
         }
     }
     iterCount++;
