@@ -7,12 +7,17 @@
 #
 #####################################################################
 
-import os
+import sys
 import numpy as np
 from matplotlib import pyplot as plt
 
 ####################### Load calculation data #######################
-coordinateFile = 'randomCities.xyz'
+if len(sys.argv) != 2:
+    print(
+        "Usage: {} <coordinate-file>".format(sys.argv[0]))
+    exit()
+
+coordinateFile = sys.argv[1]
 outputFile = 'output.dat'
 cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None, names=['name', 'xpos', 'ypos'], encoding=None)
 names = [c[0] for c in cities]
