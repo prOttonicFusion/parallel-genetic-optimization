@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
   if (MPI_Init(&argc, &argv) != MPI_SUCCESS)
   {
-    std::cout << "MPI initialization failed" << std::endl;
+    std::cerr << "Error: MPI initialization failed" << std::endl;
     return -1;
   }
 
@@ -89,11 +89,32 @@ int main(int argc, char *argv[])
     population[i].init(route, cities, Ncities);
   }
 
+  // Sort population in ascending order based on distance
+  std::sort(std::begin(population), std::end(population));
+
   ////////////////////// Main calculation loop //////////////////////
   int indexToBreed1, indexToBreed2, iterCount = 0;
   bool hasConverged = false;
   while (!hasConverged && iterCount < maxIterations)
   {
+    // ------------------------ Breeding ----------------------------
+    // Pair a fraction of the population; select parents from the most fit
+    // and replace those less fit with offspring
+    for (int i = 1; i <= crossPerIter; i++)
+    {
+      int parent1 = uniformRand(rng) * fittestSize;
+      int parent2 = uniformRand(rng) * fittestSize;
+      parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
+
+      Individ child = breedIndivids(population[parent1], population[parent2], cities, popSize, Ncities);
+
+      // Mutation
+      if (uniformRand(rng) < mutationProbability)
+        mutateIndivid(child, Ncities, rng);
+
+      population[popSize - i] = child;
+    }
+
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on distance
     std::sort(std::begin(population), std::end(population));
@@ -112,23 +133,7 @@ int main(int argc, char *argv[])
           writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
     }
 
-    // ------------------------ Breeding ----------------------------
-    // Pair a fraction of the population; select parents from the most fit
-    // and replace those less fit with offspring
-    for (int i = 1; i <= crossPerIter; i++)
-    {
-      int parent1 = uniformRand(rng) * fittestSize;
-      int parent2 = uniformRand(rng) * fittestSize;
-      parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
-
-      Individ child = breedIndivids(population[parent1], population[parent2], cities, popSize, Ncities);
-
-      // Mutation
-      if (uniformRand(rng) < mutationProbability)
-        mutateIndivid(child, Ncities, rng);
-
-      population[popSize - i] = child;
-    }
+    // ----------------- Share data across processes ----------------
 
     iterCount++;
   }
