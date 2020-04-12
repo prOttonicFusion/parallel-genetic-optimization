@@ -102,8 +102,6 @@ int main(int argc, char *argv[])
       population[popSize - i] = child;
     }
 
-    // ---------------- Check convergence status --------------------
-
     iterCount++;
   }
 
