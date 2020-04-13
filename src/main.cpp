@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on route length
-    std::sort(std::begin(population), std::end(population));
+    std::sort(population, population + popSize);;
 
     // --------------- Write data to screen & file ------------------
     std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
