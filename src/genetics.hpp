@@ -1,5 +1,13 @@
 /********************************************************************
+ * @file      genetics.hpp
+ * @author    O. Lindblom
+ * 
  * Header file for genetics.cpp
+ * 
+ * @date      2020-04-13
+ * 
+ * @copyright Copyright (c) 2020
+ * 
  *******************************************************************/
 
 #ifndef GENETICS_H

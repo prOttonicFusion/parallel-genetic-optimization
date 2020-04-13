@@ -2,16 +2,22 @@
 # -*- coding: utf-8 -*-
 
 #####################################################################
+# @file      performanceTest.py
+# @author    O. Lindblom
+# 
 # Test the performance of the C++ code using varying numbers of CPUs
-#
-######################################################################
+# 
+# @date      2020-04-13
+# 
+# @copyright Copyright (c) 2020
+#####################################################################
 
 import timeit
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
-Nrepeat = 5          # Run program this many times for each setup & take average
+Nrepeat = 5           # Run program Nrepeat times for each setup & take average
 Nproc = [1, 2, 3, 4]  # The processor setups to use
 # Command line rguments for the C++ program
 inputArgs = ['randomCities.xyz', 1000, 1, 1]

@@ -2,8 +2,14 @@
 # -*- coding: utf-8 -*-
 
 #####################################################################
+# @file      plotRoute.py
+# @author    O. Lindblom
+# 
 # A script for visualizing the results of a TSP simulation
-#
+# 
+# @date      2020-04-13
+# 
+# @copyright Copyright (c) 2020
 #####################################################################
 
 import sys

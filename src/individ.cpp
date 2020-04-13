@@ -1,13 +1,19 @@
 /********************************************************************
+ * @file      individ.cpp
+ * @author    O. Lindblom
+ * 
  * Functions for the Individ class defined in individ.hpp
+ * 
+ * @date      2020-04-13
+ * 
+ * @copyright Copyright (c) 2020
+ * 
  *******************************************************************/
 
-#include "city.hpp"
 #include "individ.hpp"
+#include "city.hpp"
 #include <iostream>
 #include <stdio.h>
-
-////////////////////// Individ-class functions //////////////////////
 
 Individ::Individ()
 {
@@ -59,7 +65,9 @@ std::string Individ::getRouteAsString(City cities[], int Ncities)
   return routeStr;
 }
 
-///////////////////// Individ operator overloads ////////////////////
+/**
+ * Operator overloadings
+ */
 
 // >
 bool operator>(const Individ &i1, const Individ &i2)
