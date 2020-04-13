@@ -2,8 +2,13 @@
 # -*- coding: utf-8 -*-
 
 #####################################################################
+# @file      generateCities.py
+# @author    O. Lindblom
+# 
 # A script for generating random city coordinates
-#
+# 
+# @date      2020-04-13
+# @copyright Copyright (c) 2020
 #####################################################################
 
 import sys
