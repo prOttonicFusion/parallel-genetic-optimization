@@ -1,6 +1,14 @@
 /********************************************************************
- * Main program
+ * @file      main.cpp
+ * @author    O. Lindblom 
+ * 
+ * The main program 
+ * 
+ * @date      2020-04-13
+ * @copyright Copyright (c) 2020
+ * 
  *******************************************************************/
+
 #include "IO.hpp"
 #include "city.hpp"
 #include "genetics.hpp"

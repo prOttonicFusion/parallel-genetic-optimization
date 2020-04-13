@@ -1,6 +1,14 @@
 /********************************************************************
- * Functions for handling input & output
+ * @file      IO.cpp
+ * @author    O. Lindblom
+ * 
+ * Functions for handling input & output 
+ * 
+ * @date      2020-04-13
+ * @copyright Copyright (c) 2020
+ * 
  *******************************************************************/
+
 #include "city.hpp"
 #include "IO.hpp"
 #include "genetics.hpp"
