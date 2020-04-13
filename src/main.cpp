@@ -161,11 +161,16 @@ int main(int argc, char *argv[])
       for (int i = 0; i < eliteMigrationSize; i++)
         for (int j = 0; j < 2; j++)
         {
+          // Right & bottom neighbors:
+          // Get send & receive adresses for closest neighbor communication
           MPI_Cart_shift(GRID_COMM, j, 1, &sourceRank, &destRank);
+          // Send & receive fittest individuals 
           MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+          // Add route received from neighbor to own population
           population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities, Ncities);
 
+          // Left & top neighbors:
           MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
           MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
