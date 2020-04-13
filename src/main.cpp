@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
     // --------------- Write data to screen & file ------------------
     std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
-    float bestRouteLen = population[0].distance;
+    float bestRouteLen = population[0].routeLength;
     if (writeToScreenInterval)
       if (iterCount % writeToScreenInterval == 0)
         writeToScreen(iterCount, bestRouteStr, bestRouteLen);
