@@ -5,7 +5,6 @@
  * Functions for the Individ class defined in individ.hpp
  * 
  * @date      2020-04-13
- * 
  * @copyright Copyright (c) 2020
  * 
  *******************************************************************/

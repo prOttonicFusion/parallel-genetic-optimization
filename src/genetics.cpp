@@ -5,7 +5,6 @@
  * Functions related to genetic operations
  * 
  * @date      2020-04-13
- * 
  * @copyright Copyright (c) 2020
  * 
  *******************************************************************/
