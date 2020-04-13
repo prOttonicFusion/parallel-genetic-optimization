@@ -22,8 +22,8 @@
 class Individ
 {
   public:
-  float routeLength; // The squared total length of the route
-  int *route;     // An array containin the visited cities' indices in visiting order
+  float routeLength; ///< The squared total length of route travelled
+  int *route;        ///< An array containin the visited cities' indices in visiting order
 
   /**
    * Construct a new Individ object

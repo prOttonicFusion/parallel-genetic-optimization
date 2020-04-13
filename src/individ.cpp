@@ -14,11 +14,7 @@
 #include <iostream>
 #include <stdio.h>
 
-////////////////////// Individ-class functions //////////////////////
-
-Individ::Individ()
-{
-}
+Individ::Individ() {}
 
 Individ::Individ(int route[], City cities[], int Ncities)
 {
@@ -36,18 +32,17 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
 {
   // Copy route to Individ's internal route
   for (int i = 0; i < Ncities; i++)
-  {
     this->route[i] = route[i];
-  }
 
-  // Calculate the route length
-  float d = 0.0, xdiff, ydiff;
+  // Calculate the lenght of the route
+  // including the distance from last city back to first
+  float l = 0.0;
   for (int i = 1; i < Ncities; i++)
-  {
-    d += distanceBetweenCities(cities[route[i]], cities[route[i-1]]);
-  }
-  d += distanceBetweenCities(cities[route[0]], cities[route[Ncities-1]]);
-  this->routeLength = d;
+    l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
+
+  l += distanceBetweenCities(cities[route[Ncities - 1]], cities[route[0]]);
+  
+  this->routeLength = l;
 }
 
 std::string Individ::getRouteAsString(City cities[], int Ncities)
@@ -62,7 +57,9 @@ std::string Individ::getRouteAsString(City cities[], int Ncities)
   return routeStr;
 }
 
-///////////////////// Individ operator overloads ////////////////////
+/**
+ * Operator overloadings
+ */
 
 // >
 bool operator>(const Individ &i1, const Individ &i2)
