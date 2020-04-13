@@ -38,18 +38,18 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
     this->route[i] = route[i];
   }
 
-  // Calculate the distance
-  float d = 0.0, xdiff, ydiff;
+  // Calculate the lenght of the route
+  float l = 0.0, xdiff, ydiff;
   for (int i = 1; i < Ncities; i++)
   {
     xdiff = (cities[route[i]].xpos - cities[route[i - 1]].xpos);
     ydiff = (cities[route[i]].ypos - cities[route[i - 1]].ypos);
-    d += xdiff * xdiff + ydiff * ydiff;
+    l += xdiff * xdiff + ydiff * ydiff;
   }
   xdiff = (cities[route[0]].xpos - cities[route[Ncities - 1]].xpos);
   ydiff = (cities[route[0]].ypos - cities[route[Ncities - 1]].ypos);
-  d += xdiff * xdiff + ydiff * ydiff;
-  this->distance = d;
+  l += xdiff * xdiff + ydiff * ydiff;
+  this->routeLength = l;
 }
 
 std::string Individ::getRouteAsString(City cities[], int Ncities)
@@ -71,19 +71,19 @@ std::string Individ::getRouteAsString(City cities[], int Ncities)
 // >
 bool operator>(const Individ &i1, const Individ &i2)
 {
-  return i1.distance > i2.distance;
+  return i1.routeLength > i2.routeLength;
 }
 
 // <
 bool operator<(const Individ &i1, const Individ &i2)
 {
-  return i1.distance < i2.distance;
+  return i1.routeLength < i2.routeLength;
 }
 
 // ==
 bool operator==(const Individ &i1, const Individ &i2)
 {
-  return (i1.distance == i2.distance && i1.route == i2.route);
+  return (i1.routeLength == i2.routeLength && i1.route == i2.route);
 }
 
 // !=

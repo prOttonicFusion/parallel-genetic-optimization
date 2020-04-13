@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     population[i].init(route, cities, Ncities);
   }
 
-  // Sort population in ascending order based on distance
+  // Sort population in ascending order based on route lenght
   std::sort(population, population + popSize);
 
   ////////////////////// Main calculation loop //////////////////////
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     }
 
     // --------------------- Compute fitness ------------------------
-    // Sort population in ascending order based on distance
+    // Sort population in ascending order based on route length
     std::sort(population, population + popSize);
 
     // --------------- Write data to screen & file ------------------
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     {
       // TODO: gather the best routes from each process & print the globally best route
       std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
-      float bestRouteLen = population[0].distance;
+      float bestRouteLen = population[0].routeLength;
       if (writeToScreenInterval)
         if (iterCount % writeToScreenInterval == 0)
           writeToScreen(iterCount, bestRouteStr, bestRouteLen);

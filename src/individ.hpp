@@ -16,14 +16,14 @@
 
 /**
  * Class for storing one solution to the problem, i.e. one route
- * and the corresponding total distance
+ * and the corresponding total route length
  * 
  */
 class Individ
 {
   public:
-  float distance; // The squared total distance travelled
-  int *route;     // An array containin the visited cities' indices in visiting order
+  float routeLength; ///< The squared total length of route travelled
+  int *route;        ///< An array containin the visited cities' indices in visiting order
 
   /**
    * Construct a new Individ object
@@ -50,7 +50,7 @@ class Individ
   void init(int route[], City cities[], int Ncities);
 
   /**
-   * Set the route of the Individ object & calculate the distance
+   * Set the route of the Individ object & calculate the route length
    * 
    * @param route [in] Int array of city indices
    * @param cities [in] The actual cities as City struct array
