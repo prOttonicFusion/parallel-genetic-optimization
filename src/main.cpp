@@ -72,6 +72,9 @@ int main(int argc, char *argv[])
     population[i].init(route, cities, Ncities);
   }
 
+  // Sort population in ascending order based on route lenght
+  std::sort(population, population + popSize);
+
   // -------------------- Initialize output file --------------------
   if (!writeToOutputFile("", true))
   {
@@ -83,20 +86,6 @@ int main(int argc, char *argv[])
   int iterCount = 0;
   while (iterCount < maxIterations)
   {
-    // --------------------- Compute fitness ------------------------
-    // Sort population in ascending order based on route length
-    std::sort(std::begin(population), std::end(population));
-
-    // --------------- Write data to screen & file ------------------
-    std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
-    float bestRouteLen = population[0].routeLength;
-    if (writeToScreenInterval)
-      if (iterCount % writeToScreenInterval == 0)
-        writeToScreen(iterCount, bestRouteStr, bestRouteLen);
-    if (writeToFileInterval)
-      if (iterCount % writeToFileInterval == 0)
-        writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
-
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
     // and replace those less fit with offspring
@@ -114,6 +103,20 @@ int main(int argc, char *argv[])
 
       population[popSize - i] = child;
     }
+
+    // --------------------- Compute fitness ------------------------
+    // Sort population in ascending order based on route length
+    std::sort(std::begin(population), std::end(population));
+
+    // --------------- Write data to screen & file ------------------
+    std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
+    float bestRouteLen = population[0].routeLength;
+    if (writeToScreenInterval)
+      if (iterCount % writeToScreenInterval == 0)
+        writeToScreen(iterCount, bestRouteStr, bestRouteLen);
+    if (writeToFileInterval)
+      if (iterCount % writeToFileInterval == 0)
+        writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
 
     iterCount++;
   }
