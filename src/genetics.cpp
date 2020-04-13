@@ -16,13 +16,6 @@
 #include "individ.hpp"
 #include "genetics.hpp"
 
-float distanceBetweenCities(City city1, City city2)
-{
-  int xdiff = (city1.xpos - city2.xpos);
-  int ydiff = (city1.ypos - city2.ypos);
-  return xdiff * xdiff + ydiff * ydiff;
-}
-
 Individ breedIndivids(Individ parent1, Individ parent2, City cities[], int popSize, int Ncities)
 {
   /** 

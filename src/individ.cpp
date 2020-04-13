@@ -36,16 +36,12 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
 
   // Calculate the lenght of the route
   // including the distance from last city back to first
-  float l = 0.0, xdiff, ydiff;
+  float l = 0.0;
   for (int i = 1; i < Ncities; i++)
-  {
-    xdiff = (cities[route[i]].xpos - cities[route[i - 1]].xpos);
-    ydiff = (cities[route[i]].ypos - cities[route[i - 1]].ypos);
-    l += xdiff * xdiff + ydiff * ydiff;
-  }
-  xdiff = (cities[route[0]].xpos - cities[route[Ncities - 1]].xpos);
-  ydiff = (cities[route[0]].ypos - cities[route[Ncities - 1]].ypos);
-  l += xdiff * xdiff + ydiff * ydiff;
+    l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
+
+  l += distanceBetweenCities(cities[route[Ncities - 1]], cities[route[0]]);
+  
   this->routeLength = l;
 }
 

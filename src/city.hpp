@@ -29,4 +29,13 @@ struct City
   float ypos;
 };
 
+/**
+ * Get the squared distance between two cities 
+ * 
+ * @param city1 
+ * @param city2 
+ * @return float Distance between city1 & city2
+ */
+float distanceBetweenCities(City city1, City city2);
+
 #endif
