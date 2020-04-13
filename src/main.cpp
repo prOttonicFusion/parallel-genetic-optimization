@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
   const int writeToScreenInterval = (argc > 3) ? atoi(argv[3]) : 1;
   const int writeToFileInterval = (argc > 4) ? atoi(argv[4]) : 1;
 
-  int Ncities; // Number of cities to use in calculations
-  int *route;
+  int Ncities;  // Number of cities to use in calculations
+  int *route;   // Array containing city indices in a specific order
   City *cities; // Array containing all citites
 
   // Read city coordinates from input file
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
   // -------------- Initialize random number generator --------------
   static std::random_device rd;  // Random seed generator
-  static std::mt19937 rng(rd()); // RNG (Mersenne Twister)
+  static std::mt19937 rng(rd()); // Random engine (Mersenne Twister)
   static std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
 
   // -------------------- Initialize output file --------------------
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
   // ------------------------ Initialize MPI ------------------------
   const int tag = 50;
-  int Ntasks, rank, nameLenght, dest_id, source_id;
+  int Ntasks, rank, nameLenght, destRank, sourceRank;
   char procName[MPI_MAX_PROCESSOR_NAME];
   MPI_Status status;
 
@@ -85,22 +85,21 @@ int main(int argc, char *argv[])
   }
 
   // Query process information
-  MPI_Comm_size(MPI_COMM_WORLD, &Ntasks);        // Ntasks = number of processes/CPUs
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);          // rank = id of current process
-  MPI_Get_processor_name(procName, &nameLenght); // procName = name of current process
+  MPI_Comm_size(MPI_COMM_WORLD, &Ntasks); // Ntasks = number of processes/CPUs
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);   // rank = id of current process
+  //MPI_Get_processor_name(procName, &nameLenght); // procName = name of current process
 
   // Per-process population size
   const int popSize = (int)(globalPopSize / Ntasks + 0.5f);
   const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
-  // Map the processes to a 2D grid topology
-  int ndims = 2; // Number of dimensions
-  //int p = (int)sqrt(Ntasks);   // Number of CPUs per dim (p x p grid)
-  int dims[ndims] = {0, 0};    // Number of nodes along each dim (0 --> let MPI_Dims determine )
-  int reorder = 0;             // Should MPI determine optimal process ordering?
-  int periods[ndims] = {1, 1}; // Periodicity (0 or 1) in each direction?
-  MPI_Comm GRID_COMM;
-  MPI_Dims_create(Ntasks, ndims, dims);
+  // Map the processors to a 2D grid topology for more structured communication
+  int ndims = 2;                        // Number of dimensions
+  int dims[ndims] = {0, 0};             // Number of nodes along each dim (0 --> let MPI_Dims choose)
+  int reorder = 0;                      // Should MPI determine optimal process ordering?
+  int periods[ndims] = {1, 1};          // Periodicity in each direction; 0 --> non-periodic
+  MPI_Comm GRID_COMM;                   // New communicator
+  MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ----------------- Generate initial population ------------------
@@ -115,9 +114,8 @@ int main(int argc, char *argv[])
   std::sort(population, population + popSize);
 
   ////////////////////// Main calculation loop //////////////////////
-  int indexToBreed1, indexToBreed2, iterCount = 0;
-  bool hasConverged = false;
-  while (!hasConverged && iterCount < maxIterations)
+  int iterCount = 0;
+  while (iterCount < maxIterations)
   {
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
@@ -144,12 +142,13 @@ int main(int argc, char *argv[])
     // --------------- Write data to screen & file ------------------
     if (rank == 0)
     {
-      // TODO: collect data from the other processes
+      // TODO: gather the best routes from each process & print the globally best route
       std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
       float bestRouteLen = population[0].distance;
       if (writeToScreenInterval)
         if (iterCount % writeToScreenInterval == 0)
           writeToScreen(iterCount, bestRouteStr, bestRouteLen);
+
       if (writeToFileInterval)
         if (iterCount % writeToFileInterval == 0)
           writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
@@ -162,14 +161,14 @@ int main(int argc, char *argv[])
       for (int i = 0; i < eliteMigrationSize; i++)
         for (int j = 0; j < 2; j++)
         {
-          MPI_Cart_shift(GRID_COMM, j, 1, &source_id, &dest_id);
-          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, dest_id, tag, recvdRoute,
-                       Ncities, MPI_INT, source_id, tag, GRID_COMM, &status);
+          MPI_Cart_shift(GRID_COMM, j, 1, &sourceRank, &destRank);
+          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
+                       Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities, Ncities);
 
-          MPI_Cart_shift(GRID_COMM, j, -1, &source_id, &dest_id);
-          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, dest_id, tag, recvdRoute,
-                       Ncities, MPI_INT, source_id, tag, GRID_COMM, &status);
+          MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
+          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
+                       Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities, Ncities);
         }
     }
