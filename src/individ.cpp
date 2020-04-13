@@ -41,20 +41,8 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
     l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
 
   l += distanceBetweenCities(cities[route[Ncities - 1]], cities[route[0]]);
-  
-  this->routeLength = l;
-}
 
-std::string Individ::getRouteAsString(City cities[], int Ncities)
-{
-  std::string routeStr;
-  for (int i = 0; i < Ncities; i++)
-  {
-    int index = this->route[i];
-    routeStr += cities[index].name;
-    if (i < Ncities - 1) routeStr += "-";
-  }
-  return routeStr;
+  this->routeLength = l;
 }
 
 /**

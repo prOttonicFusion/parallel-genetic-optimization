@@ -59,15 +59,6 @@ class Individ
   void setRoute(int route[], City cities[], int Ncities);
 
   /**
-   * Get the route as a string, i.e. all city names on a single line 
-   * 
-   * @param cities [in] The cities as City struct array
-   * @param Ncities [in] Number of cities in route
-   * @return std::string 
-   */
-  std::string getRouteAsString(City cities[], int Ncities);
-
-  /**
    * Operator overloads
    */
   friend bool operator>(const Individ &i1, const Individ &i2);
