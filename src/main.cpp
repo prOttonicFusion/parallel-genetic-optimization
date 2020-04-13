@@ -72,12 +72,11 @@ int main(int argc, char *argv[])
   }
 
   ////////////////////// Main calculation loop //////////////////////
-  int indexToBreed1, indexToBreed2, iterCount = 0;
-  bool hasConverged = false;
-  while (!hasConverged && iterCount < maxIterations)
+  int iterCount = 0;
+  while (iterCount < maxIterations)
   {
     // --------------------- Compute fitness ------------------------
-    // Sort population in ascending order based on distance
+    // Sort population in ascending order based on route length
     std::sort(std::begin(population), std::end(population));
 
     // --------------- Write data to screen & file ------------------
