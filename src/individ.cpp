@@ -14,9 +14,7 @@
 #include <iostream>
 #include <stdio.h>
 
-Individ::Individ()
-{
-}
+Individ::Individ() {}
 
 Individ::Individ(int route[], City cities[], int Ncities)
 {
@@ -34,11 +32,10 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
 {
   // Copy route to Individ's internal route
   for (int i = 0; i < Ncities; i++)
-  {
     this->route[i] = route[i];
-  }
 
   // Calculate the lenght of the route
+  // including the distance from last city back to first
   float l = 0.0, xdiff, ydiff;
   for (int i = 1; i < Ncities; i++)
   {
