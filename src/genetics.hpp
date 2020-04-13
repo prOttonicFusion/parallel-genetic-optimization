@@ -30,13 +30,4 @@ Individ breedIndivids(Individ parent1, Individ parent2, City cities[], int popSi
  */
 void mutateIndivid(Individ individ, int Ncities, std::mt19937 rng);
 
-/**
- * Get the squared distance between two cities 
- * 
- * @param city1 
- * @param city2 
- * @return float Distance between city1 & city2
- */
-float distanceBetweenCities(City city1, City city2);
-
 #endif

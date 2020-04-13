@@ -2,8 +2,8 @@
  * Functions for the Individ class defined in individ.hpp
  *******************************************************************/
 
-#include "city.hpp"
 #include "individ.hpp"
+#include "city.hpp"
 #include <iostream>
 #include <stdio.h>
 
@@ -37,9 +37,10 @@ void Individ::setRoute(int route[], City cities[], int Ncities)
   float d = 0.0, xdiff, ydiff;
   for (int i = 1; i < Ncities; i++)
   {
-    xdiff = (cities[route[i]].xpos - cities[route[i - 1]].xpos);
-    ydiff = (cities[route[i]].ypos - cities[route[i - 1]].ypos);
-    d += xdiff * xdiff + ydiff * ydiff;
+    // xdiff = (cities[route[i]].xpos - cities[route[i - 1]].xpos);
+    // ydiff = (cities[route[i]].ypos - cities[route[i - 1]].ypos);
+    // d += xdiff * xdiff + ydiff * ydiff;
+    d += distanceBetweenCities();
   }
   xdiff = (cities[route[0]].xpos - cities[route[Ncities - 1]].xpos);
   ydiff = (cities[route[0]].ypos - cities[route[Ncities - 1]].ypos);
