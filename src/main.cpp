@@ -167,6 +167,7 @@ int main(int argc, char *argv[])
         float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
         MPI_Allgather(&bestRouteLen, 1, MPI_INT, globalFittestLengths, 1, MPI_INT, GRID_COMM);
         std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
+        std::cout << globalFittestLengths[0] << " " << globalFittestLengths[3] << std::endl;
 
         // Send shortest route
         if (bestRouteLen == globalFittestLengths[0])

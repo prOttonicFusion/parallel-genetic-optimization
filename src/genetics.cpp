@@ -16,7 +16,7 @@
 #include "individ.hpp"
 #include "genetics.hpp"
 
-Individ breedIndivids(Individ parent1, Individ parent2, City cities[], int popSize, int Ncities)
+void breedIndivids(Individ child, Individ parent1, Individ parent2, City cities[], int popSize, int Ncities)
 {
   /** 
      * Generate 2 children genoms heuristically:
@@ -71,7 +71,7 @@ Individ breedIndivids(Individ parent1, Individ parent2, City cities[], int popSi
     childRoute[i] = nextCity;
   }
 
-  return Individ(childRoute, cities, Ncities);
+  child.setRoute(childRoute, cities, Ncities);
 }
 
 void mutateIndivid(Individ individ, int Ncities, std::mt19937 rng)
