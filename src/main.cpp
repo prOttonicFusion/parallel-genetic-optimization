@@ -31,27 +31,26 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  std::string inpuFile = argv[1];          // The name/path of the coordinate file
-  const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
+  std::string inputFile = argv[1];         // The path of the coordinate file
+  const int maxIterations = atoi(argv[2]); // Max. number of iterations
   const int globalPopSize = 1000;          // Combined size of all populations
-  const int eliteSize = 20;                // Number of top-fitness individs to be allowed to breed
+  const float eliteFraction = 0.2;         // Fraction of population to be allowed to breed.
   const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
-  const int eliteMigrationInterval = 50;   // Send fittest individuals to neighbor CPUs every this many iterations
-  const float replaceProportion = 0.85;    // Fraction of population to be replaced by children every iteration
+  const int eliteMigrationPeriod = 20;     // Send fittest individuals to neighbor CPUs every this many iterations
+  const float replaceProportion = 0.80;    // Fraction of population to be replaced by children every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
 
-  // Set screen & output file update intervals
-  const int writeToScreenInterval = (argc > 3) ? atoi(argv[3]) : 1;
-  const int writeToFileInterval = (argc > 4) ? atoi(argv[4]) : 1;
+  const int writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many iters
+  const int writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;   // Print to file every this many iters
 
   int Ncities;  // Number of cities to use in calculations
   int *route;   // Array containing city indices in a specific order
   City *cities; // Array containing all citites
 
   // Read city coordinates from input file
-  if (!parseXYZFile(inpuFile, Ncities, cities))
+  if (!parseXYZFile(inputFile, Ncities, cities))
   {
-    std::cerr << "Error: Could not read coordinate file" << std::endl;
+    std::cerr << "Error: Unable to read coordinate file '" << inputFile << "'" << std::endl;
     return -1;
   }
 
@@ -68,14 +67,13 @@ int main(int argc, char *argv[])
   // -------------------- Initialize output file --------------------
   if (!writeToOutputFile("", true))
   {
-    std::cerr << "Error: Problem with writing to ouput file" << std::endl;
+    std::cerr << "Error: Unable to write to ouput file" << std::endl;
     return -1;
   }
 
   // ------------------------ Initialize MPI ------------------------
   const int tag = 50;
-  int Ntasks, rank, nameLenght, destRank, sourceRank;
-  char procName[MPI_MAX_PROCESSOR_NAME];
+  int Ntasks, rank, destRank, sourceRank;
   MPI_Status status;
 
   if (MPI_Init(&argc, &argv) != MPI_SUCCESS)
@@ -87,11 +85,6 @@ int main(int argc, char *argv[])
   // Query process information
   MPI_Comm_size(MPI_COMM_WORLD, &Ntasks); // Ntasks = number of processes/CPUs
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);   // rank = id of current process
-  //MPI_Get_processor_name(procName, &nameLenght); // procName = name of current process
-
-  // Per-process population size
-  const int popSize = (int)(globalPopSize / Ntasks + 0.5f);
-  const int crossPerIter = (int)(replaceProportion * popSize); //Number of crossowers/iteration
 
   // Map the processors to a 2D grid topology for more structured communication
   int ndims = 2;                        // Number of dimensions
@@ -103,15 +96,29 @@ int main(int argc, char *argv[])
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ----------------- Generate initial population ------------------
+  const int popSize = (int)(globalPopSize / Ntasks + 0.5f);    // Per-process population size
+  const int crossPerIter = (int)(replaceProportion * popSize); // Number of crossowers/iteration
+  const int eliteSize = (int)(eliteFraction * popSize);        // Number of individuals allowed to breed
+
   Individ population[popSize];
   for (int i = 0; i < popSize; i++)
   {
-    std::shuffle(&route[0], &route[Ncities - 1], rng); // Shuffle route
+    std::shuffle(route, route + Ncities, rng); // Shuffle route
     population[i].init(route, cities, Ncities);
   }
 
   // Sort population in ascending order based on route lenght
   std::sort(population, population + popSize);
+
+  // int route_a[Ncities] = {0};
+  // int route_b[Ncities] = {1};
+  // Individ a(route_a, cities, Ncities);
+  // std::cout << getRouteAsString(a.route, cities, Ncities) << std::endl;
+  // Individ b = a;
+  // std::cout << getRouteAsString(b.route, cities, Ncities) << std::endl;
+  // b.setRoute(route_b, cities, Ncities);
+  // std::cout << getRouteAsString(b.route, cities, Ncities) << std::endl;
+  // std::cout << getRouteAsString(a.route, cities, Ncities) << std::endl;
 
   ////////////////////// Main calculation loop //////////////////////
   int iterCount = 0;
@@ -126,13 +133,14 @@ int main(int argc, char *argv[])
       int parent2 = uniformRand(rng) * eliteSize;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
-      Individ child = breedIndivids(population[parent1], population[parent2], cities, popSize, Ncities);
+      //Individ child = population[popSize - i];
+      breedIndivids(population[popSize - i], population[parent1], population[parent2], cities, popSize, Ncities);
 
       // Mutation
       if (uniformRand(rng) < mutationProbability)
-        mutateIndivid(child, Ncities, rng);
+        mutateIndivid(population[popSize - i], Ncities, rng);
 
-      population[popSize - i] = child;
+      //population[popSize - i] = child;
     }
 
     // --------------------- Compute fitness ------------------------
@@ -141,8 +149,8 @@ int main(int argc, char *argv[])
 
     // --------------- Write data to screen & file ------------------
     // TODO: gather the best routes from each process & print the globally best route
-    if (writeToScreenInterval)
-      if (iterCount % writeToScreenInterval == 0)
+    if (writeToScreenPeriod != 0)
+      if (iterCount % writeToScreenPeriod == 0)
       {
         float bestRouteLen = population[0].routeLength;
         float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
@@ -157,8 +165,8 @@ int main(int argc, char *argv[])
         }
       }
 
-    if (writeToFileInterval)
-      if (iterCount % writeToFileInterval == 0)
+    if (writeToFilePeriod != 0)
+      if (iterCount % writeToFilePeriod == 0)
       {
         int bestRoute[Ncities];
         for (int i = 0; i < Ncities; i++)
@@ -167,7 +175,6 @@ int main(int argc, char *argv[])
         float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
         MPI_Allgather(&bestRouteLen, 1, MPI_INT, globalFittestLengths, 1, MPI_INT, GRID_COMM);
         std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
-        std::cout << globalFittestLengths[0] << " " << globalFittestLengths[3] << std::endl;
 
         // Send shortest route
         if (bestRouteLen == globalFittestLengths[0])
@@ -181,7 +188,7 @@ int main(int argc, char *argv[])
       }
 
     // ------------ Share data with closest neighbor CPUs -----------
-    if (iterCount % eliteMigrationInterval == 0 && iterCount > 0)
+    if (iterCount % eliteMigrationPeriod == 0 && iterCount > 0)
     {
       int recvdRoute[Ncities];
       for (int i = 0; i < eliteMigrationSize; i++)

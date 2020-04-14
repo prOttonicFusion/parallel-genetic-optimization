@@ -9,12 +9,12 @@
  * 
  *******************************************************************/
 
+#include "genetics.hpp"
+#include "city.hpp"
+#include "individ.hpp"
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include "city.hpp"
-#include "individ.hpp"
-#include "genetics.hpp"
 
 void breedIndivids(Individ child, Individ parent1, Individ parent2, City cities[], int popSize, int Ncities)
 {
