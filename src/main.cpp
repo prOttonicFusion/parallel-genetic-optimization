@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
 
   std::string inpuFile = argv[1];          // The name/path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations if solution doesn't converge
-  const int globalPopSize = 100;           // Combined size of all populations
+  const int globalPopSize = 1000;          // Combined size of all populations
   const int eliteSize = 20;                // Number of top-fitness individs to be allowed to breed
   const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
-  const int eliteMigrationInterval = 100;  // Send fittest individuals to neighbor CPUs every this many iterations
+  const int eliteMigrationInterval = 50;   // Send fittest individuals to neighbor CPUs every this many iterations
   const float replaceProportion = 0.85;    // Fraction of population to be replaced by children every iteration
   const float mutationProbability = 0.1;   // The probability of offspring getting mutated
 
@@ -140,19 +140,44 @@ int main(int argc, char *argv[])
     std::sort(population, population + popSize);
 
     // --------------- Write data to screen & file ------------------
-    if (rank == 0)
-    {
-      // TODO: gather the best routes from each process & print the globally best route
-      std::string bestRouteStr = population[0].getRouteAsString(cities, Ncities);
-      float bestRouteLen = population[0].routeLength;
-      if (writeToScreenInterval)
-        if (iterCount % writeToScreenInterval == 0)
-          writeToScreen(iterCount, bestRouteStr, bestRouteLen);
+    // TODO: gather the best routes from each process & print the globally best route
+    if (writeToScreenInterval)
+      if (iterCount % writeToScreenInterval == 0)
+      {
+        float bestRouteLen = population[0].routeLength;
+        float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
+        // Gather the lenghts of the best routes from all CPUs to CPU 0
+        MPI_Gather(&bestRouteLen, 1, MPI_FLOAT, globalFittestLengths, 1, MPI_FLOAT, 0, GRID_COMM);
 
-      if (writeToFileInterval)
-        if (iterCount % writeToFileInterval == 0)
-          writeToOutputFile(iterCount, population[0].route, bestRouteStr, bestRouteLen, Ncities);
-    }
+        if (rank == 0)
+        {
+          // Find globally shortest route
+          std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
+          writeToScreen(iterCount, globalFittestLengths[0]);
+        }
+      }
+
+    if (writeToFileInterval)
+      if (iterCount % writeToFileInterval == 0)
+      {
+        int bestRoute[Ncities];
+        for (int i = 0; i < Ncities; i++)
+          bestRoute[i] = population[0].route[i];
+        float bestRouteLen = population[0].routeLength;
+        float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
+        MPI_Allgather(&bestRouteLen, 1, MPI_INT, globalFittestLengths, 1, MPI_INT, GRID_COMM);
+        std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
+
+        // Send shortest route
+        if (bestRouteLen == globalFittestLengths[0])
+          MPI_Bcast(bestRoute, Ncities, MPI_INT, rank, GRID_COMM);
+
+        if (rank == 0)
+        {
+          std::string bestRouteStr = getRouteAsString(bestRoute, cities, Ncities);
+          writeToOutputFile(iterCount, bestRoute, bestRouteStr, bestRouteLen, Ncities);
+        }
+      }
 
     // ------------ Share data with closest neighbor CPUs -----------
     if (iterCount % eliteMigrationInterval == 0 && iterCount > 0)
@@ -164,7 +189,7 @@ int main(int argc, char *argv[])
           // Right & bottom neighbors:
           // Get send & receive adresses for closest neighbor communication
           MPI_Cart_shift(GRID_COMM, j, 1, &sourceRank, &destRank);
-          // Send & receive fittest individuals 
+          // Send & receive fittest individuals
           MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           // Add route received from neighbor to own population

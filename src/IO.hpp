@@ -54,9 +54,8 @@ bool writeToOutputFile(int iterCount, int bestRoute[], std::string bestRouteStr,
  * Write formatted data to screen
  * 
  * @param iterCount [in] Current iteration number
- * @param bestRouteStr [in] Best route as a string of city names
  * @param bestRouteLen [in] Length of the best route
  */
-void writeToScreen(int iterCount, std::string bestRouteStr, float bestRouteLen);
+void writeToScreen(int iterCount, float bestRouteLen);
 
 #endif
