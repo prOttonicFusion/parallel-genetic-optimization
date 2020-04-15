@@ -43,13 +43,13 @@ void breedIndivids(Individ child, Individ parent1, Individ parent2, std::vector<
   for (int i = 1; i < Ncities; i++)
   {
     int nextCity = 0;
-    bool parent1CityInChild = alreadyInRoute(childRoute, parent1.route[i], Ncities);
-    bool parent2CityInChild = alreadyInRoute(childRoute, parent2.route[i], Ncities);
+    bool parent1CityInChild = alreadyInRoute(childRoute, parent1.route[i], i);
+    bool parent2CityInChild = alreadyInRoute(childRoute, parent2.route[i], i);
     if (parent1CityInChild && parent2CityInChild)
     {
       // Both parent1.route[i] and parent2.route[i] already found in childRoute
       nextCity = 0;
-      while (alreadyInRoute(childRoute, nextCity, Ncities))
+      while (alreadyInRoute(childRoute, nextCity, i))
       {
         nextCity++;
       }

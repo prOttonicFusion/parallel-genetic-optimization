@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
   std::string inputFile = argv[1];         // The path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations
-  const int globalPopSize = 50;          // Combined size of all populations
+  const int globalPopSize = 50;            // Combined size of all populations
   const float eliteFraction = 0.2;         // Fraction of population to be allowed to breed.
   const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
   const int eliteMigrationPeriod = 20;     // Send fittest individuals to neighbor CPUs every this many iterations
@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
         std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
 
         // Send shortest route
-        //if (bestRouteLen == globalFittestLengths[0])
-        //MPI_Bcast(bestRoute[0], Ncities, MPI_INT, rank, GRID_COMM);
+        if (bestRouteLen == globalFittestLengths[0])
+          MPI_Bcast(bestRoute.data(), Ncities, MPI_INT, rank, GRID_COMM);
 
         if (rank == 0)
         {
@@ -190,14 +190,14 @@ int main(int argc, char *argv[])
           // Get send & receive adresses for closest neighbor communication
           MPI_Cart_shift(GRID_COMM, j, 1, &sourceRank, &destRank);
           // Send & receive fittest individuals
-          MPI_Sendrecv(&population[i].route[0], Ncities, MPI_INT, destRank, tag, &recvdRoute[0],
+          MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           // Add route received from neighbor to own population
           population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities, Ncities);
 
           // Left & top neighbors:
           MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
-          MPI_Sendrecv(&population[i].route[0], Ncities, MPI_INT, destRank, tag, &recvdRoute[0],
+          MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities, Ncities);
         }
