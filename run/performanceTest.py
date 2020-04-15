@@ -16,7 +16,7 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
-Nrepeat = 5           # Run program Nrepeat times for each setup & take average
+Nrepeat = 2           # Run program Nrepeat times for each setup & take average
 Nproc = [1, 2, 3, 4]  # The processor setups to use
 # Command line rguments for the C++ program
 inputArgs = ['randomCities.xyz', 1000, 1, 1]
@@ -30,7 +30,7 @@ for i, N in enumerate(Nproc):
         stmt=runCmd, setup="import subprocess", number=Nrepeat)
 
 ############################ Draw figure ############################
-plt.figure(num=1, figsize=[8, 5])
+plt.figure(num=1, figsize=[7, 4])
 plt.plot(Nproc, avgTimes_MPI, 'ro--')
 plt.xlabel("Number of processes")
 plt.ylabel("Wall-time (s)")
