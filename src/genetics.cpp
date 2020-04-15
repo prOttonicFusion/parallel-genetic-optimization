@@ -17,16 +17,16 @@
 #include <random>
 #include <vector>
 
-bool alreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
+bool cityAlreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
 {
   for (int i = 0; i < Ncities; i++)
   {
     if (route[i] == cityIndex) return true;
-    return false;
   }
+  return false;
 }
 
-void breedIndivids(Individ child, Individ parent1, Individ parent2, std::vector<City> cities, int popSize, int Ncities)
+void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities, int popSize, int Ncities)
 {
   /** 
      * Generate 2 children genoms heuristically:
@@ -43,26 +43,29 @@ void breedIndivids(Individ child, Individ parent1, Individ parent2, std::vector<
   for (int i = 1; i < Ncities; i++)
   {
     int nextCity = 0;
-    bool parent1CityInChild = alreadyInRoute(childRoute, parent1.route[i], i);
-    bool parent2CityInChild = alreadyInRoute(childRoute, parent2.route[i], i);
+    bool parent1CityInChild = cityAlreadyInRoute(childRoute, parent1.route[i], i);
+    bool parent2CityInChild = cityAlreadyInRoute(childRoute, parent2.route[i], i);
     if (parent1CityInChild && parent2CityInChild)
     {
       // Both parent1.route[i] and parent2.route[i] already found in childRoute
       nextCity = 0;
-      while (alreadyInRoute(childRoute, nextCity, i))
+      while (cityAlreadyInRoute(childRoute, nextCity, i))
       {
         nextCity++;
       }
+      std::cout << "1" << std::endl;
     }
     else if (parent1CityInChild)
     {
       // Found parent1.route[i] in childRoute
       nextCity = parent2.route[i];
+      std::cout << "2" << std::endl;
     }
     else if (parent2CityInChild)
     {
       // Found parent2.route[i] in childRoute
       nextCity = parent1.route[i];
+      std::cout << "3" << std::endl;
     }
     else
     {
@@ -72,10 +75,12 @@ void breedIndivids(Individ child, Individ parent1, Individ parent2, std::vector<
       if (dist1 < dist2)
       {
         nextCity = parent1.route[i];
+        std::cout << "4a" << std::endl;
       }
       else
       {
         nextCity = parent2.route[i];
+        std::cout << "4b" << std::endl;
       }
     }
     childRoute[i] = nextCity;

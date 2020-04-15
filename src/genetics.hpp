@@ -28,7 +28,7 @@
  * @param Ncities [in] Number of cities in one route
  * @return Individ The offspring
  */
-void breedIndivids(Individ child, Individ parent1, Individ parent2, std::vector<City> cities, int popSize, int Ncities);
+void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities, int popSize, int Ncities);
 
 /**
  * Switch places of two random cities on an individ's route

@@ -125,14 +125,14 @@ int main(int argc, char *argv[])
       int parent2 = uniformRand(rng) * eliteSize;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
-      // Individ child = population[popSize - i];
-      breedIndivids(population[popSize - i], population[parent1], population[parent2], cities, popSize, Ncities);
+      Individ child = population[popSize - i];
+      breedIndivids(child, population[parent1], population[parent2], cities, popSize, Ncities);
 
       // Mutation
       if (uniformRand(rng) < mutationProbability)
-        mutateIndivid(population[popSize - i], Ncities, rng);
+        mutateIndivid(child, Ncities, rng);
 
-      //population[popSize - i] = child;
+      population[popSize - i] = child;
     }
 
     // --------------------- Compute fitness ------------------------
@@ -161,8 +161,9 @@ int main(int argc, char *argv[])
       if (iterCount % writeToFilePeriod == 0)
       {
         std::vector<int> bestRoute(Ncities);
-        for (int i = 0; i < Ncities; i++)
-          bestRoute[i] = population[0].route[i];
+        bestRoute = population[0].route;
+        // for (int i = 0; i < Ncities; i++)
+        //   bestRoute[i] = population[0].route[i];
         float bestRouteLen = population[0].routeLength;
         float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
         MPI_Allgather(&bestRouteLen, 1, MPI_INT, globalFittestLengths, 1, MPI_INT, GRID_COMM);
