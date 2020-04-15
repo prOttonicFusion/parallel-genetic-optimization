@@ -17,6 +17,7 @@
 #include <iostream>
 #include <mpi.h>
 #include <random>
+#include <vector>
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
 
   std::string inputFile = argv[1];         // The path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations
-  const int globalPopSize = 1000;          // Combined size of all populations
+  const int globalPopSize = 50;          // Combined size of all populations
   const float eliteFraction = 0.2;         // Fraction of population to be allowed to breed.
   const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
   const int eliteMigrationPeriod = 20;     // Send fittest individuals to neighbor CPUs every this many iterations
@@ -43,9 +44,9 @@ int main(int argc, char *argv[])
   const int writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many iters
   const int writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;   // Print to file every this many iters
 
-  int Ncities;  // Number of cities to use in calculations
-  int *route;   // Array containing city indices in a specific order
-  City *cities; // Array containing all citites
+  int Ncities;              // Number of cities to use in calculations
+  std::vector<int> route;   // Array containing city indices in a specific order
+  std::vector<City> cities; // Array containing all citites
 
   // Read city coordinates from input file
   if (!parseXYZFile(inputFile, Ncities, cities))
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
   }
 
   // Initialize route array
-  route = new int[Ncities];
+  route.resize(Ncities);
   for (int i = 0; i < Ncities; i++)
     route[i] = i;
 
@@ -103,23 +104,14 @@ int main(int argc, char *argv[])
   Individ population[popSize];
   for (int i = 0; i < popSize; i++)
   {
-    std::shuffle(route, route + Ncities, rng); // Shuffle route
+    std::shuffle(route.begin(), route.end(), rng); // Shuffle route
     population[i].init(route, cities, Ncities);
   }
 
   // Sort population in ascending order based on route lenght
   std::sort(population, population + popSize);
 
-  // int route_a[Ncities] = {0};
-  // int route_b[Ncities] = {1};
-  // Individ a(route_a, cities, Ncities);
-  // std::cout << getRouteAsString(a.route, cities, Ncities) << std::endl;
-  // Individ b = a;
-  // std::cout << getRouteAsString(b.route, cities, Ncities) << std::endl;
-  // b.setRoute(route_b, cities, Ncities);
-  // std::cout << getRouteAsString(b.route, cities, Ncities) << std::endl;
-  // std::cout << getRouteAsString(a.route, cities, Ncities) << std::endl;
-
+  std::cout << "Main loop" << std::endl;
   ////////////////////// Main calculation loop //////////////////////
   int iterCount = 0;
   while (iterCount < maxIterations)
@@ -133,7 +125,7 @@ int main(int argc, char *argv[])
       int parent2 = uniformRand(rng) * eliteSize;
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
-      //Individ child = population[popSize - i];
+      // Individ child = population[popSize - i];
       breedIndivids(population[popSize - i], population[parent1], population[parent2], cities, popSize, Ncities);
 
       // Mutation
@@ -168,7 +160,7 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (iterCount % writeToFilePeriod == 0)
       {
-        int bestRoute[Ncities];
+        std::vector<int> bestRoute(Ncities);
         for (int i = 0; i < Ncities; i++)
           bestRoute[i] = population[0].route[i];
         float bestRouteLen = population[0].routeLength;
@@ -177,8 +169,8 @@ int main(int argc, char *argv[])
         std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
 
         // Send shortest route
-        if (bestRouteLen == globalFittestLengths[0])
-          MPI_Bcast(bestRoute, Ncities, MPI_INT, rank, GRID_COMM);
+        //if (bestRouteLen == globalFittestLengths[0])
+        //MPI_Bcast(bestRoute[0], Ncities, MPI_INT, rank, GRID_COMM);
 
         if (rank == 0)
         {
@@ -190,7 +182,7 @@ int main(int argc, char *argv[])
     // ------------ Share data with closest neighbor CPUs -----------
     if (iterCount % eliteMigrationPeriod == 0 && iterCount > 0)
     {
-      int recvdRoute[Ncities];
+      std::vector<int> recvdRoute(Ncities);
       for (int i = 0; i < eliteMigrationSize; i++)
         for (int j = 0; j < 2; j++)
         {
@@ -198,14 +190,14 @@ int main(int argc, char *argv[])
           // Get send & receive adresses for closest neighbor communication
           MPI_Cart_shift(GRID_COMM, j, 1, &sourceRank, &destRank);
           // Send & receive fittest individuals
-          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
+          MPI_Sendrecv(&population[i].route[0], Ncities, MPI_INT, destRank, tag, &recvdRoute[0],
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           // Add route received from neighbor to own population
           population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities, Ncities);
 
           // Left & top neighbors:
           MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
-          MPI_Sendrecv(population[i].route, Ncities, MPI_INT, destRank, tag, recvdRoute,
+          MPI_Sendrecv(&population[i].route[0], Ncities, MPI_INT, destRank, tag, &recvdRoute[0],
                        Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities, Ncities);
         }

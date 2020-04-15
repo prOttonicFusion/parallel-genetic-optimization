@@ -14,6 +14,7 @@
 #include "city.hpp"
 #include "genetics.hpp"
 #include <iostream>
+#include <vector>
 
 /**
  * Parse a xyz-file into an array of City structs
@@ -24,7 +25,7 @@
  * @return true If parse succeeded
  * @return flase If an error occured     
  */
-bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities);
+bool parseXYZFile(std::string inpuFile, int &Ncities, std::vector<City> &cities);
 
 /**
  * Write string to the output file
@@ -48,7 +49,7 @@ bool writeToOutputFile(std::string outputString, bool overWrite = false);
  * @return true If write succeeded
  * @return flase If an error occured  
  */
-bool writeToOutputFile(int iterCount, int bestRoute[], std::string bestRouteStr, float bestRouteLen, int Ncities, bool overWrite = false);
+bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string bestRouteStr, float bestRouteLen, int Ncities, bool overWrite = false);
 
 /**
  * Write formatted data to screen

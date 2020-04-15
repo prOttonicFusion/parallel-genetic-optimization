@@ -13,6 +13,7 @@
 #define INDIVID_H
 #include "city.hpp"
 #include <iostream>
+#include <vector>
 
 /**
  * Class for storing one solution to the problem, i.e. one route
@@ -22,8 +23,9 @@
 class Individ
 {
   public:
-  float routeLength; ///< The squared total length of route travelled
-  int *route;        ///< An array containin the visited cities' indices in visiting order
+  int Ncities;            ///< Number of cities along a route
+  float routeLength;      ///< The squared total length of route travelled
+  std::vector<int> route; ///< An array containin the visited cities' indices in visiting order
 
   /**
    * Construct a new Individ object
@@ -33,30 +35,30 @@ class Individ
   /**
    * Construct a new Individ object
    * 
-   * @param route [in] Int array of city indices
-   * @param cities [in] The actual cities as City struct array
+   * @param route [in] Int vector of city indices
+   * @param cities [in] The actual cities as City struct vector
    * @param Ncities [in] Number of cities in route
    */
-  Individ(int route[], City cities[], int Ncities);
+  Individ(std::vector<int> route, std::vector<City> cities, int Ncities);
 
   /**
    * Initialize Individ with route. Same as setRoute, but
    * also allocates the route array
    * 
-   * @param route [in] Int array of city indices
-   * @param cities [in] The actual cities as City struct array
+   * @param route [in] Int vector of city indices
+   * @param cities [in] The actual cities as City struct vector
    * @param Ncities [in] Number of cities in route
    */
-  void init(int route[], City cities[], int Ncities);
+  void init(std::vector<int> route, std::vector<City> cities, int Ncities);
 
   /**
    * Set the route of the Individ object & calculate the route length
    * 
-   * @param route [in] Int array of city indices
-   * @param cities [in] The actual cities as City struct array
+   * @param route [in] Int vector of city indices
+   * @param cities [in] The actual cities as City struct vector
    * @param Ncities [in] Number of cities in route
    */
-  void setRoute(int route[], City cities[], int Ncities);
+  void setRoute(std::vector<int> route, std::vector<City> cities, int Ncities);
 
   /**
    * Operator overloads

@@ -12,6 +12,7 @@
 #ifndef CITY_H
 #define CITY_H
 #include <iostream>
+#include <vector>
 
 /**
  * A data structure for storing all properties of a single city (gene)
@@ -46,6 +47,6 @@ float distanceBetweenCities(City city1, City city2);
  * @param Ncities [in] Number of cities in route
  * @return std::string 
  */
-std::string getRouteAsString(int route[], City cities[], int Ncities);
+std::string getRouteAsString(std::vector<int> route, std::vector<City> cities, int Ncities);
 
 #endif

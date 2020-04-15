@@ -10,6 +10,7 @@
  *******************************************************************/
 
 #include "city.hpp"
+#include <vector>
 
 float distanceBetweenCities(City city1, City city2)
 {
@@ -18,7 +19,7 @@ float distanceBetweenCities(City city1, City city2)
   return xdiff * xdiff + ydiff * ydiff;
 }
 
-std::string getRouteAsString(int route[], City cities[], int Ncities)
+std::string getRouteAsString(std::vector<int> route, std::vector<City> cities, int Ncities)
 {
   std::string routeStr;
   for (int i = 0; i < Ncities; i++)

@@ -15,8 +15,18 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <vector>
 
-void breedIndivids(Individ child, Individ parent1, Individ parent2, City cities[], int popSize, int Ncities)
+bool alreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
+{
+  for (int i = 0; i < Ncities; i++)
+  {
+    if (route[i] == cityIndex) return true;
+    return false;
+  }
+}
+
+void breedIndivids(Individ child, Individ parent1, Individ parent2, std::vector<City> cities, int popSize, int Ncities)
 {
   /** 
      * Generate 2 children genoms heuristically:
@@ -26,20 +36,20 @@ void breedIndivids(Individ child, Individ parent1, Individ parent2, City cities[
      * - If the closer city is already found in the child, choose the other
      **/
 
-  int childRoute[Ncities];
+  std::vector<int> childRoute(Ncities);
 
   childRoute[0] = parent1.route[0];
 
   for (int i = 1; i < Ncities; i++)
   {
-    int nextCity;
-    bool parent1CityInChild = std::find(childRoute, childRoute + i, parent1.route[i]) != childRoute + i;
-    bool parent2CityInChild = std::find(childRoute, childRoute + i, parent2.route[i]) != childRoute + i;
+    int nextCity = 0;
+    bool parent1CityInChild = alreadyInRoute(childRoute, parent1.route[i], Ncities);
+    bool parent2CityInChild = alreadyInRoute(childRoute, parent2.route[i], Ncities);
     if (parent1CityInChild && parent2CityInChild)
     {
       // Both parent1.route[i] and parent2.route[i] already found in childRoute
       nextCity = 0;
-      while (std::find(childRoute, childRoute + i, nextCity) != childRoute + i)
+      while (alreadyInRoute(childRoute, nextCity, Ncities))
       {
         nextCity++;
       }
@@ -70,7 +80,6 @@ void breedIndivids(Individ child, Individ parent1, Individ parent2, City cities[
     }
     childRoute[i] = nextCity;
   }
-
   child.setRoute(childRoute, cities, Ncities);
 }
 

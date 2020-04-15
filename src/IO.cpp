@@ -9,15 +9,16 @@
  * 
  *******************************************************************/
 
-#include "city.hpp"
 #include "IO.hpp"
+#include "city.hpp"
 #include "genetics.hpp"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
-bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities)
+bool parseXYZFile(std::string inpuFile, int &Ncities, std::vector<City> &cities)
 {
   std::ifstream infile(inpuFile);
   std::string line;
@@ -30,8 +31,8 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities)
   std::istringstream iss(line);
   if (!(iss >> Ncities)) return false;
 
-  // Initialize city array accordingly
-  cities = new City[Ncities];
+  // Initialize city vector accordingly
+  cities.resize(Ncities);
 
   // Skip comment line
   std::getline(infile, line);
@@ -59,7 +60,6 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, City *&cities)
   return true;
 }
 
-
 bool writeToOutputFile(std::string outputString, bool overWrite)
 {
   std::ofstream outputFile;
@@ -75,7 +75,7 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
   outputFile.close();
 }
 
-bool writeToOutputFile(int iterCount, int bestRoute[], std::string bestRouteStr, float bestRouteLen, int Ncities, bool overWrite)
+bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string bestRouteStr, float bestRouteLen, int Ncities, bool overWrite)
 {
   std::ostringstream stringStream;
   stringStream << "Iteration " << iterCount << ":" << std::endl;
