@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
   std::string inputFile = argv[1];         // The path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations
-  const int globalPopSize = 50;            // Combined size of all populations
+  const int globalPopSize = 500;            // Combined size of all populations
   const float eliteFraction = 0.2;         // Fraction of population to be allowed to breed.
   const int eliteMigrationSize = 2;        // How many of the fittest to share with neighbors
   const int eliteMigrationPeriod = 20;     // Send fittest individuals to neighbor CPUs every this many iterations

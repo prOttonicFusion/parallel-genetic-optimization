@@ -53,19 +53,16 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
       {
         nextCity++;
       }
-      std::cout << "1" << std::endl;
     }
     else if (parent1CityInChild)
     {
       // Found parent1.route[i] in childRoute
       nextCity = parent2.route[i];
-      std::cout << "2" << std::endl;
     }
     else if (parent2CityInChild)
     {
       // Found parent2.route[i] in childRoute
       nextCity = parent1.route[i];
-      std::cout << "3" << std::endl;
     }
     else
     {
@@ -75,12 +72,10 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
       if (dist1 < dist2)
       {
         nextCity = parent1.route[i];
-        std::cout << "4a" << std::endl;
       }
       else
       {
         nextCity = parent2.route[i];
-        std::cout << "4b" << std::endl;
       }
     }
     childRoute[i] = nextCity;
