@@ -4,9 +4,9 @@
 #####################################################################
 # @file      plotRoute.py
 # @author    O. Lindblom
-# 
+#
 # A script for visualizing the results of a TSP simulation
-# 
+#
 # @date      2020-04-13
 # @copyright Copyright (c) 2020
 #####################################################################
@@ -23,7 +23,9 @@ if len(sys.argv) != 2:
 
 coordinateFile = sys.argv[1]
 outputFile = 'output.dat'
-cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None, names=['name', 'xpos', 'ypos'], encoding=None)
+cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None,
+                       names=[
+                           'name', 'xpos', 'ypos'], encoding=None)
 names = [c[0] for c in cities]
 xpos = [c[1] for c in cities]
 ypos = [c[2] for c in cities]
@@ -49,6 +51,8 @@ with open(outputFile) as f:
             routeLengths.append(float(spltdLine[1]))
 
 # Generate plottable route
+
+
 def plottableRoute(index):
     routeXCoords = [xpos[i] for i in routes[index]]
     routeYCoords = [ypos[i] for i in routes[index]]

@@ -1,12 +1,12 @@
 /********************************************************************
  * @file      individ.hpp
  * @author    O. Lindblom
- * 
+ *
  * Header file for individ.cpp. Contains the Individ-class
- * 
+ *
  * @date      2020-04-13
  * @copyright Copyright (c) 2020
- * 
+ *
  *******************************************************************/
 
 #ifndef INDIVID_H
@@ -18,7 +18,7 @@
 /**
  * Class for storing one solution to the problem, i.e. one route
  * and the corresponding total route length
- * 
+ *
  */
 class Individ
 {
@@ -34,7 +34,7 @@ class Individ
 
   /**
    * Construct a new Individ object
-   * 
+   *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
    * @param Ncities [in] Number of cities in route
@@ -44,7 +44,7 @@ class Individ
   /**
    * Initialize Individ with route. Same as setRoute, but
    * also allocates the route array
-   * 
+   *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
    * @param Ncities [in] Number of cities in route
@@ -53,7 +53,7 @@ class Individ
 
   /**
    * Set the route of the Individ object & calculate the route length
-   * 
+   *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
    * @param Ncities [in] Number of cities in route

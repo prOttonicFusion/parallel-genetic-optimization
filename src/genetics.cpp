@@ -1,12 +1,12 @@
 /********************************************************************
  * @file      genetics.cpp
  * @author    O. Lindblom
- * 
+ *
  * Functions related to genetic operations
- * 
+ *
  * @date      2020-04-13
  * @copyright Copyright (c) 2020
- * 
+ *
  *******************************************************************/
 
 #include "genetics.hpp"
@@ -26,15 +26,16 @@ bool cityAlreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
   return false;
 }
 
-void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities, int popSize, int Ncities)
+void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities,
+                   int popSize, int Ncities)
 {
-  /** 
-     * Generate 2 children genoms heuristically:
-     * - Take first city of one parent
-     * - The Nth city in the child is chosen from the parents' Nth genes by checking 
-     *   which of the two is closer to the child's N-1th city
-     * - If the closer city is already found in the child, choose the other
-     **/
+  /**
+   * Generate 2 children genoms heuristically:
+   * - Take first city of one parent
+   * - The Nth city in the child is chosen from the parents' Nth genes by checking
+   *   which of the two is closer to the child's N-1th city
+   * - If the closer city is already found in the child, choose the other
+   **/
 
   std::vector<int> childRoute(Ncities);
 

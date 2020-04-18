@@ -1,12 +1,12 @@
 /********************************************************************
  * @file      IO.cpp
  * @author    O. Lindblom
- * 
- * Functions for handling input & output 
- * 
+ *
+ * Functions for handling input & output
+ *
  * @date      2020-04-13
  * @copyright Copyright (c) 2020
- * 
+ *
  *******************************************************************/
 
 #include "IO.hpp"
@@ -75,7 +75,8 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
   outputFile.close();
 }
 
-bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string bestRouteStr, float bestRouteLen, int Ncities, bool overWrite)
+bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string bestRouteStr,
+                       float bestRouteLen, int Ncities, bool overWrite)
 {
   std::ostringstream stringStream;
   stringStream << "Iteration " << iterCount << ":" << std::endl;

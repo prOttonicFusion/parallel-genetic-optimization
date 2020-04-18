@@ -1,12 +1,12 @@
 /********************************************************************
  * @file      individ.cpp
  * @author    O. Lindblom
- * 
+ *
  * Functions for the Individ class defined in individ.hpp
- * 
+ *
  * @date      2020-04-13
  * @copyright Copyright (c) 2020
- * 
+ *
  *******************************************************************/
 
 #include "individ.hpp"
@@ -39,7 +39,8 @@ void Individ::setRoute(std::vector<int> newRoute, std::vector<City> cities, int 
   // Calculate the lenght of the route
   // including the distance from last city back to first
   float l = 0.0;
-  for (int i = 1; i < NumCities; i++) {
+  for (int i = 1; i < NumCities; i++)
+  {
     l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
   }
 
@@ -52,16 +53,10 @@ void Individ::setRoute(std::vector<int> newRoute, std::vector<City> cities, int 
  */
 
 // >
-bool operator>(const Individ &i1, const Individ &i2)
-{
-  return i1.routeLength > i2.routeLength;
-}
+bool operator>(const Individ &i1, const Individ &i2) { return i1.routeLength > i2.routeLength; }
 
 // <
-bool operator<(const Individ &i1, const Individ &i2)
-{
-  return i1.routeLength < i2.routeLength;
-}
+bool operator<(const Individ &i1, const Individ &i2) { return i1.routeLength < i2.routeLength; }
 
 // ==
 bool operator==(const Individ &i1, const Individ &i2)
@@ -70,7 +65,4 @@ bool operator==(const Individ &i1, const Individ &i2)
 }
 
 // !=
-bool operator!=(const Individ &i1, const Individ &i2)
-{
-  return !(i1 == i2);
-}
+bool operator!=(const Individ &i1, const Individ &i2) { return !(i1 == i2); }
