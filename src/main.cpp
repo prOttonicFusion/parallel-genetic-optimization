@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
   for (int i = 0; i < popSize; i++)
   {
     std::shuffle(route.begin(), route.end(), rng); // Shuffle route
-    population[i].init(route, cities, Ncities);
+    population[i].init(route, cities);
   }
 
   // Sort population in ascending order based on route lenght
@@ -134,10 +134,10 @@ int main(int argc, char *argv[])
       parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
 
       Individ child = population[popSize - i];
-      breedIndivids(child, population[parent1], population[parent2], cities, popSize, Ncities);
+      breedIndivids(child, population[parent1], population[parent2], cities, popSize);
 
       // Mutation
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(child, Ncities, rng);
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(child, rng);
 
       population[popSize - i] = child;
     }
@@ -201,13 +201,13 @@ int main(int argc, char *argv[])
           MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           // Add route received from neighbor to own population
-          population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities, Ncities);
+          population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities);
 
           // Left & top neighbors:
           MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
           MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-          population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities, Ncities);
+          population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities);
         }
     }
     iterCount++;

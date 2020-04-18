@@ -17,34 +17,35 @@
 
 Individ::Individ() {}
 
-Individ::Individ(std::vector<int> newRoute, std::vector<City> cities, int NumCities)
+Individ::Individ(std::vector<int> newRoute, std::vector<City> cities)
 {
-  this->init(newRoute, cities, NumCities);
+  this->init(newRoute, cities);
 }
 
-void Individ::init(std::vector<int> newRoute, std::vector<City> cities, int NumCities)
+void Individ::init(std::vector<int> newRoute, std::vector<City> cities)
 {
+  int NumCities = cities.size();
   this->route.resize(NumCities);
   this->Ncities = NumCities;
-  this->setRoute(newRoute, cities, NumCities);
+  this->setRoute(newRoute, cities);
 }
 
-void Individ::setRoute(std::vector<int> newRoute, std::vector<City> cities, int NumCities)
+void Individ::setRoute(std::vector<int> newRoute, std::vector<City> cities)
 {
   // Copy route to Individ's internal route
-  for (int i = 0; i < NumCities; i++)
+  for (int i = 0; i < this->Ncities; i++)
     this->route[i] = newRoute[i];
   // this->route = newRoute;
 
   // Calculate the lenght of the route
   // including the distance from last city back to first
   float l = 0.0;
-  for (int i = 1; i < NumCities; i++)
+  for (int i = 1; i < this->Ncities; i++)
   {
     l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
   }
 
-  l += distanceBetweenCities(cities[route[NumCities - 1]], cities[route[0]]);
+  l += distanceBetweenCities(cities[route[this->Ncities - 1]], cities[route[0]]);
   this->routeLength = l;
 }
 

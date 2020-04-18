@@ -27,7 +27,7 @@ bool cityAlreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
 }
 
 void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities,
-                   int popSize, int Ncities)
+                   int popSize)
 {
   /**
    * Generate 2 children genoms heuristically:
@@ -36,9 +36,8 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
    *   which of the two is closer to the child's N-1th city
    * - If the closer city is already found in the child, choose the other
    **/
-
+  int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);
-
   childRoute[0] = parent1.route[0];
 
   for (int i = 1; i < Ncities; i++)
@@ -81,15 +80,15 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
     }
     childRoute[i] = nextCity;
   }
-  child.setRoute(childRoute, cities, Ncities);
+  child.setRoute(childRoute, cities);
 }
 
-void mutateIndivid(Individ individ, int Ncities, std::mt19937 rng)
+void mutateIndivid(Individ individ, std::mt19937 rng)
 {
   // Generate two random array indices two switch places on
   std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
-  int ind1 = (int)(Ncities * uniformRand(rng));
-  int ind2 = (int)(Ncities * uniformRand(rng));
+  int ind1 = (int)(individ.Ncities * uniformRand(rng));
+  int ind2 = (int)(individ.Ncities * uniformRand(rng));
 
   // Swap array elements
   int element1 = individ.route[ind1];
