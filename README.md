@@ -31,3 +31,4 @@ python3 plotRoute.py <coordinate-file>
 ## TODO
 
 - Change population from array to STL vector?
+- Move all things related to the random generator to a separate header and load that instead of passing rng as function arg
