@@ -28,11 +28,9 @@ int main(int argc, char *argv[])
               << std::endl;
     std::cerr << "  coordFile:   A xyz-file containing the city coordinates" << std::endl;
     std::cerr << "  maxIter:     The maximum number of generations to allow" << std::endl;
-    std::cerr << "  wrtToScreen: Write results to screen every this many "
-                 "iterations. Default = 1"
+    std::cerr << "  wrtToScreen: Write results to screen every this many iterations. Default: 1"
               << std::endl;
-    std::cerr << "  wrtToFile:   Write results to file every this many "
-                 "iterations. Default = 1"
+    std::cerr << "  wrtToFile:   Write results to file every this many iterations. Default: 1"
               << std::endl;
     return -1;
   }
@@ -40,7 +38,7 @@ int main(int argc, char *argv[])
   std::string inputFile = argv[1];         // The path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations
   const int globalPopSize = 1000;          // Combined size of all populations
-  const float eliteFraction = 0.5;         // Fraction of population allowed to breed
+  const float eliteFraction = 0.02;        // Fraction of population conserved to next iteration
   const int migrationSize = 2;             // Number of individuals to share with neighbor CPUs
   const int migrationPeriod = 20;          // Send fittest individuals to neighbor
                                            //  CPUs every this many iterations
@@ -126,7 +124,7 @@ int main(int argc, char *argv[])
     // and replace those less fit with offspring
     Individ nextGeneration[popSize];
 
-    for (int i = 0; i < popSize; i++)
+    for (int i = eliteSize; i < popSize; i++)
     {
       Individ child = population[i];
       int parent1 = selectParent(population, popSize, tournamentSize);
@@ -134,11 +132,12 @@ int main(int argc, char *argv[])
       breedIndivids(child, population[parent1], population[parent2], cities, popSize);
       nextGeneration[i] = child;
 
-      // Mutation
+      // Mutate
       if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], rng);
     }
 
-    for (int i = 0; i < popSize; i++)
+    // Replace population with the new generation
+    for (int i = eliteSize; i < popSize; i++)
       population[i] = nextGeneration[i];
 
     // --------------------- Compute fitness ------------------------
