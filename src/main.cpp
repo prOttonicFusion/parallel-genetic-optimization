@@ -47,7 +47,6 @@ int main(int argc, char *argv[])
   const float replaceFraction = 0.80;      // Fraction of population to be replaced
                                            //  by children every iteration
   const float mutationProbability = 0.1;   // Probability of offspring mutation
-
   const int writeToScreenPeriod =
       (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many iters
   const int writeToFilePeriod =
@@ -131,7 +130,7 @@ int main(int argc, char *argv[])
     {
       int parent1 = uniformRand(rng) * eliteSize;
       int parent2 = uniformRand(rng) * eliteSize;
-      parent2 = (parent1 == parent2) ? parent2 + 1 : parent2;
+      parent2 = (parent1 == parent2) ? parent2 + 1 : parent2; // Parent1 != parent2
 
       Individ child = population[popSize - i];
       breedIndivids(child, population[parent1], population[parent2], cities, popSize);
@@ -160,7 +159,7 @@ int main(int argc, char *argv[])
 
         if (rank == 0)
         {
-          // Find globally shortest route
+          // Find globally shortest route & print it to screen
           std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
           writeToScreen(iterCount, globalFittestLengths[0]);
         }
