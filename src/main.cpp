@@ -162,16 +162,24 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (iterCount % writeToFilePeriod == 0)
       {
-        std::vector<int> bestRoute(Ncities);
-        bestRoute = population[0].route;
-        float bestRouteLen = population[0].routeLength;
-        float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
-        MPI_Allgather(&bestRouteLen, 1, MPI_INT, globalFittestLengths, 1, MPI_INT, GRID_COMM);
-        std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
-
-        // Send shortest route
-        if (bestRouteLen == globalFittestLengths[0])
-          MPI_Bcast(bestRoute.data(), Ncities, MPI_INT, rank, GRID_COMM);
+        std::vector<int> recvdRoute(Ncities), bestRoute(Ncities), globalBestRoute(Ncities);
+        float bestRouteLen = population[0].routeLength, globalBestRouteLen;
+        bestRoute = population[0].route;   // Locally best route
+        globalBestRouteLen = bestRouteLen;
+        for (int i = 1; i < Ntasks; i++)
+        {
+          if (rank == i) MPI_Send(bestRoute.data(), Ncities, MPI_FLOAT, 0, tag, GRID_COMM);
+          if (rank == 0)
+          {
+            MPI_Recv(recvdRoute.data(), Ncities, MPI_FLOAT, i, tag, GRID_COMM, &status);
+            float recvdRouteLen = getLenghtOfRoute(recvdRoute, cities);
+            if (recvdRouteLen < globalBestRouteLen)
+            {
+              bestRoute = recvdRoute;
+              globalBestRouteLen = recvdRouteLen;
+            }
+          }
+        }
 
         if (rank == 0)
         {

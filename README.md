@@ -35,3 +35,4 @@ python3 plotRoute.py <coordinate-file>
 - Move random route generation to within Individ.init()
 - Exit loop if bestRoute does not change over a set amount of iterations
 - Rename iteration to generation
+- Inline most used functions
