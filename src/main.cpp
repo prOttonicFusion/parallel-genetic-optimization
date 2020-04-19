@@ -42,8 +42,6 @@ int main(int argc, char *argv[])
   const int migrationSize = 2;             // Number of individuals to share with neighbor CPUs
   const int migrationPeriod = 20;          // Send fittest individuals to neighbor
                                            //  CPUs every this many iterations
-  const float replaceFraction = 0.80;      // Fraction of population to be replaced
-                                           //  by children every iteration
   const float mutationProbability = 0.1;   // Probability of offspring mutation
   const int tournamentSize = 5;            // The number of individuals to choose new parents from
   const int writeToScreenPeriod =
@@ -102,7 +100,6 @@ int main(int argc, char *argv[])
   // Define per-process population size (should be an even number)
   int tmp = (int)(globalPopSize / Ntasks + 0.5f);
   const int popSize = (tmp % 2 == 0) ? tmp : tmp + 1;
-  const int crossPerIter = (int)(replaceFraction * popSize); // Number of crossowers/iteration
   const int eliteSize = (int)(eliteFraction * popSize); // Number of individuals allowed to breed
 
   Individ population[popSize];
@@ -145,14 +142,12 @@ int main(int argc, char *argv[])
     std::sort(population, population + popSize);
 
     // --------------- Write data to screen & file ------------------
-    // TODO: gather the best routes from each process & print the globally best
-    // route
+    // Gather the best routes from each process & print the globally best route
     if (writeToScreenPeriod != 0)
       if (iterCount % writeToScreenPeriod == 0)
       {
         float bestRouteLen = population[0].routeLength;
-        float globalFittestLengths[Ntasks]; // The lengths of each process'
-                                            // fittest individual
+        float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
         // Gather the lenghts of the best routes from all CPUs to CPU 0
         MPI_Gather(&bestRouteLen, 1, MPI_FLOAT, globalFittestLengths, 1, MPI_FLOAT, 0, GRID_COMM);
 
