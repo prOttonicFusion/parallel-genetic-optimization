@@ -16,13 +16,13 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 ####################### Load calculation data #######################
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
     print(
-        "Usage: {} <coordinate-file>".format(sys.argv[0]))
+        "Usage: {} <coordinate-file> <TSP_GA-output>".format(sys.argv[0]))
     exit()
 
 coordinateFile = sys.argv[1]
-outputFile = 'output.dat'
+outputFile = sys.argv[2]
 cities = np.genfromtxt(coordinateFile, skip_header=2, dtype=None,
                        names=[
                            'name', 'xpos', 'ypos'], encoding=None)
