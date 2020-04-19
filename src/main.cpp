@@ -13,10 +13,10 @@
 #include "city.hpp"
 #include "genetics.hpp"
 #include "individ.hpp"
+#include "random.hpp"
 #include <algorithm>
 #include <iostream>
 #include <mpi.h>
-#include <random>
 #include <vector>
 
 int main(int argc, char *argv[])
@@ -67,11 +67,6 @@ int main(int argc, char *argv[])
   route.resize(Ncities);
   for (int i = 0; i < Ncities; i++)
     route[i] = i;
-
-  // -------------- Initialize random number generator --------------
-  static std::random_device rd;  // Random seed generator
-  static std::mt19937 rng(rd()); // Random engine (Mersenne Twister)
-  static std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
 
   // -------------------- Initialize output file --------------------
   if (!writeToOutputFile("", true))
