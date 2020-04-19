@@ -133,14 +133,13 @@ int main(int argc, char *argv[])
       int parent2 = selectParent(population, popSize, tournamentSize);
       breedIndivids(child, population[parent1], population[parent2], cities, popSize);
       nextGeneration[i] = child;
+
+      // Mutation
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], rng);
     }
 
     for (int i = 0; i < popSize; i++)
-    {
-      // Mutation
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], rng);
       population[i] = nextGeneration[i];
-    }
 
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on route length
@@ -212,6 +211,8 @@ int main(int argc, char *argv[])
     }
     iterCount++;
   }
+
+  // TODO: Gather & output final results
 
   // Finalize MPI & quit program
   MPI_Finalize();
