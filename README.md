@@ -34,3 +34,4 @@ python3 plotRoute.py <coordinate-file>
 - Move all things related to the random generator to a separate header and load that instead of passing rng as function arg
 - Move random route generation to within Individ.init()
 - Exit loop if bestRoute does not change over a set amount of iterations
+- Rename iteration to generation

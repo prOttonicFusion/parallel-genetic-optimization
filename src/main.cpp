@@ -206,9 +206,38 @@ int main(int argc, char *argv[])
     iterCount++;
   }
 
-  // TODO: Gather & output final results
+  ////////////////// Gather & output final results //////////////////
+  std::vector<int> bestRoute(Ncities);
+  bestRoute = population[0].route;
+  float bestRouteLen = population[0].routeLength;
+  float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
+  // Gather the lenghts of the best routes from all CPUs to CPU 0
+  MPI_Gather(&bestRouteLen, 1, MPI_FLOAT, globalFittestLengths, 1, MPI_FLOAT, 0, GRID_COMM);
 
-  // Finalize MPI & quit program
+  MPI_Allgather(&bestRouteLen, 1, MPI_INT, globalFittestLengths, 1, MPI_INT, GRID_COMM);
+  std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
+
+  // Send shortest route
+  if (bestRouteLen == globalFittestLengths[0])
+    MPI_Bcast(bestRoute.data(), Ncities, MPI_INT, rank, GRID_COMM);
+
+  if (rank == 0)
+  {
+    // Find globally shortest route & print it to screen
+    std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
+    std::string bestRouteStr = getRouteAsString(bestRoute, cities, Ncities);
+    std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
+    std::cout << "Total number of generations: " << iterCount << std::endl;
+    std::cout << "Length of shortest route:    " << globalFittestLengths[0] << std::endl;
+    std::cout << std::endl;
+    std::cout << "Generated a total of " << (iterCount * (popSize - eliteSize) + eliteSize) * Ntasks
+              << " individual routes" << std::endl;
+    std::cout << std::endl;
+
+    writeToOutputFile(iterCount, bestRoute, bestRouteStr, bestRouteLen, Ncities);
+  }
+
+  /////////////////// Finalize MPI & quit program ///////////////////
   MPI_Finalize();
   return 0;
 }
