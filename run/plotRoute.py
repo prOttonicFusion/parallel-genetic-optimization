@@ -67,7 +67,7 @@ plt.figure(num=1, figsize=[8, 5])
 plt.xlabel('x-position')
 plt.ylabel('y-position')
 
-routeX, routeY = plottableRoute(1)
+routeX, routeY = plottableRoute(-1)
 plt.plot(routeX, routeY, ':')
 plt.scatter(xpos, ypos)
 
