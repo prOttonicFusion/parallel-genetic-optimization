@@ -18,6 +18,16 @@
 #include <vector>
 
 /**
+ * Select randomly a parent from the population using Tournament Selection
+ *
+ * @param population  [in] The population, i.e. an array of Individ objects
+ * @param popSize  [in] Size of population
+ * @param tournamentSize  [in] Number of individuals to select randomly at random the tournament
+ * @return int The index of the parent in population[]
+ */
+int selectParent(Individ population[], int popSize, int tournamentSize);
+
+/**
  * Merge the genome of two individs to produce offspring
  *
  * @param child [in/out] Child individ (should be initialized prior to breeding)

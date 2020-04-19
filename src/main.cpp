@@ -39,14 +39,15 @@ int main(int argc, char *argv[])
 
   std::string inputFile = argv[1];         // The path of the coordinate file
   const int maxIterations = atoi(argv[2]); // Max. number of iterations
-  const int globalPopSize = 500;           // Combined size of all populations
-  const float eliteFraction = 0.2;         // Fraction of population allowed to breed
+  const int globalPopSize = 1000;          // Combined size of all populations
+  const float eliteFraction = 0.5;         // Fraction of population allowed to breed
   const int migrationSize = 2;             // Number of individuals to share with neighbor CPUs
   const int migrationPeriod = 20;          // Send fittest individuals to neighbor
                                            //  CPUs every this many iterations
   const float replaceFraction = 0.80;      // Fraction of population to be replaced
                                            //  by children every iteration
   const float mutationProbability = 0.1;   // Probability of offspring mutation
+  const int tournamentSize = 5;            // The number of individuals to choose new parents from
   const int writeToScreenPeriod =
       (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many iters
   const int writeToFilePeriod =
@@ -100,7 +101,9 @@ int main(int argc, char *argv[])
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ----------------- Generate initial population ------------------
-  const int popSize = (int)(globalPopSize / Ntasks + 0.5f);  // Per-process population size
+  // Define per-process population size (should be an even number)
+  int tmp = (int)(globalPopSize / Ntasks + 0.5f);
+  const int popSize = (tmp % 2 == 0) ? tmp : tmp + 1;
   const int crossPerIter = (int)(replaceFraction * popSize); // Number of crossowers/iteration
   const int eliteSize = (int)(eliteFraction * popSize); // Number of individuals allowed to breed
 
@@ -121,19 +124,22 @@ int main(int argc, char *argv[])
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
     // and replace those less fit with offspring
-    for (int i = 1; i <= crossPerIter; i++)
+    Individ nextGeneration[popSize];
+
+    for (int i = 0; i < popSize; i++)
     {
-      int parent1 = uniformRand(rng) * eliteSize;
-      int parent2 = uniformRand(rng) * eliteSize;
-      parent2 = (parent1 == parent2) ? parent2 + 1 : parent2; // Parent1 != parent2
-
-      Individ child = population[popSize - i];
+      Individ child = population[i];
+      int parent1 = selectParent(population, popSize, tournamentSize);
+      int parent2 = selectParent(population, popSize, tournamentSize);
       breedIndivids(child, population[parent1], population[parent2], cities, popSize);
+      nextGeneration[i] = child;
+    }
 
+    for (int i = 0; i < popSize; i++)
+    {
       // Mutation
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(child, rng);
-
-      population[popSize - i] = child;
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], rng);
+      population[i] = nextGeneration[i];
     }
 
     // --------------------- Compute fitness ------------------------

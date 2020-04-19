@@ -12,10 +12,24 @@
 #include "genetics.hpp"
 #include "city.hpp"
 #include "individ.hpp"
+#include "random.hpp"
 #include <algorithm>
 #include <iostream>
 #include <random>
 #include <vector>
+
+int selectParent(Individ population[], int popSize, int tournamentSize)
+{
+  // Select tournamentSize random individuals from population and save the index of the fittest
+  int bestIndex = uniformRand(rng) * popSize;
+  for (int i = 0; i < tournamentSize - 1; i++)
+  {
+    int index = uniformRand(rng) * popSize;
+    if (population[index].routeLength < population[bestIndex].routeLength) bestIndex = index;
+  }
+
+  return bestIndex;
+}
 
 bool cityAlreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
 {
@@ -38,7 +52,9 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
    **/
   int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);
-  childRoute[0] = parent1.route[0];
+
+  // Select starting city randomly from either parent
+  childRoute[0] = (uniformRand(rng) > 0.5) ? parent1.route[0] : parent2.route[0];
 
   for (int i = 1; i < Ncities; i++)
   {
