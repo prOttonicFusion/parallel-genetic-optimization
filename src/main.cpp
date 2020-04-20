@@ -164,8 +164,8 @@ int main(int argc, char *argv[])
       if (generation % writeToFilePeriod == 0)
       {
         Individ globalFittest;
-        getGloballyFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
-                                status);
+        getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
+                              status);
         if (rank == 0)
         {
           std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
@@ -202,8 +202,7 @@ int main(int argc, char *argv[])
 
   ////////////////// Gather & output final results //////////////////
   Individ globalFittest;
-  getGloballyFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
-                          status);
+  getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM, status);
 
   if (rank == 0)
   {

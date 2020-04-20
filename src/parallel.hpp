@@ -27,8 +27,8 @@
  * @param comm  [in] MPI Communicator
  * @param statys [in] MPI_Status
  */
-void getGloballyFittestRoute(Individ &globalFittest, const Individ &localFittest,
-                             const std::vector<City> &cities, const int &rank, const int &Ntasks,
-                             const int &tag, MPI_Comm &comm, MPI_Status &status);
+void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
+                           const std::vector<City> &cities, const int &rank, const int &Ntasks,
+                           const int &tag, MPI_Comm &comm, MPI_Status &status);
 
 #endif

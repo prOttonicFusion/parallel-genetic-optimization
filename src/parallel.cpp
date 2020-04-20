@@ -14,9 +14,9 @@
 #include <mpi.h>
 #include <vector>
 
-void getGloballyFittestRoute(Individ &globalFittest, const Individ &localFittest,
-                             const std::vector<City> &cities, const int &rank, const int &Ntasks,
-                             const int &tag, MPI_Comm &comm, MPI_Status &status)
+void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
+                           const std::vector<City> &cities, const int &rank, const int &Ntasks,
+                           const int &tag, MPI_Comm &comm, MPI_Status &status)
 {
   int Ncities = cities.size();
   std::vector<int> recvdRoute(Ncities);
