@@ -24,18 +24,14 @@ Individ::Individ(std::vector<int> newRoute, std::vector<City> cities)
 
 void Individ::init(std::vector<int> newRoute, std::vector<City> cities)
 {
-  int NumCities = cities.size();
-  this->route.resize(NumCities);
-  this->Ncities = NumCities;
+  this->Ncities = cities.size();
   this->setRoute(newRoute, cities);
 }
 
 void Individ::setRoute(std::vector<int> newRoute, std::vector<City> cities)
 {
   // Copy route to Individ's internal route
-  for (int i = 0; i < this->Ncities; i++)
-    this->route[i] = newRoute[i];
-  // this->route = newRoute;
+  this->route = newRoute;
 
   // Calculate the lenght of the route
   // including the distance from last city back to first
