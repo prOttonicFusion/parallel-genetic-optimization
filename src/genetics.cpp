@@ -99,7 +99,7 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
   child.setRoute(childRoute, cities);
 }
 
-void mutateIndivid(Individ individ, std::mt19937 rng)
+void mutateIndivid(Individ individ)
 {
   // Generate two random array indices two switch places on
   std::uniform_real_distribution<float> uniformRand(0.0, 1.0);

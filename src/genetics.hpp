@@ -44,8 +44,7 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
  * Switch places of two random cities on an individ's route
  *
  * @param individ [in/out] The target of the mutation
- * @param rng [in] Random engine
  */
-void mutateIndivid(Individ individ, std::mt19937 rng);
+void mutateIndivid(Individ individ);
 
 #endif

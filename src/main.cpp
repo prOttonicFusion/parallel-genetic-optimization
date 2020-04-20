@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
       nextGeneration[i] = child;
 
       // Mutate
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], rng);
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i]);
     }
 
     // Replace population with the new generation
