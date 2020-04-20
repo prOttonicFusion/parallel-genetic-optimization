@@ -19,18 +19,6 @@ float distanceBetweenCities(City city1, City city2)
   return xdiff * xdiff + ydiff * ydiff;
 }
 
-float getLenghtOfRoute(std::vector<int> route, std::vector<City> cities)
-{
-  int Ncities = cities.size();
-  float l = 0.0;
-  for (int i = 1; i < Ncities; i++)
-  {
-    l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
-  }
-  l += distanceBetweenCities(cities[route[Ncities - 1]], cities[route[0]]);
-  return l;
-}
-
 std::string getRouteAsString(std::vector<int> route, std::vector<City> cities, int Ncities)
 {
   std::string routeStr;

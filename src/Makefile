@@ -14,8 +14,8 @@ CMP=mpic++
 # Optimization level
 OPT=-O2 
 
-tsp_ga: individ.o genetics.o IO.o city.o main.o
-	${CMP} -g main.o IO.o city.o individ.o genetics.o ${OPT} -o tsp_ga
+tsp_ga: individ.o genetics.o IO.o city.o parallel.o main.o
+	${CMP} -g main.o parallel.o IO.o city.o individ.o genetics.o ${OPT} -o tsp_ga
 
 city.o:
 	${CMP} -c city.cpp ${OPT}
@@ -28,6 +28,9 @@ individ.o:
 
 genetics.o:
 	${CMP} -c genetics.cpp ${OPT}
+
+parallel.o:
+	${CMP} -c parallel.cpp ${OPT}
 
 main.o:
 	${CMP} -c main.cpp ${OPT}

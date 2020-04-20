@@ -13,6 +13,7 @@
 #include "city.hpp"
 #include "genetics.hpp"
 #include "individ.hpp"
+#include "parallel.hpp"
 #include "random.hpp"
 #include <algorithm>
 #include <iostream>
@@ -162,29 +163,16 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (generation % writeToFilePeriod == 0)
       {
-        std::vector<int> recvdRoute(Ncities), bestRoute(Ncities);
-        float bestRouteLen = population[0].routeLength, globalBestRouteLen;
-        bestRoute = population[0].route; // Locally best route
-        globalBestRouteLen = bestRouteLen;
-        for (int i = 1; i < Ntasks; i++)
-        {
-          if (rank == i) MPI_Send(bestRoute.data(), Ncities, MPI_FLOAT, 0, tag, GRID_COMM);
-          if (rank == 0)
-          {
-            MPI_Recv(recvdRoute.data(), Ncities, MPI_FLOAT, i, tag, GRID_COMM, &status);
-            float recvdRouteLen = getLenghtOfRoute(recvdRoute, cities);
-            if (recvdRouteLen < globalBestRouteLen)
-            {
-              bestRoute = recvdRoute;
-              globalBestRouteLen = recvdRouteLen;
-            }
-          }
-        }
-
+        // std::vector<int> globalBestRoute(Ncities);
+        // float globalBestRouteLen;
+        Individ globalFittest;
+        getGloballyFittestRoute(globalFittest, population, cities, rank, Ntasks, tag, GRID_COMM,
+                                status);
         if (rank == 0)
         {
-          std::string bestRouteStr = getRouteAsString(bestRoute, cities, Ncities);
-          writeToOutputFile(generation, bestRoute, bestRouteStr, bestRouteLen);
+          std::string bestRouteStr = getRouteAsString(globalFittest.route, cities, Ncities);
+          writeToOutputFile(generation, globalFittest.route, bestRouteStr,
+                            globalFittest.routeLength);
         }
       }
 
@@ -215,39 +203,23 @@ int main(int argc, char *argv[])
   }
 
   ////////////////// Gather & output final results //////////////////
-  std::vector<int> recvdRoute(Ncities), bestRoute(Ncities);
-  float bestRouteLen = population[0].routeLength, globalBestRouteLen;
-  bestRoute = population[0].route; // Locally best route
-  globalBestRouteLen = bestRouteLen;
-  for (int i = 1; i < Ntasks; i++)
-  {
-    if (rank == i) MPI_Send(bestRoute.data(), Ncities, MPI_FLOAT, 0, tag, GRID_COMM);
-    if (rank == 0)
-    {
-      MPI_Recv(recvdRoute.data(), Ncities, MPI_FLOAT, i, tag, GRID_COMM, &status);
-      float recvdRouteLen = getLenghtOfRoute(recvdRoute, cities);
-      if (recvdRouteLen < globalBestRouteLen)
-      {
-        bestRoute = recvdRoute;
-        globalBestRouteLen = recvdRouteLen;
-      }
-    }
-  }
+  Individ globalFittest;
+  getGloballyFittestRoute(globalFittest, population, cities, rank, Ntasks, tag, GRID_COMM, status);
 
   if (rank == 0)
   {
     // Find globally shortest route & print it to screen
-    std::string bestRouteStr = getRouteAsString(bestRoute, cities, Ncities);
+    std::string bestRouteStr = getRouteAsString(globalFittest.route, cities, Ncities);
     std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
     std::cout << "Total number of generations: " << generation << std::endl;
-    std::cout << "Length of shortest route:    " << globalBestRouteLen << std::endl;
+    std::cout << "Length of shortest route:    " << globalFittest.routeLength << std::endl;
     std::cout << std::endl;
     std::cout << "Generated a total of "
               << (generation * (popSize - eliteSize) + eliteSize) * Ntasks << " individual routes"
               << std::endl;
     std::cout << std::endl;
 
-    writeToOutputFile(generation, bestRoute, bestRouteStr, bestRouteLen);
+    writeToOutputFile(generation, globalFittest.route, bestRouteStr, globalFittest.routeLength);
   }
 
   /////////////////// Finalize MPI & quit program ///////////////////

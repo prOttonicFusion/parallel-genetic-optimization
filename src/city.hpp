@@ -39,16 +39,6 @@ struct City
  */
 float distanceBetweenCities(City city1, City city2);
 
-
-/**
- * Get the lenght of a route
- * 
- * @param route  [in] The route as a vector of indices referring to City objects in cities
- * @param cities  [in] Vector of City objects
- * @return float Total length of the route
- */
-float getLenghtOfRoute(std::vector<int> route, std::vector<City> cities); 
-
 /**
  * Convert route to string of city names
  *
