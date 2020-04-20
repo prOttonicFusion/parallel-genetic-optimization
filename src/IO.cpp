@@ -79,18 +79,18 @@ bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string b
                        float bestRouteLen, int Ncities, bool overWrite)
 {
   std::ostringstream stringStream;
-  stringStream << "Iteration " << generation << ":" << std::endl;
-  stringStream << "length: " << bestRouteLen << std::endl;
-  stringStream << "routeIndices: ";
+  stringStream << "Generation " << generation << ":" << std::endl;
+  stringStream << "Length: " << bestRouteLen << std::endl;
+  stringStream << "Route_indices: ";
   for (int i = 0; i < Ncities; i++)
     stringStream << bestRoute[i] << " ";
   stringStream << std::endl;
-  stringStream << "routeString: " << bestRouteStr << std::endl;
+  stringStream << "Route_string: " << bestRouteStr << std::endl;
   writeToOutputFile(stringStream.str(), overWrite);
 }
 
 void writeToScreen(int generation, float bestRouteLen)
 {
-  std::cout << "Iteration " << generation << ": " << std::endl;
+  std::cout << "Generation " << generation << ": " << std::endl;
   std::cout << "  Shortest route = " << bestRouteLen << std::endl;
 }

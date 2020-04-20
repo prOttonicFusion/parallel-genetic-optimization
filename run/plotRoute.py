@@ -37,16 +37,16 @@ routeLengths = []
 with open(outputFile) as f:
     lines = f.readlines()
     for line in lines:
-        if ('Iteration' in line):
+        if ('Generation' in line):
             spltdLine = line.split()
             genCounts.append(int(spltdLine[1][0:-1]))
 
-        if ('routeIndices' in line):
+        if ('Route_indices' in line):
             spltdLine = line.split()
             newRoute = [int(i) for i in spltdLine[1:]]
             routes.append(newRoute)
 
-        if ('length:' in line):
+        if ('Length:' in line):
             spltdLine = line.split()
             routeLengths.append(float(spltdLine[1]))
 
@@ -80,7 +80,7 @@ plt.show()
 
 # Convergence plot
 plt.figure(num=2, figsize=[8, 5])
-plt.xlabel('Iteration count')
+plt.xlabel('Generation count')
 plt.ylabel('Length of shortest route')
 
 plt.plot(genCounts, routeLengths)

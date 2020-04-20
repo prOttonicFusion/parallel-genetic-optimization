@@ -24,10 +24,10 @@ int main(int argc, char *argv[])
   // Parse command line arguments
   if (argc < 3)
   {
-    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxIter> [wrtToScreen] [wrtToFile]"
+    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
               << std::endl;
     std::cerr << "  coordFile:   A xyz-file containing the city coordinates" << std::endl;
-    std::cerr << "  maxIter:     The maximum number of generations to allow" << std::endl;
+    std::cerr << "  maxGen:     The maximum number of generations to allow" << std::endl;
     std::cerr << "  wrtToScreen: Write results to screen every this many iterations. Default: 1"
               << std::endl;
     std::cerr << "  wrtToFile:   Write results to file every this many iterations. Default: 1"
