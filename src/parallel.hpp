@@ -18,8 +18,8 @@
 /**
  * Compare the shortest routes on each CPU and determine the globally shortest one
  *
- * @param globalFittest  [in/out] The fittest individual globally 
- * @param population  [in] An array of Individ objects
+ * @param globalFittest  [in/out] The fittest individual globally
+ * @param localFittest  [in] The fittest individual locally
  * @param cities  [in] An vector of city objects
  * @param rank  [in] The id of the current CPU
  * @param Ntaskks [in] The total number of CPUs
@@ -27,7 +27,8 @@
  * @param comm  [in] MPI Communicator
  * @param statys [in] MPI_Status
  */
-void getGloballyFittestRoute(Individ &globalFittest, Individ population[], std::vector<City> cities,
-                             int rank, int Ntasks, int tag, MPI_Comm comm, MPI_Status &status);
+void getGloballyFittestRoute(Individ &globalFittest, const Individ &localFittest,
+                             const std::vector<City> &cities, const int &rank, const int &Ntasks,
+                             const int &tag, MPI_Comm &comm, MPI_Status &status);
 
 #endif

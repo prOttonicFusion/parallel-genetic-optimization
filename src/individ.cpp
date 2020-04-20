@@ -17,18 +17,18 @@
 
 Individ::Individ() {}
 
-Individ::Individ(std::vector<int> newRoute, std::vector<City> cities)
+Individ::Individ(const std::vector<int> &newRoute, const std::vector<City> &cities)
 {
   this->init(newRoute, cities);
 }
 
-void Individ::init(std::vector<int> newRoute, std::vector<City> cities)
+void Individ::init(const std::vector<int> &newRoute, const std::vector<City> &cities)
 {
   this->Ncities = cities.size();
   this->setRoute(newRoute, cities);
 }
 
-void Individ::setRoute(std::vector<int> newRoute, std::vector<City> cities)
+void Individ::setRoute(const std::vector<int> &newRoute, const std::vector<City> &cities)
 {
   // Copy route to Individ's internal route
   this->route = newRoute;

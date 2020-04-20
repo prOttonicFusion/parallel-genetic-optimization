@@ -18,7 +18,7 @@
 #include <random>
 #include <vector>
 
-int selectParent(Individ population[], int popSize, int tournamentSize)
+int selectParent(Individ population[], const int &popSize, const int &tournamentSize)
 {
   // Select tournamentSize random individuals from population and save the index of the fittest
   int bestIndex = uniformRand(rng) * popSize;
@@ -31,7 +31,7 @@ int selectParent(Individ population[], int popSize, int tournamentSize)
   return bestIndex;
 }
 
-bool cityAlreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
+bool cityAlreadyInRoute(const std::vector<int> &route, const int &cityIndex, const int &Ncities)
 {
   for (int i = 0; i < Ncities; i++)
   {
@@ -40,8 +40,8 @@ bool cityAlreadyInRoute(std::vector<int> route, int cityIndex, int Ncities)
   return false;
 }
 
-void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities,
-                   int popSize)
+void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
+                   const std::vector<City> &cities, const int &popSize)
 {
   /**
    * Generate 2 children genoms heuristically:
@@ -99,7 +99,7 @@ void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector
   child.setRoute(childRoute, cities);
 }
 
-void mutateIndivid(Individ individ)
+void mutateIndivid(Individ &individ)
 {
   // Generate two random array indices two switch places on
   std::uniform_real_distribution<float> uniformRand(0.0, 1.0);

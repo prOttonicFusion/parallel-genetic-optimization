@@ -163,14 +163,12 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (generation % writeToFilePeriod == 0)
       {
-        // std::vector<int> globalBestRoute(Ncities);
-        // float globalBestRouteLen;
         Individ globalFittest;
-        getGloballyFittestRoute(globalFittest, population, cities, rank, Ntasks, tag, GRID_COMM,
+        getGloballyFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
                                 status);
         if (rank == 0)
         {
-          std::string bestRouteStr = getRouteAsString(globalFittest.route, cities, Ncities);
+          std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
           writeToOutputFile(generation, globalFittest.route, bestRouteStr,
                             globalFittest.routeLength);
         }
@@ -204,12 +202,13 @@ int main(int argc, char *argv[])
 
   ////////////////// Gather & output final results //////////////////
   Individ globalFittest;
-  getGloballyFittestRoute(globalFittest, population, cities, rank, Ntasks, tag, GRID_COMM, status);
+  getGloballyFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
+                          status);
 
   if (rank == 0)
   {
     // Find globally shortest route & print it to screen
-    std::string bestRouteStr = getRouteAsString(globalFittest.route, cities, Ncities);
+    std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
     std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
     std::cout << "Total number of generations: " << generation << std::endl;
     std::cout << "Length of shortest route:    " << globalFittest.routeLength << std::endl;

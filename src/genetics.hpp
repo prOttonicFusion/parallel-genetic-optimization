@@ -25,7 +25,7 @@
  * @param tournamentSize  [in] Number of individuals to select randomly at random the tournament
  * @return int The index of the parent in population[]
  */
-int selectParent(Individ population[], int popSize, int tournamentSize);
+int selectParent(Individ population[], const int &popSize, const int &tournamentSize);
 
 /**
  * Merge the genome of two individs to produce offspring
@@ -37,14 +37,14 @@ int selectParent(Individ population[], int popSize, int tournamentSize);
  * @param popSize [in] Size of population
  * @return Individ The offspring
  */
-void breedIndivids(Individ &child, Individ parent1, Individ parent2, std::vector<City> cities,
-                   int popSize);
+void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
+                   const std::vector<City> &cities, const int &popSize);
 
 /**
  * Switch places of two random cities on an individ's route
  *
  * @param individ [in/out] The target of the mutation
  */
-void mutateIndivid(Individ individ);
+void mutateIndivid(Individ &individ);
 
 #endif

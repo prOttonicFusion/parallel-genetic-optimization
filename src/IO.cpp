@@ -18,9 +18,9 @@
 #include <string>
 #include <vector>
 
-bool parseXYZFile(std::string inpuFile, int &Ncities, std::vector<City> &cities)
+bool parseXYZFile(std::string &inputFile, int &Ncities, std::vector<City> &cities)
 {
-  std::ifstream infile(inpuFile);
+  std::ifstream infile(inputFile);
   std::string line;
 
   // On error
@@ -60,7 +60,7 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, std::vector<City> &cities)
   return true;
 }
 
-bool writeToOutputFile(std::string outputString, bool overWrite)
+bool writeToOutputFile(const std::string &outputString, bool overWrite)
 {
   std::ofstream outputFile;
   if (overWrite)
@@ -75,8 +75,8 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
   outputFile.close();
 }
 
-bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string bestRouteStr,
-                       float bestRouteLen, bool overWrite)
+bool writeToOutputFile(int generation, const std::vector<int> &bestRoute,
+                       const std::string &bestRouteStr, const float &bestRouteLen, bool overWrite)
 {
   std::ostringstream stringStream;
   stringStream << "Generation " << generation << ":" << std::endl;
@@ -89,7 +89,7 @@ bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string b
   writeToOutputFile(stringStream.str(), overWrite);
 }
 
-void writeToScreen(int generation, float bestRouteLen)
+void writeToScreen(const int &generation, const float &bestRouteLen)
 {
   std::cout << "Generation " << generation << ": " << std::endl;
   std::cout << "  Shortest route = " << bestRouteLen << std::endl;

@@ -14,12 +14,13 @@
 #include <mpi.h>
 #include <vector>
 
-void getGloballyFittestRoute(Individ &globalFittest, Individ population[], std::vector<City> cities,
-                             int rank, int Ntasks, int tag, MPI_Comm comm, MPI_Status &status)
+void getGloballyFittestRoute(Individ &globalFittest, const Individ &localFittest,
+                             const std::vector<City> &cities, const int &rank, const int &Ntasks,
+                             const int &tag, MPI_Comm &comm, MPI_Status &status)
 {
   int Ncities = cities.size();
   std::vector<int> recvdRoute(Ncities);
-  std::vector<int> localBestRoute = population[0].route; // Locally best route
+  std::vector<int> localBestRoute = localFittest.route; // Locally best route
   std::vector<Individ> globalFittestCandidates(Ntasks);
 
   // Send the CPU's local best route to root

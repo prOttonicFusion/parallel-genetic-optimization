@@ -37,7 +37,7 @@ struct City
  * @param city2
  * @return float Distance between city1 & city2
  */
-float distanceBetweenCities(City city1, City city2);
+float distanceBetweenCities(const City &city1, const City &city2);
 
 /**
  * Convert route to string of city names
@@ -47,6 +47,6 @@ float distanceBetweenCities(City city1, City city2);
  * @param Ncities [in] Number of cities in route
  * @return std::string
  */
-std::string getRouteAsString(std::vector<int> route, std::vector<City> cities, int Ncities);
+std::string getRouteAsString(const std::vector<int> &route, const std::vector<City> &cities);
 
 #endif

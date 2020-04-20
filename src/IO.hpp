@@ -25,7 +25,7 @@
  * @return true If parse succeeded
  * @return flase If an error occured
  */
-bool parseXYZFile(std::string inpuFile, int &Ncities, std::vector<City> &cities);
+bool parseXYZFile(std::string &inputFile, int &Ncities, std::vector<City> &cities);
 
 /**
  * Write string to the output file
@@ -35,7 +35,7 @@ bool parseXYZFile(std::string inpuFile, int &Ncities, std::vector<City> &cities)
  * @return true If write succeeded
  * @return flase If an error occured
  */
-bool writeToOutputFile(std::string outputString, bool overWrite = false);
+bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
 
 /**
  * Write formatted data to output file
@@ -48,8 +48,8 @@ bool writeToOutputFile(std::string outputString, bool overWrite = false);
  * @return true If write succeeded
  * @return flase If an error occured
  */
-bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string bestRouteStr,
-                       float bestRouteLen, bool overWrite = false);
+bool writeToOutputFile(int generation, const std::vector<int> &bestRoute, const std::string &bestRouteStr,
+                       const float &bestRouteLen, bool overWrite = false);
 
 /**
  * Write formatted data to screen
@@ -57,6 +57,6 @@ bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string b
  * @param generation [in] Current generation number
  * @param bestRouteLen [in] Length of the best route
  */
-void writeToScreen(int generation, float bestRouteLen);
+void writeToScreen(const int &generation, const float &bestRouteLen);
 
 #endif

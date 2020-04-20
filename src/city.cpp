@@ -12,15 +12,16 @@
 #include "city.hpp"
 #include <vector>
 
-float distanceBetweenCities(City city1, City city2)
+float distanceBetweenCities(const City &city1, const City &city2)
 {
   int xdiff = (city1.xpos - city2.xpos);
   int ydiff = (city1.ypos - city2.ypos);
   return xdiff * xdiff + ydiff * ydiff;
 }
 
-std::string getRouteAsString(std::vector<int> route, std::vector<City> cities, int Ncities)
+std::string getRouteAsString(const std::vector<int> &route, const std::vector<City> &cities)
 {
+  int Ncities = cities.size();
   std::string routeStr;
   for (int i = 0; i < Ncities; i++)
   {
