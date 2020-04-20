@@ -50,10 +50,9 @@ with open(outputFile) as f:
             spltdLine = line.split()
             routeLengths.append(float(spltdLine[1]))
 
-# Generate plottable route
-
 
 def plottableRoute(index):
+    """Generate plottable route"""
     routeXCoords = [xpos[i] for i in routes[index]]
     routeYCoords = [ypos[i] for i in routes[index]]
     routeXCoords.append(xpos[routes[index][0]])
@@ -67,12 +66,14 @@ plt.figure(num=1, figsize=[8, 5])
 plt.xlabel('x-position')
 plt.ylabel('y-position')
 
+# Draw best route
 routeX, routeY = plottableRoute(-1)
-plt.plot(routeX, routeY, ':')
-plt.scatter(xpos, ypos)
+plt.plot(routeX, routeY, '--')
 
+# Draw cities
+plt.scatter(xpos, ypos)
 for i, txt in enumerate(names):
-    plt.annotate(txt, (xpos[i], ypos[i]))
+    plt.annotate(txt, (xpos[i], ypos[i]), label='Final')
 
 plt.savefig('routes.png')
 plt.show()
