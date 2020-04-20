@@ -196,6 +196,7 @@ int main(int argc, char *argv[])
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities);
         }
+      std::sort(population, population + popSize);
     }
     generation++;
   }
@@ -216,7 +217,6 @@ int main(int argc, char *argv[])
               << (generation * (popSize - eliteSize) + eliteSize) * Ntasks << " individual routes"
               << std::endl;
     std::cout << std::endl;
-
     writeToOutputFile(generation, globalFittest.route, bestRouteStr, globalFittest.routeLength);
   }
 
