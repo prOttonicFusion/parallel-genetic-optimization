@@ -44,13 +44,12 @@ bool writeToOutputFile(std::string outputString, bool overWrite = false);
  * @param bestRoute [in] Best route as int array
  * @param bestRouteStr [in] Best route as a string of city names
  * @param bestRouteLen [in] Length of the best route
- * @param Ncities [in] Number of cities in one route
  * @param overWrite [in] SHould we overwrite the file?
  * @return true If write succeeded
  * @return flase If an error occured
  */
 bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string bestRouteStr,
-                       float bestRouteLen, int Ncities, bool overWrite = false);
+                       float bestRouteLen, bool overWrite = false);
 
 /**
  * Write formatted data to screen

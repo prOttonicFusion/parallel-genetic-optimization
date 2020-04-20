@@ -76,13 +76,13 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
 }
 
 bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string bestRouteStr,
-                       float bestRouteLen, int Ncities, bool overWrite)
+                       float bestRouteLen, bool overWrite)
 {
   std::ostringstream stringStream;
   stringStream << "Generation " << generation << ":" << std::endl;
   stringStream << "Length: " << bestRouteLen << std::endl;
   stringStream << "Route_indices: ";
-  for (int i = 0; i < Ncities; i++)
+  for (int i = 0; i < bestRoute.size(); i++)
     stringStream << bestRoute[i] << " ";
   stringStream << std::endl;
   stringStream << "Route_string: " << bestRouteStr << std::endl;
