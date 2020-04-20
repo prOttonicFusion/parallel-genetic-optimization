@@ -22,6 +22,8 @@ src/
 ├── IO.cpp --------------------- A module containing functions for parsing input files
 │                                and writing output 
 ├── IO.hpp --------------------- The C++ header for the above file
+├── parallel.cpp --------------- A module containing functions related to MPI communication
+├── parallel.hpp --------------- The C++ header for the above file
 └── random.hpp ----------------- All things related to random number generation 
 
 
