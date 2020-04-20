@@ -14,10 +14,10 @@ Running:
 ---------------------
 The program is executed by running: 
 
-mpiexec -n <N> ../src/tsp_ga <coordinate-file> <Niterations> [toScreenInt] [toFileInt]
+mpiexec -n <N> ../src/tsp_ga <coordinate-file> <Ngenerations> [toScreenInt] [toFileInt]
 
 with <N> being the desired number of cores, <coordinate-file> the city coordinate file 
-and <Niterations> the total number of iterations/generations. E.g.
+and <Ngenerations> the total number of generations. E.g.
 
 mpiexec -n 4 ../src/tsp_ga cityCoordinates.xyz 1000 10 1
 

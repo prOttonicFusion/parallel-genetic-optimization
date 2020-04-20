@@ -75,11 +75,11 @@ bool writeToOutputFile(std::string outputString, bool overWrite)
   outputFile.close();
 }
 
-bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string bestRouteStr,
+bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string bestRouteStr,
                        float bestRouteLen, int Ncities, bool overWrite)
 {
   std::ostringstream stringStream;
-  stringStream << "Iteration " << iterCount << ":" << std::endl;
+  stringStream << "Iteration " << generation << ":" << std::endl;
   stringStream << "length: " << bestRouteLen << std::endl;
   stringStream << "routeIndices: ";
   for (int i = 0; i < Ncities; i++)
@@ -89,8 +89,8 @@ bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string be
   writeToOutputFile(stringStream.str(), overWrite);
 }
 
-void writeToScreen(int iterCount, float bestRouteLen)
+void writeToScreen(int generation, float bestRouteLen)
 {
-  std::cout << "Iteration " << iterCount << ": " << std::endl;
+  std::cout << "Iteration " << generation << ": " << std::endl;
   std::cout << "  Shortest route = " << bestRouteLen << std::endl;
 }

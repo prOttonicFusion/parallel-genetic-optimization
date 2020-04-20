@@ -31,7 +31,7 @@ xpos = [c[1] for c in cities]
 ypos = [c[2] for c in cities]
 
 # Read routes from outputFile
-iterCounts = []
+genCounts = []
 routes = []
 routeLengths = []
 with open(outputFile) as f:
@@ -39,7 +39,7 @@ with open(outputFile) as f:
     for line in lines:
         if ('Iteration' in line):
             spltdLine = line.split()
-            iterCounts.append(int(spltdLine[1][0:-1]))
+            genCounts.append(int(spltdLine[1][0:-1]))
 
         if ('routeIndices' in line):
             spltdLine = line.split()
@@ -83,7 +83,7 @@ plt.figure(num=2, figsize=[8, 5])
 plt.xlabel('Iteration count')
 plt.ylabel('Length of shortest route')
 
-plt.plot(iterCounts, routeLengths)
+plt.plot(genCounts, routeLengths)
 
 plt.savefig('convergence.png')
 plt.show()

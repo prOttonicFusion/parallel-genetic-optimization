@@ -35,19 +35,19 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  std::string inputFile = argv[1];         // The path of the coordinate file
-  const int maxIterations = atoi(argv[2]); // Max. number of iterations
-  const int globalPopSize = 1000;          // Combined size of all populations
-  const float eliteFraction = 0.02;        // Fraction of population conserved to next iteration
-  const int migrationSize = 2;             // Number of individuals to share with neighbor CPUs
-  const int migrationPeriod = 20;          // Send fittest individuals to neighbor
-                                           //  CPUs every this many iterations
-  const float mutationProbability = 0.1;   // Probability of offspring mutation
-  const int tournamentSize = 5;            // The number of individuals to choose new parents from
+  std::string inputFile = argv[1];       // The path of the coordinate file
+  const int maxGenCount = atoi(argv[2]); // Max. number of generation
+  const int globalPopSize = 1000;        // Combined size of all populations
+  const float eliteFraction = 0.02;      // Fraction of population conserved to next generation
+  const int migrationSize = 2;           // Number of individuals to share with neighbor CPUs
+  const int migrationPeriod = 20;        // Send fittest individuals to neighbor
+                                         //  CPUs every this many generations
+  const float mutationProbability = 0.1; // Probability of offspring mutation
+  const int tournamentSize = 5;          // The number of individuals to choose new parents from
   const int writeToScreenPeriod =
-      (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many iters
+      (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many generations
   const int writeToFilePeriod =
-      (argc > 4) ? atoi(argv[4]) : 1; // Print to file every this many iters
+      (argc > 4) ? atoi(argv[4]) : 1; // Print to file every this many generations
 
   int Ncities;              // Number of cities to use in calculations
   std::vector<int> route;   // Array containing city indices in a specific order
@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
   std::sort(population, population + popSize);
 
   ////////////////////// Main calculation loop //////////////////////
-  int iterCount = 0;
-  while (iterCount < maxIterations)
+  int generation = 0;
+  while (generation < maxGenCount)
   {
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     // --------------- Write data to screen & file ------------------
     // Gather the best routes from each process & print the globally best route
     if (writeToScreenPeriod != 0)
-      if (iterCount % writeToScreenPeriod == 0)
+      if (generation % writeToScreenPeriod == 0)
       {
         float bestRouteLen = population[0].routeLength;
         float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
@@ -155,16 +155,16 @@ int main(int argc, char *argv[])
         {
           // Find globally shortest route & print it to screen
           std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
-          writeToScreen(iterCount, globalFittestLengths[0]);
+          writeToScreen(generation, globalFittestLengths[0]);
         }
       }
 
     if (writeToFilePeriod != 0)
-      if (iterCount % writeToFilePeriod == 0)
+      if (generation % writeToFilePeriod == 0)
       {
         std::vector<int> recvdRoute(Ncities), bestRoute(Ncities), globalBestRoute(Ncities);
         float bestRouteLen = population[0].routeLength, globalBestRouteLen;
-        bestRoute = population[0].route;   // Locally best route
+        bestRoute = population[0].route; // Locally best route
         globalBestRouteLen = bestRouteLen;
         for (int i = 1; i < Ntasks; i++)
         {
@@ -184,12 +184,12 @@ int main(int argc, char *argv[])
         if (rank == 0)
         {
           std::string bestRouteStr = getRouteAsString(bestRoute, cities, Ncities);
-          writeToOutputFile(iterCount, bestRoute, bestRouteStr, bestRouteLen, Ncities);
+          writeToOutputFile(generation, bestRoute, bestRouteStr, bestRouteLen, Ncities);
         }
       }
 
     // ------------ Share data with closest neighbor CPUs -----------
-    if (iterCount % migrationPeriod == 0 && iterCount > 0)
+    if (generation % migrationPeriod == 0 && generation > 0)
     {
       std::vector<int> recvdRoute(Ncities);
       for (int i = 0; i < migrationSize; i++)
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
           population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities);
         }
     }
-    iterCount++;
+    generation++;
   }
 
   ////////////////// Gather & output final results //////////////////
@@ -235,14 +235,14 @@ int main(int argc, char *argv[])
     std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
     std::string bestRouteStr = getRouteAsString(bestRoute, cities, Ncities);
     std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
-    std::cout << "Total number of generations: " << iterCount << std::endl;
+    std::cout << "Total number of generations: " << generation << std::endl;
     std::cout << "Length of shortest route:    " << globalFittestLengths[0] << std::endl;
     std::cout << std::endl;
-    std::cout << "Generated a total of " << (iterCount * (popSize - eliteSize) + eliteSize) * Ntasks
+    std::cout << "Generated a total of " << (generation * (popSize - eliteSize) + eliteSize) * Ntasks
               << " individual routes" << std::endl;
     std::cout << std::endl;
 
-    writeToOutputFile(iterCount, bestRoute, bestRouteStr, bestRouteLen, Ncities);
+    writeToOutputFile(generation, bestRoute, bestRouteStr, bestRouteLen, Ncities);
   }
 
   /////////////////// Finalize MPI & quit program ///////////////////

@@ -40,7 +40,7 @@ bool writeToOutputFile(std::string outputString, bool overWrite = false);
 /**
  * Write formatted data to output file
  *
- * @param iterCount [in] Current iteration number
+ * @param generation [in] Current generation number
  * @param bestRoute [in] Best route as int array
  * @param bestRouteStr [in] Best route as a string of city names
  * @param bestRouteLen [in] Length of the best route
@@ -49,15 +49,15 @@ bool writeToOutputFile(std::string outputString, bool overWrite = false);
  * @return true If write succeeded
  * @return flase If an error occured
  */
-bool writeToOutputFile(int iterCount, std::vector<int> bestRoute, std::string bestRouteStr,
+bool writeToOutputFile(int generation, std::vector<int> bestRoute, std::string bestRouteStr,
                        float bestRouteLen, int Ncities, bool overWrite = false);
 
 /**
  * Write formatted data to screen
  *
- * @param iterCount [in] Current iteration number
+ * @param generation [in] Current generation number
  * @param bestRouteLen [in] Length of the best route
  */
-void writeToScreen(int iterCount, float bestRouteLen);
+void writeToScreen(int generation, float bestRouteLen);
 
 #endif
