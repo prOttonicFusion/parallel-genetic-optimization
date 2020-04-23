@@ -9,6 +9,7 @@ run/
 ├── README --------------------- This file
 ├── cityCoordinates.xyz -------- Coordinates for the cities, given in xyz-format 
 ├── generateCities.py ---------- A script for creating a random city coordinate file
+├── input.dat ------------------ Calculation parameters for the genetic algorithm
 ├── output.dat ----------------- Output of the program
 └── plotRoute.py --------------- Script for plotting the results of a calculation
 
