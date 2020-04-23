@@ -1,4 +1,7 @@
 
+This directory contains the source code of the program. Functions and classes are organized 
+into modules, with most of the documentation found in the corresponding header (*.hpp) file.
+
 
 Compilation instructions
 -------------------------------
