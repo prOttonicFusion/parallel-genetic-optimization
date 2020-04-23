@@ -73,7 +73,7 @@ plt.plot(routeX, routeY, '--')
 # Draw cities
 plt.scatter(xpos, ypos)
 for i, txt in enumerate(names):
-    plt.annotate(txt, (xpos[i], ypos[i]), label='Final')
+    plt.annotate(txt, (xpos[i], ypos[i]))
 
 plt.savefig('routes.png')
 plt.show()
