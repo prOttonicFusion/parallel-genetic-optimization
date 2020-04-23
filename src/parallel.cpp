@@ -41,3 +41,20 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
 
   globalFittest = globalFittestCandidates[0];
 }
+
+void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ &localFittest,
+                                 const int &rank, const int &Ntasks, MPI_Comm &comm)
+{
+  float bestRouteLen = localFittest.routeLength;
+  float localShortestRoutes[Ntasks]; // The lengths of each process' fittest individual
+
+  // Gather the lenghts of the best routes from all CPUs to CPU 0
+  MPI_Gather(&bestRouteLen, 1, MPI_FLOAT, localShortestRoutes, 1, MPI_FLOAT, 0, comm);
+
+  if (rank == 0)
+  {
+    // Find globally shortest route & print it to screen
+    std::sort(localShortestRoutes, localShortestRoutes + Ntasks);
+    globalShortestRouteLength = localShortestRoutes[0];
+  }
+}

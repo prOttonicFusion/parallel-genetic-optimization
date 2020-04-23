@@ -145,16 +145,12 @@ int main(int argc, char *argv[])
 
     // --------------- Write data to screen & file ------------------
     // Gather the best routes from each process & print the globally best route
-    // TODO: If printing to file & screen on same iteration, avoid doing extra work
     if (writeToFilePeriod != 0)
       if (generation % writeToFilePeriod == 0)
       {
         getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
                               status);
-        if (rank == 0)
-        {
-          writeToOutputFile(generation, globalFittest, cities);
-        }
+        if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
       }
 
     if (writeToScreenPeriod != 0)
@@ -163,19 +159,8 @@ int main(int argc, char *argv[])
         float globalFittestLength = globalFittest.routeLength;
         // If already outputed to file this gen., globalFittest is up to date
         if (generation % writeToFilePeriod != 0)
-        {
-          float bestRouteLen = population[0].routeLength;
-          float globalFittestLengths[Ntasks]; // The lengths of each process' fittest individual
-          // Gather the lenghts of the best routes from all CPUs to CPU 0
-          MPI_Gather(&bestRouteLen, 1, MPI_FLOAT, globalFittestLengths, 1, MPI_FLOAT, 0, GRID_COMM);
-
-          if (rank == 0)
-          {
-            // Find globally shortest route & print it to screen
-            std::sort(globalFittestLengths, globalFittestLengths + Ntasks);
-            globalFittestLength = globalFittestLengths[0];
-          }
-        }
+          getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
+          
         if (rank == 0) writeToScreen(generation, globalFittestLength);
       }
 
