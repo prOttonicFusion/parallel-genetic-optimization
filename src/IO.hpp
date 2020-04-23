@@ -13,6 +13,7 @@
 #define IO_H
 #include "city.hpp"
 #include "genetics.hpp"
+#include "individ.hpp"
 #include <iostream>
 #include <vector>
 
@@ -41,15 +42,14 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
  * Write formatted data to output file
  *
  * @param generation [in] Current generation number
- * @param bestRoute [in] Best route as int array
+ * @param fittest [in] The fittest individual
  * @param bestRouteStr [in] Best route as a string of city names
- * @param bestRouteLen [in] Length of the best route
  * @param overWrite [in] SHould we overwrite the file?
  * @return true If write succeeded
  * @return flase If an error occured
  */
-bool writeToOutputFile(int generation, const std::vector<int> &bestRoute, const std::string &bestRouteStr,
-                       const float &bestRouteLen, bool overWrite = false);
+bool writeToOutputFile(int generation, const Individ &fittest, const std::string &bestRouteStr,
+                       bool overWrite = false);
 
 /**
  * Write formatted data to screen

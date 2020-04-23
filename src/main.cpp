@@ -154,8 +154,7 @@ int main(int argc, char *argv[])
         if (rank == 0)
         {
           std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
-          writeToOutputFile(generation, globalFittest.route, bestRouteStr,
-                            globalFittest.routeLength);
+          writeToOutputFile(generation, globalFittest, bestRouteStr);
         }
       }
 
@@ -163,7 +162,7 @@ int main(int argc, char *argv[])
       if (generation % writeToScreenPeriod == 0)
       {
         float globalFittestLength = globalFittest.routeLength;
-        // If outputting both to screen & file, no need to calculate this again
+        // If already outputed to file this gen., globalFittest is up to date
         if (generation % writeToFilePeriod != 0)
         {
           float bestRouteLen = population[0].routeLength;
@@ -223,7 +222,7 @@ int main(int argc, char *argv[])
               << (generation * (popSize - eliteSize) + eliteSize) * Ntasks << " individual routes"
               << std::endl;
     std::cout << std::endl;
-    writeToOutputFile(generation, globalFittest.route, bestRouteStr, globalFittest.routeLength);
+    writeToOutputFile(generation, globalFittest, bestRouteStr);
   }
 
   /////////////////// Finalize MPI & quit program ///////////////////
