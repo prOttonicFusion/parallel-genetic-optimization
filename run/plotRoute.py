@@ -62,7 +62,7 @@ def plottableRoute(index):
 
 ############################ Draw figures ############################
 # Optimal route plot
-plt.figure(num=1, figsize=[8, 5])
+plt.figure(num=1, figsize=[7, 5])
 plt.xlabel('x-position')
 plt.ylabel('y-position')
 
