@@ -36,15 +36,15 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  std::string inputFile = argv[1];       // The path of the coordinate file
-  const int maxGenCount = atoi(argv[2]); // Max. number of generation
-  const int globalPopSize = 1000;        // Combined size of all populations
-  const float eliteFraction = 0.02;      // Fraction of population conserved to next generation
-  const int migrationSize = 2;           // Number of individuals to share with neighbor CPUs
-  const int migrationPeriod = 20;        // Send fittest individuals to neighbor
-                                         //  CPUs every this many generations
-  const float mutationProbability = 0.1; // Probability of offspring mutation
-  const int tournamentSize = 5;          // The number of individuals to choose new parents from
+  std::string inputFile = argv[1];        // The path of the coordinate file
+  const int maxGenCount = atoi(argv[2]);  // Max. number of generation
+  const int globalPopSize = 1000;         // Combined size of all populations
+  const float eliteFraction = 0.02;       // Fraction of population conserved to next generation
+  const int migrationSize = 2;            // Number of individuals to share with neighbor CPUs
+  const int migrationPeriod = 20;         // Send fittest individuals to neighbor
+                                          //  CPUs every this many generations
+  const float mutationProbability = 0.05; // Probability of offspring mutation
+  const int tournamentSize = 5;           // The number of individuals to choose new parents from
   const int writeToScreenPeriod =
       (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many generations
   const int writeToFilePeriod =
