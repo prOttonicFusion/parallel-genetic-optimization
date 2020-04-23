@@ -28,22 +28,28 @@
 int selectParent(Individ population[], const int &popSize, const int &tournamentSize);
 
 /**
- * Merge the genome of two individs to produce offspring
+ * Merge the genome of two individs to produce offspring.
+ *
+ * The genome crossover occurs heurustically:
+ * 1) 0th city of one parent is set as the child's 0th city
+ * 2) The Nth city in the child is chosen from the parents' Nth genes by checking
+ *    which of the two is closer to the child's N-1th city
+ * 3) If the closer city is already found in the child, take the city from the other parent
+ * 4) If both are already found in child, pick random city
  *
  * @param child [in/out] Child individ (should be initialized prior to breeding)
  * @param parent1 [in] Mother individ
  * @param parent2 [in] Father individ
  * @param cities [in] Array of City structs
  * @param popSize [in] Size of population
- * @return Individ The offspring
  */
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
                    const std::vector<City> &cities, const int &popSize);
 
 /**
- * Switch places of two random cities on an individ's route
+ * Switch places of two random cities (genes) on an individ's route (genome)
  *
- * @param individ [in/out] The target of the mutation
+ * @param individ [in/out] The individual to mutate
  */
 void mutateIndivid(Individ &individ);
 

@@ -43,13 +43,6 @@ bool cityAlreadyInRoute(const std::vector<int> &route, const int &cityIndex, con
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
                    const std::vector<City> &cities, const int &popSize)
 {
-  /**
-   * Generate 2 children genoms heuristically:
-   * - Take first city of one parent
-   * - The Nth city in the child is chosen from the parents' Nth genes by checking
-   *   which of the two is closer to the child's N-1th city
-   * - If the closer city is already found in the child, choose the other
-   **/
   int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);
 
