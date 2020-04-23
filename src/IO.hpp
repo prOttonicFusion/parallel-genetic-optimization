@@ -22,14 +22,14 @@
  *
  * @param [in] inputFile Path to a input file in xyz-format
  * @param [out] Ncities Number of cities in the input file
- * @param [out] cities Cities as structs in an array
+ * @param [in] cities Cities as structs in an array
  * @return true If parse succeeded
  * @return flase If an error occured
  */
 bool parseXYZFile(std::string &inputFile, int &Ncities, std::vector<City> &cities);
 
 /**
- * Write string to the output file
+ * Write a string to the output file
  *
  * @param [in] outputString Content to write to the file
  * @param [in] overWrite Should the file be overwritten?
@@ -39,12 +39,17 @@ bool parseXYZFile(std::string &inputFile, int &Ncities, std::vector<City> &citie
 bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
 
 /**
- * Write formatted data to output file
+ * Write a formatted entry to the output file. The entry has the following format:
+ * Generation <Gen number>:
+ * Length: <lenght of shortest route>
+ * Route_indices: <route as indices pointing to the cities array> 
+ * Route_string: <route with city names>
  *
  * @param generation [in] Current generation number
  * @param fittest [in] The fittest individual
  * @param bestRouteStr [in] Best route as a string of city names
- * @param overWrite [in] SHould we overwrite the file?
+ * @param cities [in] Cities as structs in an array
+ * @param overWrite [in] Should we overwrite the file?
  * @return true If write succeeded
  * @return flase If an error occured
  */
@@ -52,7 +57,9 @@ bool writeToOutputFile(int generation, const Individ &fittest, const std::vector
                        bool overWrite = false);
 
 /**
- * Write formatted data to screen
+ * Write a formatted data entry to screen. The entry has the format:
+ * Generation <Gen number>
+ * Shortest route = <lenght of shortest route>
  *
  * @param generation [in] Current generation number
  * @param bestRouteLen [in] Length of the best route
