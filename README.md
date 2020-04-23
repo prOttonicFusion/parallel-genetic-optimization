@@ -25,7 +25,7 @@ where `<coordinate-file>` is the xyz-file containing the city coordinates and `<
 The results can be visualized using the attached Python script, executed as
 
 ```
-python3 plotRoute.py <coordinate-file>
+python3 plotRoute.py <coordinate-file> <output-file>
 ```
 
 ## TODO
