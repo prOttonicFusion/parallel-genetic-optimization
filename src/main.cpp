@@ -22,7 +22,7 @@
 
 int main(int argc, char *argv[])
 {
-  // Parse command line arguments
+
   if (argc < 3)
   {
     std::cerr << "Usage: " << argv[0] << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
@@ -196,7 +196,6 @@ int main(int argc, char *argv[])
 
   if (rank == 0)
   {
-    // Find globally shortest route & print it to screen
     std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
     std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
     std::cout << "Total number of generations: " << generation << std::endl;
