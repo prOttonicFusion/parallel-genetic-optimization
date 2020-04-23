@@ -18,9 +18,51 @@
 #include <string>
 #include <vector>
 
-bool parseXYZFile(std::string &inputFile, int &Ncities, std::vector<City> &cities)
+bool parseInputFile(int &globalPopSize, float &eliteFraction, int &migrationSize,
+                    int &migrationPeriod, float &mutationProbability, int &tournamentSize)
 {
-  std::ifstream infile(inputFile);
+  std::ifstream infile("input.dat");
+
+  std::string cmd, line;
+  float value;
+
+  // Skip comment line
+  std::getline(infile, line);
+
+  int counter = 0;
+  while (infile >> cmd >> value)
+  {
+    if (cmd == "globalPopSize")
+      globalPopSize = (int)value;
+    else if (cmd == "eliteFraction")
+      eliteFraction = value;
+    else if (cmd == "migrationSize")
+      migrationSize = (int)value;
+    else if (cmd == "migrationPeriod")
+      migrationPeriod = (int)value;
+    else if (cmd == "mutationProbability")
+      mutationProbability = value;
+    else if (cmd == "tournamentSize")
+      tournamentSize = (int)value;
+    else
+    {
+      std::cerr << "Error: Unknown input file keyword '" << cmd << "'" << std::endl;
+      return false;
+    }
+    counter++;
+  }
+
+  if (counter != 6)
+  {
+    std::cerr << "Error: Invalid number of input keywords: " << counter << std::endl;
+    return false;
+  }
+  return true;
+}
+
+bool parseXYZFile(std::string &coordFile, int &Ncities, std::vector<City> &cities)
+{
+  std::ifstream infile(coordFile);
   std::string line;
 
   // On error
@@ -75,7 +117,8 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite)
   outputFile.close();
 }
 
-bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities, bool overWrite)
+bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities,
+                       bool overWrite)
 {
   std::ostringstream stringStream;
   std::string bestRouteStr = getRouteAsString(fittest.route, cities);

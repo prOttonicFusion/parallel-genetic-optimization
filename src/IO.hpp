@@ -18,6 +18,21 @@
 #include <vector>
 
 /**
+ * Parse an input file named 'input.dat' and print error message if one occurs
+ *
+ * @param globalPopSize  [in/out]
+ * @param eliteFraction  [in/out]
+ * @param migrationSize  [in/out]
+ * @param migrationPeriod  [in/out]
+ * @param mutationProbability  [in/out]
+ * @param tournamentSize  [in/out]
+ * @return true If parse succeeded
+ * @return flase If an error occured
+ */
+bool parseInputFile(int &globalPopSize, float &eliteFraction, int &migrationSize,
+                    int &migrationPeriod, float &mutationProbability, int &tournamentSize);
+
+/**
  * Parse a xyz-file into an array of City structs
  *
  * @param [in] inputFile Path to a input file in xyz-format
@@ -26,7 +41,7 @@
  * @return true If parse succeeded
  * @return flase If an error occured
  */
-bool parseXYZFile(std::string &inputFile, int &Ncities, std::vector<City> &cities);
+bool parseXYZFile(std::string &coordFile, int &Ncities, std::vector<City> &cities);
 
 /**
  * Write a string to the output file
@@ -42,7 +57,7 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
  * Write a formatted entry to the output file. The entry has the following format:
  * Generation <Gen number>:
  * Length: <lenght of shortest route>
- * Route_indices: <route as indices pointing to the cities array> 
+ * Route_indices: <route as indices pointing to the cities array>
  * Route_string: <route with city names>
  *
  * @param generation [in] Current generation number

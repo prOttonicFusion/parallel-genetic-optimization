@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  std::string inputFile = argv[1];        // The path of the coordinate file
+  std::string coordFile = argv[1];        // The path of the coordinate file
   const int maxGenCount = atoi(argv[2]);  // Max. number of generation
   const int globalPopSize = 1000;         // Combined size of all populations
   const float eliteFraction = 0.02;       // Fraction of population conserved to next generation
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
   Individ globalFittest;    // The most fit individual of the combined populations
 
   // Read city coordinates from input file
-  if (!parseXYZFile(inputFile, Ncities, cities))
+  if (!parseXYZFile(coordFile, Ncities, cities))
   {
     std::cerr << "Error: Unable to read coordinate file '" << inputFile << "'" << std::endl;
     return -1;
