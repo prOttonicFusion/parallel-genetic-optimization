@@ -1,5 +1,9 @@
-This directory contains the input and output of a successful run of the program. 
-The structure of the directory is as follows:
+
+This directory contains the input and output of a successful execution of the program. 
+
+
+Contents of this directory
+-------------------------------
 
 run/
 ├── README --------------------- This file
@@ -10,8 +14,8 @@ run/
 
 
 
-Running:
----------------------
+Running instructions:
+-------------------------------
 The program is executed by running: 
 
 mpiexec -n <N> ../src/tsp_ga <coordinate-file> <Ngenerations> [toScreenInt] [toFileInt]

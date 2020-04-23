@@ -33,4 +33,3 @@ python3 plotRoute.py <coordinate-file>
 - Change population from array to STL vector?
 - Move random route generation to within Individ.init()?
 - Exit loop if bestRoute does not change over a set amount of generations
-- Inline most used functions
