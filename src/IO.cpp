@@ -75,10 +75,10 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite)
   outputFile.close();
 }
 
-bool writeToOutputFile(int generation, const Individ &fittest,
-                       const std::string &bestRouteStr,  bool overWrite)
+bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities, bool overWrite)
 {
   std::ostringstream stringStream;
+  std::string bestRouteStr = getRouteAsString(fittest.route, cities);
   stringStream << "Generation " << generation << ":" << std::endl;
   stringStream << "Length: " << fittest.routeLength << std::endl;
   stringStream << "Route_indices: ";

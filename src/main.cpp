@@ -153,8 +153,7 @@ int main(int argc, char *argv[])
                               status);
         if (rank == 0)
         {
-          std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
-          writeToOutputFile(generation, globalFittest, bestRouteStr);
+          writeToOutputFile(generation, globalFittest, cities);
         }
       }
 
@@ -222,7 +221,7 @@ int main(int argc, char *argv[])
               << (generation * (popSize - eliteSize) + eliteSize) * Ntasks << " individual routes"
               << std::endl;
     std::cout << std::endl;
-    writeToOutputFile(generation, globalFittest, bestRouteStr);
+    writeToOutputFile(generation, globalFittest, cities);
   }
 
   /////////////////// Finalize MPI & quit program ///////////////////

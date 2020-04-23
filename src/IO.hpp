@@ -48,7 +48,7 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
  * @return true If write succeeded
  * @return flase If an error occured
  */
-bool writeToOutputFile(int generation, const Individ &fittest, const std::string &bestRouteStr,
+bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities,
                        bool overWrite = false);
 
 /**
