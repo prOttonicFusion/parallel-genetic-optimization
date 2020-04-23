@@ -118,6 +118,27 @@ int main(int argc, char *argv[])
   int generation = 0;
   while (generation < maxGenCount)
   {
+    // --------------- Write data to screen & file ------------------
+    // Gather the best routes from each process & print the globally best route
+    if (writeToFilePeriod != 0)
+      if (generation % writeToFilePeriod == 0)
+      {
+        getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
+                              status);
+        if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
+      }
+
+    if (writeToScreenPeriod != 0)
+      if (generation % writeToScreenPeriod == 0)
+      {
+        float globalFittestLength = globalFittest.routeLength;
+        // If already outputed to file this gen., globalFittest is up to date
+        if (generation % writeToFilePeriod != 0)
+          getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
+
+        if (rank == 0) writeToScreen(generation, globalFittestLength);
+      }
+
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
     // and replace those less fit with offspring
@@ -142,27 +163,6 @@ int main(int argc, char *argv[])
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on route length
     std::sort(population, population + popSize);
-
-    // --------------- Write data to screen & file ------------------
-    // Gather the best routes from each process & print the globally best route
-    if (writeToFilePeriod != 0)
-      if (generation % writeToFilePeriod == 0)
-      {
-        getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
-                              status);
-        if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
-      }
-
-    if (writeToScreenPeriod != 0)
-      if (generation % writeToScreenPeriod == 0)
-      {
-        float globalFittestLength = globalFittest.routeLength;
-        // If already outputed to file this gen., globalFittest is up to date
-        if (generation % writeToFilePeriod != 0)
-          getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
-          
-        if (rank == 0) writeToScreen(generation, globalFittestLength);
-      }
 
     // ------------ Share data with closest neighbor CPUs -----------
     if (generation % migrationPeriod == 0 && generation > 0)
