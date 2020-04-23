@@ -15,12 +15,8 @@
 #include <vector>
 
 /**
- * A data structure for storing all properties of a single city (gene)
- **/
-
-/**
- * Data structure for storing a city's name and position as
- * (string) City.name, (float) City.xpos, (float) City.ypos
+ * Data structure for storing all properties of a single city (gene)
+ * These are: (string) City.name, (float) City.xpos, (float) City.ypos
  *
  */
 struct City
@@ -33,19 +29,19 @@ struct City
 /**
  * Get the squared distance between two cities
  *
- * @param city1
- * @param city2
+ * @param city1 [in] The first city
+ * @param city2 [in] The second city
  * @return float Distance between city1 & city2
  */
 float distanceBetweenCities(const City &city1, const City &city2);
 
 /**
- * Convert route to string of city names
+ * Convert a route in array-of-indices form to a string of city names
  *
  * @param route [in] Route as an array of indices pointing to cities
  * @param cities [in] The cities as City struct array
  * @param Ncities [in] Number of cities in route
- * @return std::string
+ * @return std::string The route in string form
  */
 std::string getRouteAsString(const std::vector<int> &route, const std::vector<City> &cities);
 
