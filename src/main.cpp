@@ -46,43 +46,10 @@ int main(int argc, char *argv[])
   int migrationPeriod;       // Send fittest individuals to neighbor CPUs every this many gens.
   float mutationProbability; // Probability of offspring mutation
   int tournamentSize;        // The number of individuals to choose new parents from
-
-  if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
-                      mutationProbability, tournamentSize))
-  {
-    std::cerr << "Error: Unable to read input file '" << "input.dat" << "'" << std::endl;
-    return -1;
-  }
-
-  // Parse command line arguments
-  coordFile = argv[1];
-  maxGenCount = atoi(argv[2]);
-  writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
-  writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
-
-  int Ncities;              // Number of cities to use in calculations
-  std::vector<int> route;   // Array containing city indices in a specific order
-  std::vector<City> cities; // Array containing all citites
-  Individ globalFittest;    // The most fit individual of the combined populations
-
-  // Read city coordinates from input file
-  if (!parseXYZFile(coordFile, Ncities, cities))
-  {
-    std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
-    return -1;
-  }
-
-  // Initialize route array
-  route.resize(Ncities);
-  for (int i = 0; i < Ncities; i++)
-    route[i] = i;
-
-  // -------------------- Initialize output file --------------------
-  if (!writeToOutputFile("", true))
-  {
-    std::cerr << "Error: Unable to write to ouput file" << std::endl;
-    return -1;
-  }
+  int Ncities;               // Number of cities to use in calculations
+  std::vector<int> route;    // Array containing city indices in a specific order
+  std::vector<City> cities;  // Array containing all citites
+  Individ globalFittest;     // The most fit individual of the combined populations
 
   // ------------------------ Initialize MPI ------------------------
   const int tag = 50;
@@ -107,6 +74,51 @@ int main(int argc, char *argv[])
   MPI_Comm GRID_COMM;          // New communicator
   MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
+
+  // Parse input file on root CPU and scatter out to the other CPUs
+  if (rank == 0)
+  {
+    if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
+                        mutationProbability, tournamentSize))
+    {
+      std::cerr << "Error: Unable to read input file '"
+                << "input.dat"
+                << "'" << std::endl;
+      return -1;
+    }
+  }
+  
+  MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&migrationSize, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&migrationPeriod, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&tournamentSize, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&eliteFraction, 1, MPI_FLOAT, 0, GRID_COMM);
+  MPI_Bcast(&mutationProbability, 1, MPI_FLOAT, 0, GRID_COMM);
+
+  // Parse command line arguments
+  coordFile = argv[1];
+  maxGenCount = atoi(argv[2]);
+  writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
+  writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
+
+  // Read city coordinates from input file
+  if (!parseXYZFile(coordFile, Ncities, cities))
+  {
+    std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
+    return -1;
+  }
+
+  // Initialize route array
+  route.resize(Ncities);
+  for (int i = 0; i < Ncities; i++)
+    route[i] = i;
+
+  // -------------------- Initialize output file --------------------
+  if (!writeToOutputFile("", true))
+  {
+    std::cerr << "Error: Unable to write to ouput file" << std::endl;
+    return -1;
+  }
 
   // ----------------- Generate initial population ------------------
   const int eliteSize =
