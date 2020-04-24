@@ -23,19 +23,6 @@
 int main(int argc, char *argv[])
 {
 
-  if (argc < 3)
-  {
-    std::cerr << "Usage: " << argv[0] << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
-              << std::endl;
-    std::cerr << "  coordFile:   A xyz-file containing the city coordinates" << std::endl;
-    std::cerr << "  maxGen:     The maximum number of generations to allow" << std::endl;
-    std::cerr << "  wrtToScreen: Write results to screen every this many iterations. Default: 1"
-              << std::endl;
-    std::cerr << "  wrtToFile:   Write results to file every this many iterations. Default: 1"
-              << std::endl;
-    return -1;
-  }
-
   std::string coordFile;     // The path of the coordinate file
   int maxGenCount;           // Max. number of generation
   int writeToScreenPeriod;   // Print to screen every this many generations
@@ -75,7 +62,7 @@ int main(int argc, char *argv[])
   MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
-  // Parse input file on root CPU and scatter out to the other CPUs
+  // ------------ Parse input on root CPU & broadcast it ------------
   if (rank == 0)
   {
     if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
@@ -86,6 +73,25 @@ int main(int argc, char *argv[])
                 << "'" << std::endl;
       return -1;
     }
+
+    // Parse command line arguments
+    if (argc < 3)
+    {
+      std::cerr << "Usage: " << argv[0] << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
+                << std::endl;
+      std::cerr << "  coordFile:   A xyz-file containing the city coordinates" << std::endl;
+      std::cerr << "  maxGen:     The maximum number of generations to allow" << std::endl;
+      std::cerr << "  wrtToScreen: Write results to screen every this many iterations. Default: 1"
+                << std::endl;
+      std::cerr << "  wrtToFile:   Write results to file every this many iterations. Default: 1"
+                << std::endl;
+      return -1;
+    }
+
+    coordFile = argv[1];
+    maxGenCount = atoi(argv[2]);
+    writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
+    writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
   }
 
   MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
@@ -94,12 +100,15 @@ int main(int argc, char *argv[])
   MPI_Bcast(&tournamentSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&eliteFraction, 1, MPI_FLOAT, 0, GRID_COMM);
   MPI_Bcast(&mutationProbability, 1, MPI_FLOAT, 0, GRID_COMM);
+  MPI_Bcast(&maxGenCount, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&writeToScreenPeriod, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&writeToFilePeriod, 1, MPI_INT, 0, GRID_COMM);
 
-  // Parse command line arguments
-  coordFile = argv[1];
-  maxGenCount = atoi(argv[2]);
-  writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
-  writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
+  // Send C++ string; coordFile
+  int stringSize = coordFile.size();
+  MPI_Bcast(&stringSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  if (rank != 0) coordFile.resize(stringSize);
+  MPI_Bcast(const_cast<char *>(coordFile.data()), stringSize, MPI_CHAR, 0, GRID_COMM);
 
   // Read city coordinates from input file
   if (!parseXYZFile(coordFile, Ncities, cities))
@@ -122,8 +131,7 @@ int main(int argc, char *argv[])
     }
 
   // ----------------- Generate initial population ------------------
-  const int eliteSize =
-      (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
+  int eliteSize = (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
 
   Individ population[populationSize];
   for (int i = 0; i < populationSize; i++)
