@@ -68,23 +68,14 @@ int main(int argc, char *argv[])
     if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
                         mutationProbability, tournamentSize))
     {
-      std::cerr << "Error: Unable to read input file '"
-                << "input.dat"
-                << "'" << std::endl;
+      std::cerr << "Error: Unable to read input file" << std::endl;
       return -1;
     }
 
     // Parse command line arguments
     if (argc < 3)
     {
-      std::cerr << "Usage: " << argv[0] << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
-                << std::endl;
-      std::cerr << "  coordFile:   A xyz-file containing the city coordinates" << std::endl;
-      std::cerr << "  maxGen:     The maximum number of generations to allow" << std::endl;
-      std::cerr << "  wrtToScreen: Write results to screen every this many iterations. Default: 1"
-                << std::endl;
-      std::cerr << "  wrtToFile:   Write results to file every this many iterations. Default: 1"
-                << std::endl;
+      printUsageInfo(argv[0]);
       return -1;
     }
 

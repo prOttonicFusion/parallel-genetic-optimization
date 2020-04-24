@@ -18,6 +18,13 @@
 #include <vector>
 
 /**
+ * Prints usage information to stdout
+ *
+ * @param programName  [in] The name of the program exetuable as listed in argv[0] of the main()
+ */
+void printUsageInfo(char **programName);
+
+/**
  * Parse an input file named 'input.dat' and print error message if one occurs
  *
  * @param populationSize  [in/out]

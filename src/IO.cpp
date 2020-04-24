@@ -18,6 +18,18 @@
 #include <string>
 #include <vector>
 
+void printUsageInfo(char **programName)
+{
+  std::cerr << "Usage: " << programName << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
+            << std::endl;
+  std::cerr << "  coordFile:   A xyz-file containing the city coordinates" << std::endl;
+  std::cerr << "  maxGen:     The maximum number of generations to allow" << std::endl;
+  std::cerr << "  wrtToScreen: Write results to screen every this many iterations. Default: 1"
+            << std::endl;
+  std::cerr << "  wrtToFile:   Write results to file every this many iterations. Default: 1"
+            << std::endl;
+}
+
 bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
                     int &migrationPeriod, float &mutationProbability, int &tournamentSize)
 {
