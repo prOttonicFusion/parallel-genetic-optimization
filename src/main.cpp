@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
   // Read city coordinates from input file
   if (!parseXYZFile(coordFile, Ncities, cities))
   {
-    std::cerr << "Error: Unable to read coordinate file '" << inputFile << "'" << std::endl;
+    std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
     return -1;
   }
 
