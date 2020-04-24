@@ -47,8 +47,12 @@ int main(int argc, char *argv[])
   float mutationProbability; // Probability of offspring mutation
   int tournamentSize;        // The number of individuals to choose new parents from
 
-  bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
-                      int &migrationPeriod, float &mutationProbability, int &tournamentSize);
+  if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
+                      mutationProbability, tournamentSize))
+  {
+    std::cerr << "Error: Unable to read input file '" << "input.dat" << "'" << std::endl;
+    return -1;
+  }
 
   // Parse command line arguments
   coordFile = argv[1];

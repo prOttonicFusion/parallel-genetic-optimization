@@ -23,30 +23,33 @@ bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSiz
 {
   std::ifstream infile("input.dat");
 
-  std::string cmd, line;
+  std::string keyword, line, comment;
   float value;
 
   // Skip comment line
   std::getline(infile, line);
 
   int counter = 0;
-  while (infile >> cmd >> value)
+  while (std::getline(infile, line))
   {
-    if (cmd == "populationSize")
+    std::istringstream stream(line);
+    stream >> keyword >> value;
+
+    if (keyword == "populationSize")
       populationSize = (int)value;
-    else if (cmd == "eliteFraction")
+    else if (keyword == "eliteFraction")
       eliteFraction = value;
-    else if (cmd == "migrationSize")
+    else if (keyword == "migrationSize")
       migrationSize = (int)value;
-    else if (cmd == "migrationPeriod")
+    else if (keyword == "migrationPeriod")
       migrationPeriod = (int)value;
-    else if (cmd == "mutationProbability")
+    else if (keyword == "mutationProbability")
       mutationProbability = value;
-    else if (cmd == "tournamentSize")
+    else if (keyword == "tournamentSize")
       tournamentSize = (int)value;
     else
     {
-      std::cerr << "Error: Unknown input file keyword '" << cmd << "'" << std::endl;
+      std::cerr << "Error: Unknown input file keyword '" << keyword << "'" << std::endl;
       return false;
     }
     counter++;
