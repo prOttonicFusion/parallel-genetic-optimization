@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-bool parseInputFile(int &globalPopSize, float &eliteFraction, int &migrationSize,
+bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
                     int &migrationPeriod, float &mutationProbability, int &tournamentSize)
 {
   std::ifstream infile("input.dat");
@@ -32,8 +32,8 @@ bool parseInputFile(int &globalPopSize, float &eliteFraction, int &migrationSize
   int counter = 0;
   while (infile >> cmd >> value)
   {
-    if (cmd == "globalPopSize")
-      globalPopSize = (int)value;
+    if (cmd == "populationSize")
+      populationSize = (int)value;
     else if (cmd == "eliteFraction")
       eliteFraction = value;
     else if (cmd == "migrationSize")

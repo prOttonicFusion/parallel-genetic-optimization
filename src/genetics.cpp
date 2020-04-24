@@ -18,13 +18,13 @@
 #include <random>
 #include <vector>
 
-int selectParent(Individ population[], const int &popSize, const int &tournamentSize)
+int selectParent(Individ population[], const int &populationSize, const int &tournamentSize)
 {
   // Select tournamentSize random individuals from population and save the index of the fittest
-  int bestIndex = uniformRand(rng) * popSize;
+  int bestIndex = uniformRand(rng) * populationSize;
   for (int i = 0; i < tournamentSize - 1; i++)
   {
-    int index = uniformRand(rng) * popSize;
+    int index = uniformRand(rng) * populationSize;
     if (population[index].routeLength < population[bestIndex].routeLength) bestIndex = index;
   }
 
@@ -41,7 +41,7 @@ bool cityAlreadyInRoute(const std::vector<int> &route, const int &cityIndex, con
 }
 
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
-                   const std::vector<City> &cities, const int &popSize)
+                   const std::vector<City> &cities, const int &populationSize)
 {
   int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);

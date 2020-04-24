@@ -21,11 +21,11 @@
  * Select randomly a parent from the population using Tournament Selection
  *
  * @param population  [in] The population, i.e. an array of Individ objects
- * @param popSize  [in] Size of population
+ * @param populationSize  [in] Size of population
  * @param tournamentSize  [in] Number of individuals to select randomly at random the tournament
  * @return int The index of the parent in population[]
  */
-int selectParent(Individ population[], const int &popSize, const int &tournamentSize);
+int selectParent(Individ population[], const int &populationSize, const int &tournamentSize);
 
 /**
  * Merge the genome of two individs to produce offspring.
@@ -41,10 +41,10 @@ int selectParent(Individ population[], const int &popSize, const int &tournament
  * @param parent1 [in] Mother individ
  * @param parent2 [in] Father individ
  * @param cities [in] Array of City structs
- * @param popSize [in] Size of population
+ * @param populationSize [in] Size of population
  */
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
-                   const std::vector<City> &cities, const int &popSize);
+                   const std::vector<City> &cities, const int &populationSize);
 
 /**
  * Switch places of two random cities (genes) on an individ's route (genome)

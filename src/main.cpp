@@ -36,19 +36,25 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  std::string coordFile = argv[1];        // The path of the coordinate file
-  const int maxGenCount = atoi(argv[2]);  // Max. number of generation
-  const int globalPopSize = 1000;         // Combined size of all populations
-  const float eliteFraction = 0.02;       // Fraction of population conserved to next generation
-  const int migrationSize = 2;            // Number of individuals to share with neighbor CPUs
-  const int migrationPeriod = 20;         // Send fittest individuals to neighbor
-                                          //  CPUs every this many generations
-  const float mutationProbability = 0.05; // Probability of offspring mutation
-  const int tournamentSize = 5;           // The number of individuals to choose new parents from
-  const int writeToScreenPeriod =
-      (argc > 3) ? atoi(argv[3]) : 1; // Print to screen every this many generations
-  const int writeToFilePeriod =
-      (argc > 4) ? atoi(argv[4]) : 1; // Print to file every this many generations
+  std::string coordFile;     // The path of the coordinate file
+  int maxGenCount;           // Max. number of generation
+  int writeToScreenPeriod;   // Print to screen every this many generations
+  int writeToFilePeriod;     // Print to file every this many generations
+  int populationSize;        // Combined size of all populations
+  float eliteFraction;       // Fraction of population conserved to next generation
+  int migrationSize;         // Number of individuals to share with neighbor CPUs
+  int migrationPeriod;       // Send fittest individuals to neighbor CPUs every this many gens.
+  float mutationProbability; // Probability of offspring mutation
+  int tournamentSize;        // The number of individuals to choose new parents from
+
+  bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
+                      int &migrationPeriod, float &mutationProbability, int &tournamentSize);
+
+  // Parse command line arguments
+  coordFile = argv[1];
+  maxGenCount = atoi(argv[2]);
+  writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
+  writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
 
   int Ncities;              // Number of cities to use in calculations
   std::vector<int> route;   // Array containing city indices in a specific order
@@ -99,20 +105,18 @@ int main(int argc, char *argv[])
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ----------------- Generate initial population ------------------
-  // Define per-process population size (should be an even number)
-  int tmp = (int)(globalPopSize / Ntasks + 0.5f);
-  const int popSize = (tmp % 2 == 0) ? tmp : tmp + 1;
-  const int eliteSize = (int)(eliteFraction * popSize); // Number of individuals allowed to breed
+  const int eliteSize =
+      (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
 
-  Individ population[popSize];
-  for (int i = 0; i < popSize; i++)
+  Individ population[populationSize];
+  for (int i = 0; i < populationSize; i++)
   {
     std::shuffle(route.begin(), route.end(), rng); // Shuffle route
     population[i].init(route, cities);
   }
 
   // Sort population in ascending order based on route lenght
-  std::sort(population, population + popSize);
+  std::sort(population, population + populationSize);
 
   ////////////////////// Main calculation loop //////////////////////
   int generation = 0;
@@ -142,14 +146,14 @@ int main(int argc, char *argv[])
     // ------------------------ Breeding ----------------------------
     // Pair a fraction of the population; select parents from the most fit
     // and replace those less fit with offspring
-    Individ nextGeneration[popSize];
+    Individ nextGeneration[populationSize];
 
-    for (int i = eliteSize; i < popSize; i++)
+    for (int i = eliteSize; i < populationSize; i++)
     {
       Individ child = population[i];
-      int parent1 = selectParent(population, popSize, tournamentSize);
-      int parent2 = selectParent(population, popSize, tournamentSize);
-      breedIndivids(child, population[parent1], population[parent2], cities, popSize);
+      int parent1 = selectParent(population, populationSize, tournamentSize);
+      int parent2 = selectParent(population, populationSize, tournamentSize);
+      breedIndivids(child, population[parent1], population[parent2], cities, populationSize);
       nextGeneration[i] = child;
 
       // Mutate
@@ -157,12 +161,12 @@ int main(int argc, char *argv[])
     }
 
     // Replace population with the new generation
-    for (int i = eliteSize; i < popSize; i++)
+    for (int i = eliteSize; i < populationSize; i++)
       population[i] = nextGeneration[i];
 
     // --------------------- Compute fitness ------------------------
     // Sort population in ascending order based on route length
-    std::sort(population, population + popSize);
+    std::sort(population, population + populationSize);
 
     // ------------ Share data with closest neighbor CPUs -----------
     if (generation % migrationPeriod == 0 && generation > 0)
@@ -178,15 +182,15 @@ int main(int argc, char *argv[])
           MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           // Add route received from neighbor to own population
-          population[popSize - (i * 2 + 1)].setRoute(recvdRoute, cities);
+          population[populationSize - (i * 2 + 1)].setRoute(recvdRoute, cities);
 
           // Left & top neighbors:
           MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
           MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-          population[popSize - (i * 2 + 2)].setRoute(recvdRoute, cities);
+          population[populationSize - (i * 2 + 2)].setRoute(recvdRoute, cities);
         }
-      std::sort(population, population + popSize);
+      std::sort(population, population + populationSize);
     }
     generation++;
   }
@@ -202,8 +206,8 @@ int main(int argc, char *argv[])
     std::cout << "Length of shortest route:    " << globalFittest.routeLength << std::endl;
     std::cout << std::endl;
     std::cout << "Generated a total of "
-              << (generation * (popSize - eliteSize) + eliteSize) * Ntasks << " individual routes"
-              << std::endl;
+              << (generation * (populationSize - eliteSize) + eliteSize) * Ntasks
+              << " individual routes" << std::endl;
     std::cout << std::endl;
     writeToOutputFile(generation, globalFittest, cities);
   }

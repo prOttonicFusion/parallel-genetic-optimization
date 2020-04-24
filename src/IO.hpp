@@ -20,7 +20,7 @@
 /**
  * Parse an input file named 'input.dat' and print error message if one occurs
  *
- * @param globalPopSize  [in/out]
+ * @param populationSize  [in/out]
  * @param eliteFraction  [in/out]
  * @param migrationSize  [in/out]
  * @param migrationPeriod  [in/out]
@@ -29,7 +29,7 @@
  * @return true If parse succeeded
  * @return flase If an error occured
  */
-bool parseInputFile(int &globalPopSize, float &eliteFraction, int &migrationSize,
+bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
                     int &migrationPeriod, float &mutationProbability, int &tournamentSize);
 
 /**
