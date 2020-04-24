@@ -20,7 +20,7 @@ The compiled program is exectuted on `<N>` processors by running
 mpiexec -n <N> ../src/tsp_ga <coordinate-file> <NGenerations> [wrtToScreen] [wrtToFile]
 ```
 
-where `<coordinate-file>` is the xyz-file containing the city coordinates and `<NGenerations>` should be the total number of generations to use in the calculation. The two last and optional parameters specify the frequency of writing data to the screen and output file, respectively. The default value of 1 means data is printed every generation, while 0 would mean no data output.
+where `<coordinate-file>` is the xyz-file containing the city coordinates and `<NGenerations>` should be the total number of generations to use in the calculation. The two last and optional parameters specify the frequency of writing data to the screen and output file, respectively. The default value of 1 means data is printed every generation, while 0 would mean no data output. Additional calculation parameters, such as the population size can be adjusted in the `input.dat|` file.
 
 The results can be visualized using the attached Python script, executed as
 

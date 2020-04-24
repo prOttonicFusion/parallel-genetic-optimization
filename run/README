@@ -26,6 +26,7 @@ and <Ngenerations> the total number of generations. E.g.
 
 mpiexec -n 4 ../src/tsp_ga cityCoordinates.xyz 1000 10 1
 
-The output, written to output.dat, can then be visualized using:
+Additional calculation parameters, such as the population size can be adjusted in the 
+input.dat file. The output, written to output.dat, can then be visualized using:
 
 python3 plotRoute.py cityCoordinates.xyz output.dat
