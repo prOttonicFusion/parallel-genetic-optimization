@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
     }
 
   // ----------------- Generate initial population ------------------
+  Individ population[populationSize];
   int eliteSize = (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
 
   // Initialize route array
@@ -115,15 +116,13 @@ int main(int argc, char *argv[])
   for (int i = 0; i < Ncities; i++)
     route[i] = i;
 
-  Individ population[populationSize];
   for (int i = 0; i < populationSize; i++)
   {
-    std::shuffle(route.begin(), route.end(), rng); // Shuffle route
+    std::shuffle(route.begin(), route.end(), rng); // New random route by shufflinge cities
     population[i].init(route, cities);
   }
 
-  // Sort population in ascending order based on route lenght
-  std::sort(population, population + populationSize);
+  std::sort(population, population + populationSize); // Ascending order based on route lenght
 
   ////////////////////// Main calculation loop //////////////////////
   int generation = 0;
@@ -143,7 +142,7 @@ int main(int argc, char *argv[])
       if (generation % writeToScreenPeriod == 0)
       {
         float globalFittestLength = globalFittest.routeLength;
-        // If already outputed to file this gen., globalFittest is up to date
+        // If we have written to file this gen., there is no need to recalculate globalFittest
         if (generation % writeToFilePeriod != 0)
           getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
 
@@ -151,8 +150,7 @@ int main(int argc, char *argv[])
       }
 
     // ------------------------ Breeding ----------------------------
-    // Pair a fraction of the population; select parents from the most fit
-    // and replace those less fit with offspring
+    // Create new generation from elite + offspring of selected parents
     Individ nextGeneration[populationSize];
 
     for (int i = eliteSize; i < populationSize; i++)
@@ -167,12 +165,12 @@ int main(int argc, char *argv[])
       if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i]);
     }
 
-    // Replace population with the new generation
+    // Replace population with the new generation, leaving elite in place
     for (int i = eliteSize; i < populationSize; i++)
       population[i] = nextGeneration[i];
 
     // --------------------- Compute fitness ------------------------
-    // Sort population in ascending order based on route length
+    // Sort population in ascending order based on (squared) route length
     std::sort(population, population + populationSize);
 
     // ------------ Share data with closest neighbor CPUs -----------

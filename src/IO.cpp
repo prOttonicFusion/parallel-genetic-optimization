@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-void printUsageInfo(char **programName)
+void printUsageInfo(char *programName)
 {
   std::cerr << "Usage: " << programName << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
             << std::endl;
