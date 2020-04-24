@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
       return -1;
     }
   }
-  
+
   MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&migrationSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&migrationPeriod, 1, MPI_INT, 0, GRID_COMM);
@@ -114,11 +114,12 @@ int main(int argc, char *argv[])
     route[i] = i;
 
   // -------------------- Initialize output file --------------------
-  if (!writeToOutputFile("", true))
-  {
-    std::cerr << "Error: Unable to write to ouput file" << std::endl;
-    return -1;
-  }
+  if (rank == 0)
+    if (!writeToOutputFile("", true))
+    {
+      std::cerr << "Error: Unable to write to ouput file" << std::endl;
+      return -1;
+    }
 
   // ----------------- Generate initial population ------------------
   const int eliteSize =
