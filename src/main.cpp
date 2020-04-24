@@ -71,18 +71,6 @@ int main(int argc, char *argv[])
       std::cerr << "Error: Unable to read input file" << std::endl;
       return -1;
     }
-
-    // Parse command line arguments
-    if (argc < 3)
-    {
-      printUsageInfo(argv[0]);
-      return -1;
-    }
-
-    coordFile = argv[1];
-    maxGenCount = atoi(argv[2]);
-    writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
-    writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
   }
 
   MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
@@ -91,15 +79,18 @@ int main(int argc, char *argv[])
   MPI_Bcast(&tournamentSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&eliteFraction, 1, MPI_FLOAT, 0, GRID_COMM);
   MPI_Bcast(&mutationProbability, 1, MPI_FLOAT, 0, GRID_COMM);
-  MPI_Bcast(&maxGenCount, 1, MPI_INT, 0, GRID_COMM);
-  MPI_Bcast(&writeToScreenPeriod, 1, MPI_INT, 0, GRID_COMM);
-  MPI_Bcast(&writeToFilePeriod, 1, MPI_INT, 0, GRID_COMM);
 
-  // Send C++ string; coordFile
-  int stringSize = coordFile.size();
-  MPI_Bcast(&stringSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
-  if (rank != 0) coordFile.resize(stringSize);
-  MPI_Bcast(const_cast<char *>(coordFile.data()), stringSize, MPI_CHAR, 0, GRID_COMM);
+  // Parse command line arguments
+  if (argc < 3 && rank == 0)
+  {
+    printUsageInfo(argv[0]);
+    return -1;
+  }
+
+  coordFile = argv[1];
+  maxGenCount = atoi(argv[2]);
+  writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
+  writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
 
   // Read city coordinates from input file
   if (!parseXYZFile(coordFile, Ncities, cities))
