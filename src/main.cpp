@@ -117,11 +117,6 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  // Initialize route array
-  route.resize(Ncities);
-  for (int i = 0; i < Ncities; i++)
-    route[i] = i;
-
   // -------------------- Initialize output file --------------------
   if (rank == 0)
     if (!writeToOutputFile("", true))
@@ -132,6 +127,11 @@ int main(int argc, char *argv[])
 
   // ----------------- Generate initial population ------------------
   int eliteSize = (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
+
+  // Initialize route array
+  route.resize(Ncities);
+  for (int i = 0; i < Ncities; i++)
+    route[i] = i;
 
   Individ population[populationSize];
   for (int i = 0; i < populationSize; i++)
