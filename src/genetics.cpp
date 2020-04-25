@@ -95,7 +95,6 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
 void mutateIndivid(Individ &individ)
 {
   // Generate two random array indices two switch places on
-  std::uniform_real_distribution<float> uniformRand(0.0, 1.0);
   int ind1 = (int)(individ.Ncities * uniformRand(rng));
   int ind2 = (int)(individ.Ncities * uniformRand(rng));
 
