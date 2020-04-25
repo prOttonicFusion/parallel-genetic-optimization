@@ -187,13 +187,13 @@ int main(int argc, char *argv[])
           MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
           // Add route received from neighbor to own population
-          population[populationSize - (i * 2 + 1)].setRoute(recvdRoute, cities);
+          population[populationSize - (i * 4 + 1 + j*2)].setRoute(recvdRoute, cities);
 
           // Left & top neighbors:
           MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
           MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
                        recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-          population[populationSize - (i * 2 + 2)].setRoute(recvdRoute, cities);
+          population[populationSize - (i * 4 + 2 + j*2)].setRoute(recvdRoute, cities);
         }
       std::sort(population, population + populationSize);
     }

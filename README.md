@@ -30,7 +30,7 @@ python3 plotRoute.py <coordinate-file> <output-file>
 
 ## TODO
 
-- Move usage message to IO.cpp
+- Fix 'spikes' of worsening results when running on 1 core
 - Change population from array to STL vector?
 - Move random route generation to within Individ.init()?
 - Exit loop if bestRoute does not change over a set amount of generations
