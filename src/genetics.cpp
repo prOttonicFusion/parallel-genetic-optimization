@@ -47,7 +47,7 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
   std::vector<int> childRoute(Ncities);
 
   // Select starting city randomly from either parent
-  childRoute[0] = (uniformRand(rng) > 0.5) ? parent1.route[0] : parent2.route[0];
+  childRoute[0] = parent1.route[0];
 
   for (int i = 1; i < Ncities; i++)
   {
