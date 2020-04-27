@@ -30,6 +30,9 @@ python3 plotRoute.py <coordinate-file> <output-file>
 
 ## TODO
 
+- Migration of fittest individuals should only happen between source and one, randomly selected neighbor
+- Try to improve performance; a population of 50 should be enough to solve a 20 city problem in 100 generations on 1 core
+- Check breeding function; what to do if bot ith parent cities are found in childRoute?
 - Fix 'spikes' of worsening results when running on 1 core
 - Change population from array to STL vector?
 - Move random route generation to within Individ.init()?
