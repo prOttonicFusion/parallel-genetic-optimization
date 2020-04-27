@@ -45,6 +45,8 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
 {
   int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);
+  for (int i = 0; i < Ncities; i++)
+    childRoute[i] = -1;
 
   // Select starting city randomly from either parent
   childRoute[0] = parent1.route[0];
@@ -57,11 +59,7 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
     if (parent1CityInChild && parent2CityInChild)
     {
       // Both parent1.route[i] and parent2.route[i] already found in childRoute
-      nextCity = 0;
-      while (cityAlreadyInRoute(childRoute, nextCity, i))
-      {
-        nextCity++;
-      }
+      continue;
     }
     else if (parent1CityInChild)
     {
@@ -89,6 +87,19 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
     }
     childRoute[i] = nextCity;
   }
+
+  // Fill in blank positions
+  for (int i = 0; i < Ncities; i++)
+  {
+    if (childRoute[i] == -1)
+    {
+      int nextCity = 0;
+      while (cityAlreadyInRoute(childRoute, nextCity, Ncities))
+        nextCity++;
+      childRoute[i] = nextCity;
+    }
+  }
+
   child.setRoute(childRoute, cities);
 }
 
