@@ -55,11 +55,11 @@ int main(int argc, char *argv[])
 
   // Map the processors to a 2D grid topology for more structured communication
   int ndims = 1;                     // Number of dimensions
-  int dims[ndims] = {0};             // Number of nodes along each dim (0 --> let MPI_Dims choose)
+  int dims[ndims] = {Ntasks};        // Number of nodes along each dim (0 --> let MPI_Dims choose)
   int reorder = 0;                   // Should MPI determine optimal process ordering?
   int periods[ndims] = {1};          // Periodicity in each direction; 0 --> non-periodic
   MPI_Comm GRID_COMM;                // New communicator
-  MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
+  //MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
   // ------------ Parse input on root CPU & broadcast it ------------
@@ -182,8 +182,8 @@ int main(int argc, char *argv[])
         // Get receiver rank for closest neighbor communication
         MPI_Cart_shift(GRID_COMM, 0, -1, &sourceRank, &destRank);
         // Send & receive fittest individuals
-        MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, sourceRank, tag, recvdRoute.data(),
-                     Ncities, MPI_INT, MPI_ANY_SOURCE, tag, GRID_COMM, &status);
+        MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
+                     Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
         // Add route received from neighbor to own population
         population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
       }
