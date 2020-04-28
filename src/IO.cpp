@@ -130,6 +130,7 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite)
   }
   outputFile << outputString << std::endl;
   outputFile.close();
+  return true;
 }
 
 bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities,
@@ -144,7 +145,7 @@ bool writeToOutputFile(int generation, const Individ &fittest, const std::vector
     stringStream << fittest.route[i] << " ";
   stringStream << std::endl;
   stringStream << "Route_string: " << bestRouteStr << std::endl;
-  writeToOutputFile(stringStream.str(), overWrite);
+  return writeToOutputFile(stringStream.str(), overWrite);
 }
 
 void writeToScreen(const int &generation, const float &bestRouteLen)
