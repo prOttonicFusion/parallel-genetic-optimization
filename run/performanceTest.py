@@ -16,10 +16,10 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
-Nrepeat = 5           # Run program Nrepeat times for each setup & take average
+Nrepeat = 15           # Run program Nrepeat times for each setup & take average
 Nproc = [1, 2, 3, 4, 5, 6]  # The processor setups to use
 # Command line rguments for the C++ program
-inputArgs = ['randomCities.xyz', '1000', '100', '1']
+inputArgs = ['randomCities.xyz', '1000', '0', '100']
 
 
 def tail(f, n):
@@ -48,6 +48,7 @@ def getShortestRouteLength():
 # Run the program multiple times for each setup and calculate an average final route length
 avgFinalLength_MPI = np.zeros(len(Nproc))
 for i, N in enumerate(Nproc):
+    print('Running on {} CPUs'.format(N))
     routeLengthSum = 0.0
     for j in range(Nrepeat):
         subprocess.run(['mpiexec', '-n', str(N), '../src/tsp_ga', *inputArgs])
