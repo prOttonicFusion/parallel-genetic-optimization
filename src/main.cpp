@@ -173,14 +173,15 @@ int main(int argc, char *argv[])
     // Sort population in ascending order based on (squared) route length
     std::sort(population, population + populationSize);
 
-    // ------------- Share data with random neighbor CPU ------------
+    // ---------------- Share data with neighbor CPU ----------------
+    // Send fittest individual(s) to next CPU on the right 
     if (generation % migrationPeriod == 0 && generation > 0)
     {
       std::vector<int> recvdRoute(Ncities);
       for (int i = 0; i < migrationSize; i++)
       {
         // Get receiver rank for closest neighbor communication
-        MPI_Cart_shift(GRID_COMM, 0, -1, &sourceRank, &destRank);
+        MPI_Cart_shift(GRID_COMM, 0, 1, &sourceRank, &destRank);
         // Send & receive fittest individuals
         MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
                      Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
