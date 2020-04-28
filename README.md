@@ -1,6 +1,6 @@
 # Parallel Genetic Optimization
 
-An example solution of the classic Traveling Salesman Problem (TSP) using a parallel genetic optimization algorithm in C++.
+A multiple-deme/stepping-stone parallel solver for the classical Traveling Salesman Problem (TSP).  Written in C++ using the [Open MPI](https://www.open-mpi.org/) Message Passing Interface implementation.
 
 ## Compilation
 
