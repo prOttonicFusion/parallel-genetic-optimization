@@ -173,28 +173,24 @@ int main(int argc, char *argv[])
     // Sort population in ascending order based on (squared) route length
     std::sort(population, population + populationSize);
 
-    // ------------ Share data with closest neighbor CPUs -----------
+    // ------------- Share data with random neighbor CPU ------------
     if (generation % migrationPeriod == 0 && generation > 0)
     {
       std::vector<int> recvdRoute(Ncities);
+      // Select neighbor to migrate (clone) fittest individuals to
+      float rand = uniformRand(rng);
+      int direction = (rand < 0.5) ? 0 : 1;     // Move vertically or horisontally
+      int displacement = (rand < 0.5) ? -1 : 1; // Move forward or backward
       for (int i = 0; i < migrationSize; i++)
-        for (int j = 0; j < 2; j++)
-        {
-          // Right & bottom neighbors:
-          // Get send & receive adresses for closest neighbor communication
-          MPI_Cart_shift(GRID_COMM, j, 1, &sourceRank, &destRank);
-          // Send & receive fittest individuals
-          MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
-                       recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-          // Add route received from neighbor to own population
-          population[populationSize - (i * 4 + 1 + j*2)].setRoute(recvdRoute, cities);
-
-          // Left & top neighbors:
-          MPI_Cart_shift(GRID_COMM, j, -1, &sourceRank, &destRank);
-          MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag,
-                       recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-          population[populationSize - (i * 4 + 2 + j*2)].setRoute(recvdRoute, cities);
-        }
+      {
+        // Get send & receive adresses for closest neighbor communication
+        MPI_Cart_shift(GRID_COMM, direction, displacement, &sourceRank, &destRank);
+        // Send & receive fittest individuals
+        MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, rank, tag, recvdRoute.data(),
+                     Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+        // Add route received from neighbor to own population
+        population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
+      }
       std::sort(population, population + populationSize);
     }
     generation++;
