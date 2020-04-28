@@ -35,6 +35,7 @@ def getShortestRouteLength():
     lastOutputFrame = tail('output.dat', 5)
     return float(lastOutputFrame[1].split()[1])
 
+
 # Run the program multiple times for each setup and calculate an average final route length and wall-time
 avgFinalLength_MPI = np.zeros(len(Nproc))
 avgTimes_MPI = np.zeros(len(Nproc))
@@ -43,8 +44,10 @@ for i, N in enumerate(Nproc):
     routeLengthSum = 0.0
     timeSum = 0.0
     for j in range(Nrepeat):
-        runCmd = "subprocess.run(['mpiexec', '-n', '{}', '../src/tsp_ga', '{}', '{}', '{}', '{}'])".format(N, *inputArgs)
-        timeSum += timeit.timeit(stmt=runCmd, setup="import subprocess", number=1)
+        runCmd = "subprocess.run(['mpiexec', '-n', '{}', '../src/tsp_ga', '{}', '{}', '{}', '{}'])".format(
+            N, *inputArgs)
+        timeSum += timeit.timeit(stmt=runCmd,
+                                 setup="import subprocess", number=1)
         routeLengthSum += getShortestRouteLength()
     avgFinalLength_MPI[i] = routeLengthSum/Nrepeat
     avgTimes_MPI[i] = timeSum/Nrepeat
@@ -52,10 +55,10 @@ for i, N in enumerate(Nproc):
 print(avgFinalLength_MPI)
 
 ############################ Draw figure ############################
-plt.figure(num=1, figsize=[7, 4])
+plt.figure(num=0, figsize=[7, 4])
 plt.plot(Nproc, avgTimes_MPI, 'ro--')
 plt.xlabel("Number of processes")
-plt.ylabel("Wall-time (s)")
+plt.ylabel("Mean Wall-time (s)")
 # plt.legend()
 plt.savefig("performance_walltime.png")
 plt.show()
@@ -64,7 +67,16 @@ plt.figure(num=1, figsize=[7, 4])
 plt.plot(Nproc, avgFinalLength_MPI, 'o--')
 plt.xlabel("Number of processes")
 plt.ylabel("Mean Final Squared Route Length")
-plt.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
 # plt.legend()
 plt.savefig("performance_route.png")
+plt.show()
+
+plt.figure(num=2, figsize=[7, 4])
+plt.plot(Nproc, [avgFinalLength_MPI[i]*avgTimes_MPI[i] for i in range(len(Nproc))], 'go--')
+plt.xlabel("Number of processes")
+plt.ylabel("Route Length * Wall-time")
+plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
+# plt.legend()
+plt.savefig("performance_relative.png")
 plt.show()
