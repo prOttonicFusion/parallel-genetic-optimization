@@ -9,9 +9,12 @@
 #####################################################################
 
 # Compiler
-CMP=mpic++
+# -----------------------------
+CMP=mpic++   # Open MPI + GCC
+#CMP=mpicc    # Intel
 
 # Optimization level
+# -----------------------------
 OPT=-O2 
 
 tsp_ga: individ.o genetics.o IO.o city.o parallel.o main.o
