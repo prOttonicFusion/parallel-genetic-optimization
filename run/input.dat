@@ -1,5 +1,5 @@
 This is the input file for the GA TSP solver
-populationSize 100        // Number of individuals in the population
+populationSize 1000        // Number of individuals in the population
 eliteFraction 0.02        // Fraction of population conserved to next generation
 migrationSize 1           // Number of individuals to share with neighbor CPUs
 migrationPeriod 20        // Send fittest individuals to neighbor CPUs every this many generations
