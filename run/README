@@ -19,14 +19,20 @@ Running instructions:
 -------------------------------
 The program is executed by running: 
 
-mpiexec -n <N> ../src/tsp_ga <coordinate-file> <Ngenerations> [toScreenInt] [toFileInt]
+    mpiexec -n <N> ../src/tsp_ga <coordinate-file> <Ngenerations> [toScreenInt] [toFileInt]
 
 with <N> being the desired number of cores, <coordinate-file> the city coordinate file 
 and <Ngenerations> the total number of generations. E.g.
 
-mpiexec -n 4 ../src/tsp_ga cityCoordinates.xyz 1000 10 1
+    mpiexec -n 4 ../src/tsp_ga cityCoordinates.xyz 1000 10 1
 
 Additional calculation parameters, such as the population size can be adjusted in the 
 input.dat file. The output, written to output.dat, can then be visualized using:
 
-python3 plotRoute.py cityCoordinates.xyz output.dat
+    python3 plotRoute.py cityCoordinates.xyz output.dat
+
+
+
+The program has been tested and found to work with the follwing compiler-MPI configurations:
+OpenMPI/2.1.2-GCC-6.4.0-2.28
+OpenMPI/3.1.3-GCC-8.2.0-2.31.1
