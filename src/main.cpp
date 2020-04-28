@@ -54,11 +54,11 @@ int main(int argc, char *argv[])
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);   // rank = id of current process
 
   // Map the processors to a 2D grid topology for more structured communication
-  int ndims = 2;               // Number of dimensions
-  int dims[ndims] = {0, 0};    // Number of nodes along each dim (0 --> let MPI_Dims choose)
-  int reorder = 0;             // Should MPI determine optimal process ordering?
-  int periods[ndims] = {1, 1}; // Periodicity in each direction; 0 --> non-periodic
-  MPI_Comm GRID_COMM;          // New communicator
+  int ndims = 1;                     // Number of dimensions
+  int dims[ndims] = {0};             // Number of nodes along each dim (0 --> let MPI_Dims choose)
+  int reorder = 0;                   // Should MPI determine optimal process ordering?
+  int periods[ndims] = {1};          // Periodicity in each direction; 0 --> non-periodic
+  MPI_Comm GRID_COMM;                // New communicator
   MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
@@ -177,17 +177,13 @@ int main(int argc, char *argv[])
     if (generation % migrationPeriod == 0 && generation > 0)
     {
       std::vector<int> recvdRoute(Ncities);
-      // Select neighbor to migrate (clone) fittest individuals to
-      float rand = uniformRand(rng);
-      int direction = (rand < 0.5) ? 0 : 1;     // Move vertically or horisontally
-      int displacement = (rand < 0.5) ? 1 : -1; // Move forward or backward
       for (int i = 0; i < migrationSize; i++)
       {
-        // Get send & receive adresses for closest neighbor communication
-        MPI_Cart_shift(GRID_COMM, direction, displacement, &sourceRank, &destRank);
+        // Get receiver rank for closest neighbor communication
+        MPI_Cart_shift(GRID_COMM, 0, -1, &sourceRank, &destRank);
         // Send & receive fittest individuals
-        MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, rank, tag, recvdRoute.data(),
-                     Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+        MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, sourceRank, tag, recvdRoute.data(),
+                     Ncities, MPI_INT, MPI_ANY_SOURCE, tag, GRID_COMM, &status);
         // Add route received from neighbor to own population
         population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
       }
