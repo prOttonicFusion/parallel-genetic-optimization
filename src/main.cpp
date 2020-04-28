@@ -178,6 +178,7 @@ int main(int argc, char *argv[])
     if (generation % migrationPeriod == 0 && generation > 0)
     {
       std::vector<int> recvdRoute(Ncities);
+      float recvdRouteLength; 
       for (int i = 0; i < migrationSize; i++)
       {
         // Get receiver rank for closest neighbor communication
@@ -185,8 +186,12 @@ int main(int argc, char *argv[])
         // Send & receive fittest individuals
         MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
                      Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-        // Add route received from neighbor to own population
-        population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
+        MPI_Sendrecv(&population[i].routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength,
+                     1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
+        // Add route received from neighbor to own population by replacing own least fit indviduals
+        // Skip if own least fit are more fit than the new candidates
+        if (recvdRouteLength < population[populationSize - (i + 1)].routeLength)
+          population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
       }
       std::sort(population, population + populationSize);
     }
