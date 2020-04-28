@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
       // Select neighbor to migrate (clone) fittest individuals to
       float rand = uniformRand(rng);
       int direction = (rand < 0.5) ? 0 : 1;     // Move vertically or horisontally
-      int displacement = (rand < 0.5) ? -1 : 1; // Move forward or backward
+      int displacement = (rand < 0.5) ? 1 : -1; // Move forward or backward
       for (int i = 0; i < migrationSize; i++)
       {
         // Get send & receive adresses for closest neighbor communication
