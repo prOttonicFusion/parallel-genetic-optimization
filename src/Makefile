@@ -9,37 +9,38 @@
 #####################################################################
 
 # Compiler
-# -----------------------------
-CMP=mpic++   # Open MPI + GCC
-#CMP=mpicc    # Intel
+CC=mpic++   # Open MPI + GCC
+#CC=mpicc    # Intel
 
 # Optimization level
-# -----------------------------
 OPT=-O2 
 
-tsp_ga: individ.o genetics.o IO.o city.o parallel.o main.o
-	${CMP} -g main.o parallel.o IO.o city.o individ.o genetics.o ${OPT} -o tsp_ga
+# Executable name
+EXE=tsp_ga
+
+${EXE}: individ.o genetics.o IO.o city.o parallel.o main.o
+	${CC} main.o parallel.o IO.o city.o individ.o genetics.o ${OPT} -o ${EXE}
 
 city.o:
-	${CMP} -c city.cpp ${OPT}
+	${CC} -c city.cpp ${OPT}
 
 IO.o:
-	${CMP} -c IO.cpp ${OPT}
+	${CC} -c IO.cpp ${OPT}
 
 individ.o:
-	${CMP} -c individ.cpp ${OPT}
+	${CC} -c individ.cpp ${OPT}
 
 genetics.o:
-	${CMP} -c genetics.cpp ${OPT}
+	${CC} -c genetics.cpp ${OPT}
 
 parallel.o:
-	${CMP} -c parallel.cpp ${OPT}
+	${CC} -c parallel.cpp ${OPT}
 
 main.o:
-	${CMP} -c main.cpp ${OPT}
-	
+	${CC} -c main.cpp ${OPT}
+
 clean:
 	rm -f *.o
 
 clean-all:
-	rm -f *.o tsp_ga
+	rm -f *.o ${EXE}
