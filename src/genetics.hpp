@@ -25,7 +25,7 @@
  * @param tournamentSize  [in] Number of individuals to select randomly at random the tournament
  * @return int The index of the parent in population[]
  */
-int selectParent(Individ population[], const int &populationSize, const int &tournamentSize);
+int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize);
 
 /**
  * Merge the genome of two individs to produce offspring.

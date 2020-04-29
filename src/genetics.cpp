@@ -18,7 +18,7 @@
 #include <random>
 #include <vector>
 
-int selectParent(Individ population[], const int &populationSize, const int &tournamentSize)
+int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize)
 {
   // Select tournamentSize random individuals from population and save the index of the fittest
   int bestIndex = uniformRand(rng) * populationSize;

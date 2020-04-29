@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
     for (int i = eliteSize; i < populationSize; i++)
     {
       Individ child = population[i];
-      int parent1 = selectParent(population, populationSize, tournamentSize);
-      int parent2 = selectParent(population, populationSize, tournamentSize);
+      int parent1 = selectRandomIndivid(population, populationSize, tournamentSize);
+      int parent2 = selectRandomIndivid(population, populationSize, tournamentSize);
       breedIndivids(child, population[parent1], population[parent2], cities, populationSize);
       nextGeneration[i] = child;
 
@@ -187,10 +187,13 @@ int main(int argc, char *argv[])
 
       for (int i = 0; i < migrationSize; i++)
       {
+        // Select random individual to send
+        int index = selectRandomIndivid(population, populationSize, tournamentSize);
+
         // Send & receive fittest individuals
-        MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
+        MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
                      Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-        MPI_Sendrecv(&population[i].routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength,
+        MPI_Sendrecv(&population[index].routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength,
                      1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
         // Add route received from neighbor to own population by replacing own least fit indviduals
         // Skip if own least fit are more fit than the new candidates
