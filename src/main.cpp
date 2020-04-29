@@ -55,12 +55,11 @@ int main(int argc, char *argv[])
 
   // Map the processors to a 2D grid topology for more structured communication
   int ndims = 1;              // Number of dimensions
-  int dims[ndims] = {Ntasks}; // Number of nodes along each dim (0 --> let MPI_Dims choose)
+  int dims[ndims] = {Ntasks}; // Number of nodes along each dim
   int reorder = 0;            // Should MPI determine optimal process ordering?
-  int periods[ndims] = {1};   // Periodicity in each direction; 0 --> non-periodic
+  int periodic[ndims] = {1};  // Periodicity in each direction; 0 --> non-periodic
   MPI_Comm GRID_COMM;         // New communicator
-  //MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
-  MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
+  MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periodic, reorder, &GRID_COMM);
 
   // ------------ Parse input on root CPU & broadcast it ------------
   if (rank == 0)
@@ -182,7 +181,7 @@ int main(int argc, char *argv[])
     {
       std::vector<int> recvdRoute(Ncities);
       float recvdRouteLength;
-      
+
       // Get receiver rank for closest neighbor communication
       MPI_Cart_shift(GRID_COMM, 0, 1, &sourceRank, &destRank);
 
