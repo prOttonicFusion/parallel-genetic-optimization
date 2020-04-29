@@ -25,8 +25,7 @@ int selectRandomIndivid(Individ population[], const int &populationSize, const i
   for (int i = 0; i < tournamentSize - 1; i++)
   {
     int index = uniformRand(rng) * populationSize;
-    if (population[index].routeLength < population[bestIndex].routeLength)
-      bestIndex = index;
+    if (population[index].routeLength < population[bestIndex].routeLength) bestIndex = index;
   }
 
   return bestIndex;
@@ -36,8 +35,7 @@ bool cityAlreadyInRoute(const std::vector<int> &route, const int &cityIndex, con
 {
   for (int i = 0; i < Ncities; i++)
   {
-    if (route[i] == cityIndex)
-      return true;
+    if (route[i] == cityIndex) return true;
   }
   return false;
 }
@@ -65,15 +63,18 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
 
       for (int j = 1; j < Ncities; j++)
       {
-        int index = (i + j < Ncities) ? i + j : j - 1;  // Periodic boundaries
+        int index = (i + j < Ncities) ? i + j : j - 1; // Periodic boundaries
         bool parent1jCityInChild = cityAlreadyInRoute(childRoute, parent1.route[index], i);
         bool parent2jCityInChild = cityAlreadyInRoute(childRoute, parent2.route[index], i);
 
         if (!parent1jCityInChild && !parent2jCityInChild)
           nextCity = (uniformRand(rng) < 0.5) ? parent1.route[index] : parent2.route[index];
-        else if (parent1jCityInChild && !parent2jCityInChild) nextCity = parent2.route[index];
-        else if (parent2jCityInChild && !parent1jCityInChild) nextCity = parent1.route[index];
-        else continue;
+        else if (parent1jCityInChild && !parent2jCityInChild)
+          nextCity = parent2.route[index];
+        else if (parent2jCityInChild && !parent1jCityInChild)
+          nextCity = parent1.route[index];
+        else
+          continue;
 
         if (!cityAlreadyInRoute(childRoute, nextCity, i)) break;
       }

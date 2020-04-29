@@ -134,8 +134,7 @@ int main(int argc, char *argv[])
       {
         getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
                               status);
-        if (rank == 0)
-          writeToOutputFile(generation, globalFittest, cities);
+        if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
       }
 
     if (writeToScreenPeriod != 0)
@@ -146,8 +145,7 @@ int main(int argc, char *argv[])
         if (generation % writeToFilePeriod != 0)
           getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
 
-        if (rank == 0)
-          writeToScreen(generation, globalFittestLength);
+        if (rank == 0) writeToScreen(generation, globalFittestLength);
       }
 
     // ------------------------ Breeding ----------------------------
@@ -163,8 +161,7 @@ int main(int argc, char *argv[])
       nextGeneration[i] = child;
 
       // Mutate
-      if (uniformRand(rng) < mutationProbability)
-        mutateIndivid(nextGeneration[i]);
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i]);
     }
 
     // Replace population with the new generation, leaving elite in place
@@ -191,8 +188,8 @@ int main(int argc, char *argv[])
         int index = selectRandomIndivid(population, populationSize, tournamentSize);
 
         // Send & receive fittest individuals
-        MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
-                     Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+        MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag,
+                     recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
         MPI_Sendrecv(&population[index].routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength,
                      1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
         // Add route received from neighbor to own population by replacing own least fit indviduals
