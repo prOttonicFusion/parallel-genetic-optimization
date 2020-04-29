@@ -31,7 +31,7 @@ int selectRandomIndivid(Individ population[], const int &populationSize, const i
   return bestIndex;
 }
 
-bool cityAlreadyInRoute(const std::vector<int> &route, const int &cityIndex, const int &Ncities)
+bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const int &Ncities)
 {
   for (int i = 0; i < Ncities; i++)
   {
@@ -48,43 +48,43 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
   for (int i = 0; i < Ncities; i++)
     childRoute[i] = -1;
 
-  // Select starting city randomly from either parent
+  // Get starting city from first parent
   childRoute[0] = parent1.route[0];
 
+  // Loop over genome
   for (int i = 1; i < Ncities; i++)
   {
     int nextCity = 0;
-    bool parent1CityInChild = cityAlreadyInRoute(childRoute, parent1.route[i], i);
-    bool parent2CityInChild = cityAlreadyInRoute(childRoute, parent2.route[i], i);
-    if (parent1CityInChild && parent2CityInChild)
+    bool parent1CityFoundInChild = cityFoundInRoute(childRoute, parent1.route[i], i);
+    bool parent2CityFoundInChild = cityFoundInRoute(childRoute, parent2.route[i], i);
+    if (parent1CityFoundInChild && parent2CityFoundInChild)
     {
       // Both parent1.route[i] and parent2.route[i] already found in childRoute
       // Select next city of one of the parents
-
       for (int j = 1; j < Ncities; j++)
       {
         int index = (i + j < Ncities) ? i + j : j - 1; // Periodic boundaries
-        bool parent1jCityInChild = cityAlreadyInRoute(childRoute, parent1.route[index], i);
-        bool parent2jCityInChild = cityAlreadyInRoute(childRoute, parent2.route[index], i);
+        bool parent1NextCityFoundInChild = cityFoundInRoute(childRoute, parent1.route[index], i);
+        bool parent2NextCityFoundInChild = cityFoundInRoute(childRoute, parent2.route[index], i);
 
-        if (!parent1jCityInChild && !parent2jCityInChild)
+        if (!parent1NextCityFoundInChild && !parent2NextCityFoundInChild)
           nextCity = (uniformRand(rng) < 0.5) ? parent1.route[index] : parent2.route[index];
-        else if (parent1jCityInChild && !parent2jCityInChild)
+        else if (parent1NextCityFoundInChild && !parent2NextCityFoundInChild)
           nextCity = parent2.route[index];
-        else if (parent2jCityInChild && !parent1jCityInChild)
+        else if (parent2NextCityFoundInChild && !parent1NextCityFoundInChild)
           nextCity = parent1.route[index];
         else
           continue;
 
-        if (!cityAlreadyInRoute(childRoute, nextCity, i)) break;
+        if (!cityFoundInRoute(childRoute, nextCity, i)) break;
       }
     }
-    else if (parent1CityInChild)
+    else if (parent1CityFoundInChild)
     {
       // Found parent1.route[i] in childRoute
       nextCity = parent2.route[i];
     }
-    else if (parent2CityInChild)
+    else if (parent2CityFoundInChild)
     {
       // Found parent2.route[i] in childRoute
       nextCity = parent1.route[i];
@@ -94,14 +94,7 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
       // Neither was found --> choose closest
       int dist1 = distanceBetweenCities(cities[childRoute[i - 1]], cities[parent1.route[i]]);
       int dist2 = distanceBetweenCities(cities[childRoute[i - 1]], cities[parent2.route[i]]);
-      if (dist1 < dist2)
-      {
-        nextCity = parent1.route[i];
-      }
-      else
-      {
-        nextCity = parent2.route[i];
-      }
+      nextCity = (dist1 < dist2) ? parent1.route[i] : parent2.route[i];
     }
     childRoute[i] = nextCity;
   }
