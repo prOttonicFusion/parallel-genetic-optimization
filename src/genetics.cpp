@@ -25,7 +25,8 @@ int selectParent(Individ population[], const int &populationSize, const int &tou
   for (int i = 0; i < tournamentSize - 1; i++)
   {
     int index = uniformRand(rng) * populationSize;
-    if (population[index].routeLength < population[bestIndex].routeLength) bestIndex = index;
+    if (population[index].routeLength < population[bestIndex].routeLength)
+      bestIndex = index;
   }
 
   return bestIndex;
@@ -35,7 +36,8 @@ bool cityAlreadyInRoute(const std::vector<int> &route, const int &cityIndex, con
 {
   for (int i = 0; i < Ncities; i++)
   {
-    if (route[i] == cityIndex) return true;
+    if (route[i] == cityIndex)
+      return true;
   }
   return false;
 }
@@ -59,7 +61,22 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
     if (parent1CityInChild && parent2CityInChild)
     {
       // Both parent1.route[i] and parent2.route[i] already found in childRoute
-      continue;
+      // Select next city of one of the parents
+
+      for (int j = 1; j < Ncities; j++)
+      {
+        int index = (i + j < Ncities) ? i + j : j - 1;  // Periodic boundaries
+        bool parent1jCityInChild = cityAlreadyInRoute(childRoute, parent1.route[index], i);
+        bool parent2jCityInChild = cityAlreadyInRoute(childRoute, parent2.route[index], i);
+
+        if (!parent1jCityInChild && !parent2jCityInChild)
+          nextCity = (uniformRand(rng) < 0.5) ? parent1.route[index] : parent2.route[index];
+        else if (parent1jCityInChild && !parent2jCityInChild) nextCity = parent2.route[index];
+        else if (parent2jCityInChild && !parent1jCityInChild) nextCity = parent1.route[index];
+        else continue;
+
+        if (!cityAlreadyInRoute(childRoute, nextCity, i)) break;
+      }
     }
     else if (parent1CityInChild)
     {
@@ -86,18 +103,6 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
       }
     }
     childRoute[i] = nextCity;
-  }
-
-  // Fill in blank positions
-  for (int i = 0; i < Ncities; i++)
-  {
-    if (childRoute[i] == -1)
-    {
-      int nextCity = 0;
-      while (cityAlreadyInRoute(childRoute, nextCity, Ncities))
-        nextCity++;
-      childRoute[i] = nextCity;
-    }
   }
 
   child.setRoute(childRoute, cities);
