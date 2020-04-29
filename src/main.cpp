@@ -54,11 +54,11 @@ int main(int argc, char *argv[])
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);   // rank = id of current process
 
   // Map the processors to a 2D grid topology for more structured communication
-  int ndims = 1;                     // Number of dimensions
-  int dims[ndims] = {Ntasks};        // Number of nodes along each dim (0 --> let MPI_Dims choose)
-  int reorder = 0;                   // Should MPI determine optimal process ordering?
-  int periods[ndims] = {1};          // Periodicity in each direction; 0 --> non-periodic
-  MPI_Comm GRID_COMM;                // New communicator
+  int ndims = 1;              // Number of dimensions
+  int dims[ndims] = {Ntasks}; // Number of nodes along each dim (0 --> let MPI_Dims choose)
+  int reorder = 0;            // Should MPI determine optimal process ordering?
+  int periods[ndims] = {1};   // Periodicity in each direction; 0 --> non-periodic
+  MPI_Comm GRID_COMM;         // New communicator
   //MPI_Dims_create(Ntasks, ndims, dims); // Divide processors in a cartesian grid
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periods, reorder, &GRID_COMM);
 
@@ -135,7 +135,8 @@ int main(int argc, char *argv[])
       {
         getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
                               status);
-        if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
+        if (rank == 0)
+          writeToOutputFile(generation, globalFittest, cities);
       }
 
     if (writeToScreenPeriod != 0)
@@ -146,7 +147,8 @@ int main(int argc, char *argv[])
         if (generation % writeToFilePeriod != 0)
           getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
 
-        if (rank == 0) writeToScreen(generation, globalFittestLength);
+        if (rank == 0)
+          writeToScreen(generation, globalFittestLength);
       }
 
     // ------------------------ Breeding ----------------------------
@@ -162,7 +164,8 @@ int main(int argc, char *argv[])
       nextGeneration[i] = child;
 
       // Mutate
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i]);
+      if (uniformRand(rng) < mutationProbability)
+        mutateIndivid(nextGeneration[i]);
     }
 
     // Replace population with the new generation, leaving elite in place
@@ -174,11 +177,11 @@ int main(int argc, char *argv[])
     std::sort(population, population + populationSize);
 
     // ---------------- Share data with neighbor CPU ----------------
-    // Send fittest individual(s) to next CPU on the right 
+    // Send fittest individual(s) to next CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
       std::vector<int> recvdRoute(Ncities);
-      float recvdRouteLength; 
+      float recvdRouteLength;
       for (int i = 0; i < migrationSize; i++)
       {
         // Get receiver rank for closest neighbor communication
