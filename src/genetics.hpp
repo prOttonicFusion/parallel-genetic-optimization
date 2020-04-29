@@ -18,7 +18,7 @@
 #include <vector>
 
 /**
- * Select randomly a parent from the population using Tournament Selection
+ * Select randomly an individual from the population using Tournament Selection
  *
  * @param population  [in] The population, i.e. an array of Individ objects
  * @param populationSize  [in] Size of population
@@ -35,7 +35,7 @@ int selectRandomIndivid(Individ population[], const int &populationSize, const i
  * 2) The Nth city in the child is chosen from the parents' Nth genes by checking
  *    which of the two is closer to the child's N-1th city
  * 3) If the closer city is already found in the child, take the city from the other parent
- * 4) If both are already found in child, pick random city
+ * 4) If both are already found in child, pick next city from either parent
  *
  * @param child [in/out] Child individ (should be initialized prior to breeding)
  * @param parent1 [in] Mother individ

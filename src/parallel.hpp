@@ -26,7 +26,7 @@
  * @param Ntasks [in] The total number of CPUs
  * @param tag  [in] MPI messaging tag
  * @param comm  [in] MPI Communicator object
- * @param statys [in] MPI_Status
+ * @param status [in] MPI_Status
  */
 void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
                            const std::vector<City> &cities, const int &rank, const int &Ntasks,
@@ -35,7 +35,7 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
 /**
  * Compares the shortest routes on each CPU and determine the globally shortest one.
  * The output is the length of globally fittest Individ objects route.
- * This is a more lightweight version of getGlobalFittestRoute()
+ * This is a more light-weight version of getGlobalFittestRoute()
  *
  * @param globalShortestRouteLength  [in/out] Length of the globally shortest route
  * @param localFittest  [in] The fittest Individ object on the current CPU

@@ -42,7 +42,7 @@ class Individ
 
   /**
    * Initialize Individ with route. Same as setRoute, but
-   * also allocates the route array
+   * also resizes the route vector
    *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
