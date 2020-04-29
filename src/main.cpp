@@ -182,10 +182,12 @@ int main(int argc, char *argv[])
     {
       std::vector<int> recvdRoute(Ncities);
       float recvdRouteLength;
+      
+      // Get receiver rank for closest neighbor communication
+      MPI_Cart_shift(GRID_COMM, 0, 1, &sourceRank, &destRank);
+
       for (int i = 0; i < migrationSize; i++)
       {
-        // Get receiver rank for closest neighbor communication
-        MPI_Cart_shift(GRID_COMM, 0, 1, &sourceRank, &destRank);
         // Send & receive fittest individuals
         MPI_Sendrecv(population[i].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
                      Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
