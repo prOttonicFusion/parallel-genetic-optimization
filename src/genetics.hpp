@@ -18,14 +18,14 @@
 #include <vector>
 
 /**
- * Select randomly an individual from the population using Tournament Selection
+ * Select randomly an individual from the population using Fitness Proportionate Selection 
  *
  * @param population  [in] The population, i.e. an array of Individ objects
  * @param populationSize  [in] Size of population
- * @param tournamentSize  [in] Number of individuals to select randomly at random the tournament
+ * @param routeLengthSum  [in] The route length sum over the entire population
  * @return int The index of the parent in population[]
  */
-int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize);
+int selectRandomIndivid(Individ population[], const int &populationSize, const float &routeLengthSum);
 
 /**
  * Merge the genome of two individs to produce offspring.

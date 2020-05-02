@@ -148,6 +148,12 @@ int main(int argc, char *argv[])
         if (rank == 0) writeToScreen(generation, globalFittestLength);
       }
 
+    // --------------------- Fitness computation --------------------
+    float routeLengthSum = 0;
+    for (int i = 0; i < populationSize; i++)
+      routeLengthSum += population[i].routeLength;
+    
+
     // ------------------------ Breeding ----------------------------
     // Create new generation from elite + offspring of selected parents
     Individ nextGeneration[populationSize];
@@ -155,8 +161,8 @@ int main(int argc, char *argv[])
     for (int i = eliteSize; i < populationSize; i++)
     {
       Individ child = population[i];
-      int parent1 = selectRandomIndivid(population, populationSize, tournamentSize);
-      int parent2 = selectRandomIndivid(population, populationSize, tournamentSize);
+      int parent1 = selectRandomIndivid(population, populationSize, routeLengthSum);
+      int parent2 = selectRandomIndivid(population, populationSize, routeLengthSum);
       breedIndivids(child, population[parent1], population[parent2], cities, populationSize);
       nextGeneration[i] = child;
 
@@ -168,7 +174,7 @@ int main(int argc, char *argv[])
     for (int i = eliteSize; i < populationSize; i++)
       population[i] = nextGeneration[i];
 
-    // --------------------- Compute fitness ------------------------
+    // --------------------- Sort population ------------------------
     // Sort population in ascending order based on (squared) route length
     std::sort(population, population + populationSize);
 
@@ -185,7 +191,7 @@ int main(int argc, char *argv[])
       for (int i = 0; i < migrationSize; i++)
       {
         // Select random individual to send
-        int index = selectRandomIndivid(population, populationSize, tournamentSize);
+        int index = selectRandomIndivid(population, populationSize, routeLengthSum);
 
         // Send & receive fittest individuals
         MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag,
