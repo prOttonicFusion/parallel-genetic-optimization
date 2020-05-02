@@ -31,7 +31,7 @@ void printUsageInfo(char *programName)
 }
 
 bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
-                    int &migrationPeriod, float &mutationProbability, int &tournamentSize)
+                    int &migrationPeriod, float &mutationProbability)
 {
   std::ifstream infile("input.dat");
 
@@ -57,8 +57,6 @@ bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSiz
       migrationPeriod = (int)value;
     else if (keyword == "mutationProbability")
       mutationProbability = value;
-    else if (keyword == "tournamentSize")
-      tournamentSize = (int)value;
     else
     {
       std::cerr << "Error: Unknown input file keyword '" << keyword << "'" << std::endl;
@@ -67,7 +65,7 @@ bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSiz
     counter++;
   }
 
-  if (counter != 6)
+  if (counter != 5)
   {
     std::cerr << "Error: Invalid number of input keywords: " << counter << std::endl;
     return false;
