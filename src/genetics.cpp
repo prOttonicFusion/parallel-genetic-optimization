@@ -53,11 +53,9 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
 {
   int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);
-  for (int i = 0; i < Ncities; i++)
-    childRoute[i] = -1;
 
-  // Get starting city from first parent
-  childRoute[0] = parent1.route[0];
+  // Get starting city from random parent
+  childRoute[0] = (uniformRand(rng) < 0.5) ? parent1.route[0] : parent2.route[0];
 
   // Loop over genome
   for (int i = 1; i < Ncities; i++)
