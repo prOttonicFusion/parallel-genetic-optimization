@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
   for (int i = 0; i < populationSize; i++)
   {
-    std::shuffle(route.begin(), route.end(), rng); // New random route by shufflinge cities
+    std::shuffle(route.begin(), route.end(), rng); // New random route by shuffling cities
     population[i].init(route, cities);
   }
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 
     for (int i = eliteSize; i < populationSize; i++)
     {
-      Individ child = population[i];
+      Individ child = population[i];  // Re-use individ object
       int parent1 = selectRandomIndivid(population, populationSize, routeLengthSum);
       int parent2 = selectRandomIndivid(population, populationSize, routeLengthSum);
       breedIndivids(child, population[parent1], population[parent2], cities, populationSize);

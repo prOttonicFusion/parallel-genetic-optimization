@@ -69,7 +69,7 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
       // Select next city of one of the parents
       for (int j = 1; j < Ncities; j++)
       {
-        int index = (i + j < Ncities) ? i + j : j - 1; // Periodic boundaries
+        int index = (i + j < Ncities) ? i + j : j - (Ncities - i); // Periodic boundaries
         bool parent1NextCityFoundInChild = cityFoundInRoute(childRoute, parent1.route[index], i);
         bool parent2NextCityFoundInChild = cityFoundInRoute(childRoute, parent2.route[index], i);
 
