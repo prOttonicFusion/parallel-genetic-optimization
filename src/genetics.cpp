@@ -18,25 +18,16 @@
 #include <random>
 #include <vector>
 
-int selectRandomIndivid(Individ population[], const int &populationSize, const float &routeLengthSum)
+int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize)
 {
-  // Select inidividual using Fitness Proportionate Selection 
-  // Calculate probability as p_i = (1.0/routeLength_i)/(1.0/routeLengthSum)
-  double randomValue = uniformRand(rng);
-  double offset = 0.0;
-  int selectedIndex = 0;
-
-  for (int i = 0; i < populationSize; i++)
+  // Select tournamentSize random individuals from population and save the index of the fittest
+  int bestIndex = uniformRand(rng) * populationSize;
+  for (int i = 0; i < tournamentSize - 1; i++)
   {
-    offset += 1.0/population[i].routeLength*routeLengthSum;
-    if (randomValue < offset)
-    {
-      selectedIndex = i;
-      break;
-    }
+    int index = uniformRand(rng) * populationSize;
+    if (population[index].routeLength < population[bestIndex].routeLength) bestIndex = index;
   }
-
-  return selectedIndex;
+  return bestIndex;
 }
 
 bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const int &Ncities)

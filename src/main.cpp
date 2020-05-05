@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
   int migrationSize;         // Number of individuals to share with neighbor CPUs
   int migrationPeriod;       // Send fittest individuals to neighbor CPUs every this many gens.
   float mutationProbability; // Probability of offspring mutation
+  int tournamentSize;        // The number of individuals to choose new parents from
   int Ncities;               // Number of cities to use in calculations
   std::vector<int> route;    // Array containing city indices in a specific order
   std::vector<City> cities;  // Array containing all citites
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
   if (rank == 0)
   {
     if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
-                        mutationProbability))
+                        mutationProbability, tournamentSize))
     {
       std::cerr << "Error: Unable to read input file" << std::endl;
       return -1;
@@ -75,6 +76,7 @@ int main(int argc, char *argv[])
   MPI_Bcast(&migrationSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&migrationPeriod, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&eliteFraction, 1, MPI_FLOAT, 0, GRID_COMM);
+  MPI_Bcast(&tournamentSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&mutationProbability, 1, MPI_FLOAT, 0, GRID_COMM);
 
   // Parse command line arguments
@@ -159,8 +161,8 @@ int main(int argc, char *argv[])
     for (int i = eliteSize; i < populationSize; i++)
     {
       Individ child = population[i];  // Re-use individ object
-      int parent1 = selectRandomIndivid(population, populationSize, routeLengthSum);
-      int parent2 = selectRandomIndivid(population, populationSize, routeLengthSum);
+      int parent1 = selectRandomIndivid(population, populationSize, tournamentSize);
+      int parent2 = selectRandomIndivid(population, populationSize, tournamentSize);
       breedIndivids(child, population[parent1], population[parent2], cities, populationSize);
       nextGeneration[i] = child;
 
@@ -189,7 +191,7 @@ int main(int argc, char *argv[])
       for (int i = 0; i < migrationSize; i++)
       {
         // Select random individual to send
-        int index = selectRandomIndivid(population, populationSize, routeLengthSum);
+        int index = selectRandomIndivid(population, populationSize, tournamentSize);
 
         // Send & receive fittest individuals
         MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag,

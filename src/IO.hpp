@@ -32,11 +32,12 @@ void printUsageInfo(char *programName);
  * @param migrationSize  [in/out]
  * @param migrationPeriod  [in/out]
  * @param mutationProbability  [in/out]
+ * @param tournamentSize  [in/out]
  * @return true If parse succeeded
  * @return flase If an error occured
  */
 bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
-                    int &migrationPeriod, float &mutationProbability);
+                    int &migrationPeriod, float &mutationProbability, int &tournamentSize);
 
 /**
  * Parse a xyz-file into an array of City structs

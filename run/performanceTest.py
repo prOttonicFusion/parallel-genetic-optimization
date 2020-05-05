@@ -16,10 +16,10 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
-Nrepeat = 3           # Run program Nrepeat times for each setup & take average
+Nrepeat = 20           # Run program Nrepeat times for each setup & take average
 Nproc = [1, 2, 3, 4, 5, 6, 7, 8]  # The processor setups to use
 # Command line rguments for the C++ program
-inputArgs = ['randomCities.xyz', '1000', '0', '100']
+inputArgs = ['randomCities.xyz', '1000', '100', '100']
 
 
 def tail(f, n):
