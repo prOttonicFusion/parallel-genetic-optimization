@@ -49,63 +49,46 @@ bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const
 }
 
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
-                   const std::vector<City> &cities, const int &populationSize)
-{
-  int Ncities = parent1.Ncities;
-  std::vector<int> childRoute(Ncities);
+               const std::vector<City> &cities, const int &populationSize){
 
-  // Get starting city from random parent
-  childRoute[0] = (uniformRand(rng) < 0.5) ? parent1.route[0] : parent2.route[0];
+     std::vector<int> childRoute(parent1.Ncities);
+     for (int i = 0; i < parent1.Ncities; i++)
+     {
+       childRoute[i] = -1;
+     }
 
-  // Loop over genome
-  for (int i = 1; i < Ncities; i++)
-  {
-    int nextCity = 0;
-    bool parent1CityFoundInChild = cityFoundInRoute(childRoute, parent1.route[i], i);
-    bool parent2CityFoundInChild = cityFoundInRoute(childRoute, parent2.route[i], i);
-    if (parent1CityFoundInChild && parent2CityFoundInChild)
-    {
-      // Both parent1.route[i] and parent2.route[i] already found in childRoute
-      // Select next city of one of the parents
-      for (int j = 1; j < Ncities; j++)
-      {
-        int index = (i + j < Ncities) ? i + j : j - (Ncities - i); // Periodic boundaries
-        bool parent1NextCityFoundInChild = cityFoundInRoute(childRoute, parent1.route[index], i);
-        bool parent2NextCityFoundInChild = cityFoundInRoute(childRoute, parent2.route[index], i);
+    // Get start and end sub tour positions for parent1's tour
+    int startPos = (int) (uniformRand(rng) * parent1.Ncities);
+    int endPos = (int) uniformRand(rng) * parent1.Ncities;
 
-        if (!parent1NextCityFoundInChild && !parent2NextCityFoundInChild)
-          nextCity = (uniformRand(rng) < 0.5) ? parent1.route[index] : parent2.route[index];
-        else if (parent1NextCityFoundInChild && !parent2NextCityFoundInChild)
-          nextCity = parent2.route[index];
-        else if (parent2NextCityFoundInChild && !parent1NextCityFoundInChild)
-          nextCity = parent1.route[index];
-        else
-          continue;
-
-        if (!cityFoundInRoute(childRoute, nextCity, i)) break;
-      }
+    // Loop and add the sub tour from parent1 to our child
+    for (int i = 0; i < parent1.Ncities; i++) {
+        // If our start position is less than the end position
+        if (startPos < endPos && i > startPos && i < endPos) {
+            childRoute[i] = parent1.route[i];
+        } // If our start position is larger
+        else if (startPos > endPos) {
+            if (!(i < startPos && i > endPos)) {
+                childRoute[i] = parent1.route[i];
+            }
+        }
     }
-    else if (parent1CityFoundInChild)
-    {
-      // Found parent1.route[i] in childRoute
-      nextCity = parent2.route[i];
-    }
-    else if (parent2CityFoundInChild)
-    {
-      // Found parent2.route[i] in childRoute
-      nextCity = parent1.route[i];
-    }
-    else
-    {
-      // Neither was found --> choose closest
-      int dist1 = distanceBetweenCities(cities[childRoute[i - 1]], cities[parent1.route[i]]);
-      int dist2 = distanceBetweenCities(cities[childRoute[i - 1]], cities[parent2.route[i]]);
-      nextCity = (dist1 < dist2) ? parent1.route[i] : parent2.route[i];
-    }
-    childRoute[i] = nextCity;
-  }
 
-  child.setRoute(childRoute, cities);
+    // Loop through parent2's city tour
+    for (int i = 0; i < parent1.Ncities; i++) {
+        // If child doesn't have the city add it
+        if (!cityFoundInRoute(childRoute, parent2.route[i], i)) {
+            // Loop to find a spare position in the child's tour
+            for (int ii = 0; ii < parent1.Ncities; ii++) {
+                // Spare position found, add city
+                if (childRoute[ii] == -1) {
+                    childRoute[ii] = parent2.route[ii];
+                    break;
+                }
+            }
+        }
+    }
+    child.setRoute(childRoute, cities);
 }
 
 void mutateIndivid(Individ &individ)
