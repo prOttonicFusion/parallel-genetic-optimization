@@ -10,6 +10,7 @@
  *******************************************************************/
 
 #include "individ.hpp"
+#include "city.hpp"
 #include <algorithm>
 #include <mpi.h>
 #include <vector>
@@ -37,9 +38,8 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
     }
     globalFittestCandidates[0].init(localBestRoute, cities);
     std::sort(globalFittestCandidates.begin(), globalFittestCandidates.end());
+    globalFittest = globalFittestCandidates[0];
   }
-
-  globalFittest = globalFittestCandidates[0];
 }
 
 void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ &localFittest,
