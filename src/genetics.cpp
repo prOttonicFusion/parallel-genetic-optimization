@@ -108,14 +108,18 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
   child.setRoute(childRoute, cities);
 }
 
-void mutateIndivid(Individ &individ)
+void mutateIndivid(Individ &individ, const std::vector<City> &cities)
 {
+  std::vector<int> mutatedRoute = individ.route;
+
   // Generate two random array indices two switch places on
   int ind1 = (int)(individ.Ncities * uniformRand(rng));
   int ind2 = (int)(individ.Ncities * uniformRand(rng));
 
   // Swap array elements
-  int element1 = individ.route[ind1];
-  individ.route[ind1] = individ.route[ind2];
-  individ.route[ind2] = element1;
+  int element1 = mutatedRoute[ind1];
+  mutatedRoute[ind1] = mutatedRoute[ind2];
+  mutatedRoute[ind2] = element1;
+
+  individ.setRoute(mutatedRoute, cities);
 }

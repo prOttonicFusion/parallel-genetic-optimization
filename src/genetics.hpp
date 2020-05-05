@@ -50,7 +50,8 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
  * Switch places of two random cities (genes) on an individ's route (genome)
  *
  * @param individ [in/out] The individual to mutate
+ * @param cities [in] Array of City structs
  */
-void mutateIndivid(Individ &individ);
+void mutateIndivid(Individ &individ, const std::vector<City> &cities);
 
 #endif

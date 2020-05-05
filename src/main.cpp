@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
       nextGeneration[i] = child;
 
       // Mutate
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i]);
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], cities);
     }
 
     // Replace population with the new generation, leaving elite in place
