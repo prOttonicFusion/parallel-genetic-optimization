@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
                         mutationProbability, tournamentSize))
     {
       std::cerr << "Error: Unable to read input file" << std::endl;
+      MPI_Finalize();
       return -1;
     }
   }
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
   if (argc < 3 && rank == 0)
   {
     printUsageInfo(argv[0]);
+    MPI_Finalize();
     return -1;
   }
 
@@ -95,6 +97,7 @@ int main(int argc, char *argv[])
   if (!parseXYZFile(coordFile, Ncities, cities))
   {
     std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
+    MPI_Finalize();
     return -1;
   }
 
@@ -103,6 +106,7 @@ int main(int argc, char *argv[])
     if (!writeToOutputFile("", true))
     {
       std::cerr << "Error: Unable to write to ouput file" << std::endl;
+      MPI_Finalize();
       return -1;
     }
 
