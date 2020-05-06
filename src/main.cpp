@@ -180,6 +180,8 @@ int main(int argc, char *argv[])
                        rank, Ntasks, tag, GRID_COMM, status);
       std::sort(population, population + populationSize);
     }
+
+    // Increment generation counter
     generation++;
   }
 

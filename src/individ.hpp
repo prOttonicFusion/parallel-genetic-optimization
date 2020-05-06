@@ -28,12 +28,12 @@ class Individ
   std::vector<int> route; ///< An array containin the visited cities' indices in visiting order
 
   /**
-   * Construct a new Individ object
+   * Construct a new blank Individ object
    */
   Individ();
 
   /**
-   * Construct a new Individ object
+   * Construct a new Individ object from the provided route
    *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
@@ -41,8 +41,7 @@ class Individ
   Individ(const std::vector<int> &route, const std::vector<City> &cities);
 
   /**
-   * Initialize Individ with route. Same as setRoute, but
-   * also resizes the route vector
+   * Initialize Individ with route. Same as setRoute, but also resizes the route vector
    *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
@@ -50,7 +49,7 @@ class Individ
   void init(const std::vector<int> &route, const std::vector<City> &cities);
 
   /**
-   * Set the route of the Individ object & calculate the route length
+   * Set the route of the Individ object & re-calculate the route length
    *
    * @param route [in] Int vector of city indices
    * @param cities [in] The actual cities as City struct vector
@@ -59,7 +58,7 @@ class Individ
   void setRoute(const std::vector<int> &route, const std::vector<City> &cities);
 
   /**
-   * Operator overloads
+   * Operator overloadings
    */
   friend bool operator>(const Individ &i1, const Individ &i2);
   friend bool operator<(const Individ &i1, const Individ &i2);

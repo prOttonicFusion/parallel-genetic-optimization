@@ -33,8 +33,7 @@ void Individ::setRoute(const std::vector<int> &newRoute, const std::vector<City>
   // Copy route to Individ's internal route
   this->route = newRoute;
 
-  // Calculate the lenght of the route
-  // including the distance from last city back to first
+  // Calculate the lenght of the route, including the distance from last city back to first
   float l = 0.0;
   for (int i = 1; i < this->Ncities; i++)
   {

@@ -25,7 +25,9 @@
 void printUsageInfo(char *programName);
 
 /**
- * Parse an input file named 'input.dat' and print error message if one occurs
+ * Parse an input file named 'input.dat' and print error message if one occurs.
+ * The input file should contain keyword-value pairs (e.g. populationSize 100)
+ * with the keywords matching the variable names used below
  *
  * @param populationSize  [in/out]
  * @param eliteFraction  [in/out]
@@ -34,34 +36,39 @@ void printUsageInfo(char *programName);
  * @param mutationProbability  [in/out]
  * @param tournamentSize  [in/out]
  * @return true If parse succeeded
- * @return flase If an error occured
+ * @return false If an error occured
  */
 bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
                     int &migrationPeriod, float &mutationProbability, int &tournamentSize);
 
 /**
- * Parse a xyz-file into an array of City structs
+ * Parse a xyz-file into an array of City structs. The format of the xyz-file shoud be:
+ * <Number of cities>
+ * <Comment line>
+ * <City 1 Name> <City 1 Xpos> <City 1 Ypos>
+ * <City 2 Name> <City 2 Xpos> <City 2 Ypos>
+ * ...
  *
- * @param [in] inputFile Path to a input file in xyz-format
- * @param [out] Ncities Number of cities in the input file
- * @param [in] cities Cities as structs in an array
+ * @param [in] inputFile Path to the input file in xyz-format
+ * @param [in/out] Ncities Number of cities in the input file
+ * @param [in/out] cities Cities as structs in an array
  * @return true If parse succeeded
- * @return flase If an error occured
+ * @return false If an error occured
  */
 bool parseXYZFile(std::string &coordFile, int &Ncities, std::vector<City> &cities);
 
 /**
- * Write a string to the output file
+ * Write a string to the output file 'output.dat'
  *
  * @param [in] outputString Content to write to the file
- * @param [in] overWrite Should the file be overwritten?
+ * @param [in] overWrite Should the file be overwritten? Optional, default is false
  * @return true If write succeeded
- * @return flase If an error occured
+ * @return false If an error occured
  */
 bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
 
 /**
- * Write a formatted entry to the output file. The entry has the following format:
+ * Write a formatted entry to the output file 'output.dat'. The entry has the following format:
  * Generation <Gen number>:
  * Length: <lenght of shortest route>
  * Route_indices: <route as indices pointing to the cities array>
@@ -71,9 +78,9 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite = false);
  * @param fittest [in] The fittest individual
  * @param bestRouteStr [in] Best route as a string of city names
  * @param cities [in] Cities as structs in an array
- * @param overWrite [in] Should we overwrite the file?
+ * @param overWrite [in] Should we overwrite the file? Optional, default is false
  * @return true If write succeeded
- * @return flase If an error occured
+ * @return false If an error occured
  */
 bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities,
                        bool overWrite = false);

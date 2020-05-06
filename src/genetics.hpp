@@ -18,17 +18,18 @@
 #include <vector>
 
 /**
- * Select randomly a parent from the population using Tournament Selection
+ * Select randomly an individual from the population using Tournament Selection; i.e. by selecting
+ * the fittest out of tournamentSize random individuals
  *
  * @param population  [in] The population, i.e. an array of Individ objects
  * @param populationSize  [in] Size of population
- * @param tournamentSize  [in] Number of individuals to select randomly in the tournament
+ * @param tournamentSize  [in] Number of individuals to participate in the tournament
  * @return int The index of the parent in population[]
  */
 int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize);
 
 /**
- * Merge the genome of two individs to produce offspring.
+ * Merge the genome of two individs to produce offspring
  *
  * The genome crossover occurs heurustically:
  * 1) 0th city of one parent is set as the child's 0th city
@@ -37,9 +38,9 @@ int selectRandomIndivid(Individ population[], const int &populationSize, const i
  * 3) If the closer city is already found in the child, take the city from the other parent
  * 4) If both are already found in child, pick next city from either parent
  *
- * @param child [in/out] Child individ (should be initialized prior to breeding)
- * @param parent1 [in] Mother individ
- * @param parent2 [in] Father individ
+ * @param child [in/out] Child individual (should be initialized prior to breeding)
+ * @param parent1 [in] Mother individual
+ * @param parent2 [in] Father individual
  * @param cities [in] Array of City structs
  * @param populationSize [in] Size of population
  */
@@ -47,7 +48,7 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
                    const std::vector<City> &cities, const int &populationSize);
 
 /**
- * Switch places of two random cities (genes) on an individ's route (genome)
+ * Switch places of two random cities (genes) on an individual's route (genome)
  *
  * @param individ [in/out] The individual to mutate
  * @param cities [in] Array of City structs
