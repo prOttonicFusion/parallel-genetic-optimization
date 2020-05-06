@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     std::sort(population, population + populationSize);
 
     // ---------------- Share data with neighbor CPU ----------------
-    // Send fittest individual(s) to next CPU on the right
+    // Send random individual(s) to closest CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
       performMigration(migrationSize, tournamentSize, population, populationSize, cities, Ncities,
