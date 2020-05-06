@@ -148,11 +148,6 @@ int main(int argc, char *argv[])
         if (rank == 0) writeToScreen(generation, globalFittestLength);
       }
 
-    // --------------------- Fitness computation --------------------
-    float routeLengthSum = 0;
-    for (int i = 0; i < populationSize; i++)
-      routeLengthSum += population[i].routeLength;
-
     // ------------------------ Breeding ----------------------------
     // Create new generation from elite + offspring of selected parents
     Individ nextGeneration[populationSize];
