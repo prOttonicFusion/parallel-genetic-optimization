@@ -40,7 +40,7 @@ bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const
 }
 
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
-                   const std::vector<City> &cities, const int &populationSize)
+                   const std::vector<City> &cities)
 {
   int Ncities = parent1.Ncities;
   std::vector<int> childRoute(Ncities);

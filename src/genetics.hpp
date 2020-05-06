@@ -42,10 +42,9 @@ int selectRandomIndivid(Individ population[], const int &populationSize, const i
  * @param parent1 [in] Mother individual
  * @param parent2 [in] Father individual
  * @param cities [in] Array of City structs
- * @param populationSize [in] Size of population
  */
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
-                   const std::vector<City> &cities, const int &populationSize);
+                   const std::vector<City> &cities);
 
 /**
  * Switch places of two random cities (genes) on an individual's route (genome)

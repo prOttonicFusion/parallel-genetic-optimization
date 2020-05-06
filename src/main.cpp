@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
       Individ child = population[i]; // Re-use individ object
       int parent1 = selectRandomIndivid(population, populationSize, tournamentSize);
       int parent2 = selectRandomIndivid(population, populationSize, tournamentSize);
-      breedIndivids(child, population[parent1], population[parent2], cities, populationSize);
+      breedIndivids(child, population[parent1], population[parent2], cities);
       nextGeneration[i] = child;
 
       // Mutate
