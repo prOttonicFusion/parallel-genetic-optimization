@@ -22,7 +22,7 @@
  *
  * @param population  [in] The population, i.e. an array of Individ objects
  * @param populationSize  [in] Size of population
- * @param tournamentSize  [in] Number of individuals to select randomly at random the tournament
+ * @param tournamentSize  [in] Number of individuals to select randomly in the tournament
  * @return int The index of the parent in population[]
  */
 int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize);
