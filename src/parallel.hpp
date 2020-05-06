@@ -46,8 +46,9 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
 void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ &localFittest,
                                  const int &rank, const int &Ntasks, MPI_Comm &comm);
 /**
- * Copy over migrationSize random individuals from each CPU to its right-side neighbor in a circular CPU topology
- * 
+ * Copy over migrationSize random individuals from each CPU to its right-side neighbor in a circular
+ * CPU topology
+ *
  * @param migrationSize  [in] Number of individuals to migrate from each CPU
  * @param tournamentSize  [in] Argument for selectRandomIndivid()
  * @param population  [in/out] The population, i.e. an array of Individ objects

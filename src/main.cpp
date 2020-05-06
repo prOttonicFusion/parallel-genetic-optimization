@@ -152,7 +152,6 @@ int main(int argc, char *argv[])
     float routeLengthSum = 0;
     for (int i = 0; i < populationSize; i++)
       routeLengthSum += population[i].routeLength;
-    
 
     // ------------------------ Breeding ----------------------------
     // Create new generation from elite + offspring of selected parents
@@ -160,7 +159,7 @@ int main(int argc, char *argv[])
 
     for (int i = eliteSize; i < populationSize; i++)
     {
-      Individ child = population[i];  // Re-use individ object
+      Individ child = population[i]; // Re-use individ object
       int parent1 = selectRandomIndivid(population, populationSize, tournamentSize);
       int parent2 = selectRandomIndivid(population, populationSize, tournamentSize);
       breedIndivids(child, population[parent1], population[parent2], cities, populationSize);
@@ -182,8 +181,8 @@ int main(int argc, char *argv[])
     // Send fittest individual(s) to next CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
-      performMigration(migrationSize, tournamentSize, population, populationSize, cities, Ncities, 
-                      rank, Ntasks, tag, GRID_COMM, status);
+      performMigration(migrationSize, tournamentSize, population, populationSize, cities, Ncities,
+                       rank, Ntasks, tag, GRID_COMM, status);
       std::sort(population, population + populationSize);
     }
     generation++;
