@@ -63,7 +63,6 @@ int main(int argc, char *argv[])
 
   // ------------ Parse input on root CPU & broadcast it ------------
   if (rank == 0)
-  {
     if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
                         mutationProbability, tournamentSize))
     {
@@ -71,7 +70,6 @@ int main(int argc, char *argv[])
       MPI_Finalize();
       return -1;
     }
-  }
 
   MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
   MPI_Bcast(&migrationSize, 1, MPI_INT, 0, GRID_COMM);
