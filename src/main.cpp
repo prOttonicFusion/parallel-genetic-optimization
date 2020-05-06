@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
   // ------------------------ Initialize MPI ------------------------
   const int tag = 50;
-  int Ntasks, rank, destRank, sourceRank;
+  int Ntasks, rank;
   MPI_Status status;
 
   if (MPI_Init(&argc, &argv) != MPI_SUCCESS)
@@ -182,27 +182,8 @@ int main(int argc, char *argv[])
     // Send fittest individual(s) to next CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
-      std::vector<int> recvdRoute(Ncities);
-      float recvdRouteLength;
-
-      // Get receiver rank for closest neighbor communication
-      MPI_Cart_shift(GRID_COMM, 0, 1, &sourceRank, &destRank);
-
-      for (int i = 0; i < migrationSize; i++)
-      {
-        // Select random individual to send
-        int index = selectRandomIndivid(population, populationSize, tournamentSize);
-
-        // Send & receive fittest individuals
-        MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag,
-                     recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-        MPI_Sendrecv(&population[index].routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength,
-                     1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
-        // Add route received from neighbor to own population by replacing own least fit indviduals
-        // Skip if own least fit are more fit than the new candidates
-        if (recvdRouteLength < population[populationSize - (i + 1)].routeLength)
-          population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
-      }
+      performMigration(migrationSize, tournamentSize, population, populationSize, cities, Ncities, 
+                      rank, Ntasks, tag, GRID_COMM, status);
       std::sort(population, population + populationSize);
     }
     generation++;
