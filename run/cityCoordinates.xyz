@@ -1,11 +1,12 @@
-13
-This is a comment line
+20
+Some sample cities
 Hobbiton 0.0 1400.0
 Bree 210.0 1300.0
 MinasTirith 1040.0 305.0
 Isengard 245.0 840.0
 BaradDur 1480.0 560.0
 Edoras 500.0 480.0
+Coldfells 880.0 1520.0
 Rivendell 810.0 1340.0
 Erebor 1500.0 1600.0
 Mirkwood 1330.0 1220.0
@@ -13,3 +14,9 @@ Moria 580.0 810.0
 Lothlorien 900.0 600.0
 Weathertop 440.0 1290.0
 HelmsDeep 300.0 590.0
+DolGuldur 1170.0 780.0
+Esgaroth 1440.0 1420.0
+Fangorn 825.0 460.0
+Trollshaws 600.0 1185.0
+Osgiliath 1354.0 430.0
+GreyHavens 0.0 1111.0
