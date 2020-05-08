@@ -12,6 +12,7 @@
 #include "city.hpp"
 #include <vector>
 
+// Get the squared distance between two cities
 float distanceBetweenCities(const City &city1, const City &city2)
 {
   int xdiff = (city1.xpos - city2.xpos);
@@ -19,6 +20,7 @@ float distanceBetweenCities(const City &city1, const City &city2)
   return xdiff * xdiff + ydiff * ydiff;
 }
 
+// Convert a route in array-of-indices form to a string of city names
 std::string getRouteAsString(const std::vector<int> &route, const std::vector<City> &cities)
 {
   int Ncities = cities.size();

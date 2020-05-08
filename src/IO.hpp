@@ -86,7 +86,7 @@ bool writeToOutputFile(int generation, const Individ &fittest, const std::vector
                        bool overWrite = false);
 
 /**
- * Write a formatted data entry to screen. The entry has the format:
+ * Write a formatted data entry to stdout. The entry has the format:
  * Generation <Gen number>
  * Shortest route = <lenght of shortest route>
  *

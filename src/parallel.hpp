@@ -16,7 +16,7 @@
 #include <vector>
 
 /**
- * Compares the shortest routes on each CPU and determine the globally shortest one.
+ * Compares the shortest routes on each CPU and determine the globally shortest one
  * On the CPU with rank 0, globalFittest will contain the resulting route
  *
  * @param globalFittest  [in/out] The fittest individual globally
@@ -33,7 +33,7 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
                            const int &tag, MPI_Comm &comm, MPI_Status &status);
 
 /**
- * Compares the shortest routes on each CPU and determine the globally shortest one.
+ * Compares the shortest routes on each CPU and determine the globally shortest one
  * On the CPU with rank 0, globalShortestRouteLength will contain the resulting route length
  * This is a more light-weight version of getGlobalFittestRoute()
  *

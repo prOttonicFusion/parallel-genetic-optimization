@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 
+// Prints usage information to stdout
 void printUsageInfo(char *programName)
 {
   std::cerr << "Usage: " << programName << " <coordFile> <maxGen> [wrtToScreen] [wrtToFile]"
@@ -30,6 +31,7 @@ void printUsageInfo(char *programName)
             << std::endl;
 }
 
+// Parse an input file named 'input.dat'
 bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSize,
                     int &migrationPeriod, float &mutationProbability, int &tournamentSize)
 {
@@ -75,6 +77,7 @@ bool parseInputFile(int &populationSize, float &eliteFraction, int &migrationSiz
   return true;
 }
 
+// Parse a xyz-file into an array of City structs
 bool parseXYZFile(std::string &coordFile, int &Ncities, std::vector<City> &cities)
 {
   std::ifstream infile(coordFile);
@@ -117,6 +120,7 @@ bool parseXYZFile(std::string &coordFile, int &Ncities, std::vector<City> &citie
   return true;
 }
 
+// Write a string to the output file 'output.dat'
 bool writeToOutputFile(const std::string &outputString, bool overWrite)
 {
   std::ofstream outputFile;
@@ -133,6 +137,7 @@ bool writeToOutputFile(const std::string &outputString, bool overWrite)
   return true;
 }
 
+// Write a formatted entry to the output file 'output.dat'
 bool writeToOutputFile(int generation, const Individ &fittest, const std::vector<City> &cities,
                        bool overWrite)
 {
@@ -148,6 +153,7 @@ bool writeToOutputFile(int generation, const Individ &fittest, const std::vector
   return writeToOutputFile(stringStream.str(), overWrite);
 }
 
+// Write a formatted data entry to stdout
 void writeToScreen(const int &generation, const float &bestRouteLen)
 {
   std::cout << "Generation " << generation << ": " << std::endl;

@@ -16,6 +16,7 @@
 #include <mpi.h>
 #include <vector>
 
+// Compares the shortest routes on each CPU and determine the globally shortest one
 void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
                            const std::vector<City> &cities, const int &rank, const int &Ntasks,
                            const int &tag, MPI_Comm &comm, MPI_Status &status)
@@ -43,6 +44,7 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
   }
 }
 
+// Compares the shortest routes on each CPU and determine the globally shortest one
 void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ &localFittest,
                                  const int &rank, const int &Ntasks, MPI_Comm &comm)
 {
@@ -60,6 +62,7 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
   }
 }
 
+// Copy over migrationSize random individuals from each CPU to its right-side neighbor in a circular
 void performMigration(const int &migrationSize, const int &tournamentSize, Individ population[],
                       const int &populationSize, const std::vector<City> &cities,
                       const int &Ncities, const int &rank, const int &Ntasks, const int &tag,

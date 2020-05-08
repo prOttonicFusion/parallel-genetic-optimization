@@ -18,9 +18,9 @@
 #include <random>
 #include <vector>
 
+// Select tournamentSize random individuals from population and save the index of the fittest
 int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize)
 {
-  // Select tournamentSize random individuals from population and save the index of the fittest
   int bestIndex = uniformRand(rng) * populationSize;
   for (int i = 0; i < tournamentSize - 1; i++)
   {
@@ -30,6 +30,7 @@ int selectRandomIndivid(Individ population[], const int &populationSize, const i
   return bestIndex;
 }
 
+// Check if cityIndex is already inlcuded in route[0:Ncities]
 bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const int &Ncities)
 {
   for (int i = 0; i < Ncities; i++)
@@ -39,6 +40,7 @@ bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const
   return false;
 }
 
+// Merge the genome of two individs to produce offspring
 void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
                    const std::vector<City> &cities)
 {
@@ -95,10 +97,10 @@ void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent
     }
     childRoute[i] = nextCity;
   }
-
   child.setRoute(childRoute, cities);
 }
 
+// Switch places of two random cities (genes) on an individual's route (genome)
 void mutateIndivid(Individ &individ, const std::vector<City> &cities)
 {
   std::vector<int> mutatedRoute = individ.route;

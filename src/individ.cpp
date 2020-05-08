@@ -15,19 +15,23 @@
 #include <stdio.h>
 #include <vector>
 
+// Construct a new blank Individ object
 Individ::Individ() {}
 
+// Construct a new Individ object from the provided route
 Individ::Individ(const std::vector<int> &newRoute, const std::vector<City> &cities)
 {
   this->init(newRoute, cities);
 }
 
+// Initialize Individ with route. Same as setRoute, but also resize the route vector
 void Individ::init(const std::vector<int> &newRoute, const std::vector<City> &cities)
 {
   this->Ncities = cities.size();
   this->setRoute(newRoute, cities);
 }
 
+// Set the route of the Individ object & re-calculate the route length
 void Individ::setRoute(const std::vector<int> &newRoute, const std::vector<City> &cities)
 {
   // Copy route to Individ's internal route
