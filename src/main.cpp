@@ -14,6 +14,7 @@
 #include "genetics.hpp"
 #include "individ.hpp"
 #include "parallel.hpp"
+#include "population.hpp"
 #include "random.hpp"
 #include <algorithm>
 #include <iostream>
@@ -34,7 +35,6 @@ int main(int argc, char *argv[])
   float mutationProbability; // Probability of offspring mutation
   int tournamentSize;        // The number of individuals to choose new parents from
   int Ncities;               // Number of cities to use in calculations
-  std::vector<int> route;    // Array containing city indices in a specific order
   std::vector<City> cities;  // Array containing all citites
   Individ globalFittest;     // The most fit individual of the combined populations
 
@@ -109,19 +109,9 @@ int main(int argc, char *argv[])
     }
 
   // ----------------- Generate initial population ------------------
-  Individ population[populationSize];
   int eliteSize = (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
 
   // Initialize route array
-  route.resize(Ncities);
-  for (int i = 0; i < Ncities; i++)
-    route[i] = i;
-
-  for (int i = 0; i < populationSize; i++)
-  {
-    std::shuffle(route.begin(), route.end(), rng); // New random route by shuffling cities
-    population[i].init(route, cities);
-  }
 
   std::sort(population, population + populationSize); // Ascending order based on route lenght
 
