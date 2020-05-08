@@ -12,6 +12,7 @@
 #define PARALLEL_H
 
 #include "individ.hpp"
+#include "population.hpp"
 #include <mpi.h>
 #include <vector>
 
@@ -61,8 +62,7 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
  * @param GRID_COMM  [in] MPI Communicator with processors mapped to a periodic 1D grid topology
  * @param status  [in] MPI_Status
  */
-void performMigration(const int &migrationSize, const int &tournamentSize,
-                      std::vector<Individ> population, const int &populationSize,
+void performMigration(const int &migrationSize, const int &tournamentSize, Population population,
                       const std::vector<City> &cities, const int &Ncities, const int &rank,
                       const int &Ntasks, const int &tag, MPI_Comm &GRID_COMM, MPI_Status &status);
 

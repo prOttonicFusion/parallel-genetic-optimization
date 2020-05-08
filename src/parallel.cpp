@@ -12,6 +12,7 @@
 #include "city.hpp"
 #include "genetics.hpp"
 #include "individ.hpp"
+#include "population.hpp"
 #include <algorithm>
 #include <mpi.h>
 #include <vector>
@@ -63,8 +64,7 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
 }
 
 // Copy over migrationSize random individuals from each CPU to its right-side neighbor in a circular
-void performMigration(const int &migrationSize, const int &tournamentSize,
-                      std::vector<Individ> population, const int &populationSize,
+void performMigration(const int &migrationSize, const int &tournamentSize, Population population,
                       const std::vector<City> &cities, const int &Ncities, const int &rank,
                       const int &Ntasks, const int &tag, MPI_Comm &GRID_COMM, MPI_Status &status)
 {
@@ -78,16 +78,16 @@ void performMigration(const int &migrationSize, const int &tournamentSize,
   for (int i = 0; i < migrationSize; i++)
   {
     // Select random individual to send
-    int index = selectRandomIndivid(population, populationSize, tournamentSize);
+    int index = population.selectRandomIndivid(tournamentSize);
 
     // Send & receive fittest individuals
-    MPI_Sendrecv(population[index].route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
-                 Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-    MPI_Sendrecv(&population[index].routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength, 1,
-                 MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
+    MPI_Sendrecv(population.population[index].route.data(), Ncities, MPI_INT, destRank, tag,
+                 recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+    MPI_Sendrecv(&population.population[index].routeLength, 1, MPI_FLOAT, destRank, tag,
+                 &recvdRouteLength, 1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
     // Add route received from neighbor to own population by replacing own least fit indviduals
     // Skip if own least fit are more fit than the new candidates
-    if (recvdRouteLength < population[populationSize - (i + 1)].routeLength)
-      population[populationSize - (i + 1)].setRoute(recvdRoute, cities);
+    if (recvdRouteLength < population.population[population.populationSize - (i + 1)].routeLength)
+      population.population[population.populationSize - (i + 1)].setRoute(recvdRoute, cities);
   }
 }

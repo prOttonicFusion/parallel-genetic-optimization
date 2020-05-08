@@ -41,7 +41,16 @@ class Population
    */
   void sort();
 
-  private:
+  /**
+   * Select randomly an individual from the population using Tournament Selection; i.e. by selecting
+   * the fittest out of tournamentSize random individuals
+   *
+   * @param tournamentSize  [in] Number of individuals to participate in the tournament
+   * @return int The index of the parent in population[]
+   */
+  int selectRandomIndivid(const int &tournamentSize);
+
+      private:
 };
 
 #endif

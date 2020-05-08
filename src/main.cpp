@@ -112,10 +112,7 @@ int main(int argc, char *argv[])
   int eliteSize = (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
   Population population(populationSize);
   population.init(cities, Ncities);
-  population.sort(); // Ascending order based on route lenght
-
-  std::cout << population.population[0].routeLength << std::endl;
-  std::cout << population.population[0].routeLength << std::endl;
+  population.sort(); // Sort in ascending order based on route lenght
 
   ////////////////////// Main calculation loop //////////////////////
   int generation = 0;
@@ -150,8 +147,8 @@ int main(int argc, char *argv[])
     for (int i = eliteSize; i < populationSize; i++)
     {
       Individ child = population.population[i]; // Re-use individ object
-      int parent1 = selectRandomIndivid(population.population, populationSize, tournamentSize);
-      int parent2 = selectRandomIndivid(population.population, populationSize, tournamentSize);
+      int parent1 = population.selectRandomIndivid(tournamentSize);
+      int parent2 = population.selectRandomIndivid(tournamentSize);
       breedIndivids(child, population.population[parent1], population.population[parent2], cities);
       nextGeneration[i] = child;
 
@@ -171,8 +168,8 @@ int main(int argc, char *argv[])
     // Send random individual(s) to closest CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
-      performMigration(migrationSize, tournamentSize, population.population, populationSize, cities,
-                       Ncities, rank, Ntasks, tag, GRID_COMM, status);
+      performMigration(migrationSize, tournamentSize, population, cities, Ncities, rank, Ntasks,
+                       tag, GRID_COMM, status);
       population.sort();
     }
 

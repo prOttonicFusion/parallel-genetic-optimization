@@ -18,18 +18,6 @@
 #include <random>
 #include <vector>
 
-// Select tournamentSize random individuals from population and save the index of the fittest
-int selectRandomIndivid(std::vector<Individ> population, const int &populationSize, const int &tournamentSize)
-{
-  int bestIndex = uniformRand(rng) * populationSize;
-  for (int i = 0; i < tournamentSize - 1; i++)
-  {
-    int index = uniformRand(rng) * populationSize;
-    if (population[index].routeLength < population[bestIndex].routeLength) bestIndex = index;
-  }
-  return bestIndex;
-}
-
 // Check if cityIndex is already inlcuded in route[0:Ncities]
 bool cityFoundInRoute(const std::vector<int> &route, const int &cityIndex, const int &Ncities)
 {
