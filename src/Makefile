@@ -18,8 +18,8 @@ OPT=-O2
 # Executable name
 EXE=tsp_ga
 
-${EXE}: individ.o genetics.o IO.o city.o parallel.o main.o
-	${CC} main.o parallel.o IO.o city.o individ.o genetics.o ${OPT} -o ${EXE}
+${EXE}: individ.o genetics.o IO.o city.o parallel.o population.o main.o
+	${CC} main.o parallel.o population.o IO.o city.o individ.o genetics.o ${OPT} -o ${EXE}
 
 city.o:
 	${CC} -c city.cpp ${OPT}
@@ -35,6 +35,9 @@ genetics.o:
 
 parallel.o:
 	${CC} -c parallel.cpp ${OPT}
+
+population.o:
+	${CC} -c population.cpp ${OPT}
 
 main.o:
 	${CC} -c main.cpp ${OPT}

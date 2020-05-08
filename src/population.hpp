@@ -35,6 +35,12 @@ class Population
    */
   void init(std::vector<City> cities, int Ncities);
 
+  /**
+   * Sort population in ascending order based on route length
+   *
+   */
+  void sort();
+
   private:
 };
 

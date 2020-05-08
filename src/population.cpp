@@ -30,9 +30,11 @@ void Population::init(std::vector<City> cities, int Ncities)
   for (int i = 0; i < Ncities; i++)
     route[i] = i;
 
-  for (int i = 0; i < populationSize; i++)
+  for (int i = 0; i < this->populationSize; i++)
   {
     std::shuffle(route.begin(), route.end(), rng); // New random route by shuffling cities
-    population[i].init(route, cities);
+    this->population[i].init(route, cities);
   }
 }
+
+void Population::sort() { std::sort(this->population.begin(), this->population.end()); }

@@ -63,10 +63,10 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
 }
 
 // Copy over migrationSize random individuals from each CPU to its right-side neighbor in a circular
-void performMigration(const int &migrationSize, const int &tournamentSize, Individ population[],
-                      const int &populationSize, const std::vector<City> &cities,
-                      const int &Ncities, const int &rank, const int &Ntasks, const int &tag,
-                      MPI_Comm &GRID_COMM, MPI_Status &status)
+void performMigration(const int &migrationSize, const int &tournamentSize,
+                      std::vector<Individ> population, const int &populationSize,
+                      const std::vector<City> &cities, const int &Ncities, const int &rank,
+                      const int &Ntasks, const int &tag, MPI_Comm &GRID_COMM, MPI_Status &status)
 {
   std::vector<int> recvdRoute(Ncities);
   float recvdRouteLength;

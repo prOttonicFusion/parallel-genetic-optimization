@@ -19,7 +19,7 @@
 #include <vector>
 
 // Select tournamentSize random individuals from population and save the index of the fittest
-int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize)
+int selectRandomIndivid(std::vector<Individ> population, const int &populationSize, const int &tournamentSize)
 {
   int bestIndex = uniformRand(rng) * populationSize;
   for (int i = 0; i < tournamentSize - 1; i++)
