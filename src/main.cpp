@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (generation % writeToFilePeriod == 0)
       {
-        getGlobalFittestRoute(globalFittest, population.population[0], cities, rank, Ntasks, tag,
+        getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
                               GRID_COMM, status);
         if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
       }
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
         float globalFittestLength = globalFittest.routeLength;
         // If we have written to file this gen., there is no need to recalculate globalFittest
         if (generation % writeToFilePeriod != 0)
-          getGlobalFittestRouteLenght(globalFittestLength, population.population[0], rank, Ntasks,
+          getGlobalFittestRouteLenght(globalFittestLength, population.individuals[0], rank, Ntasks,
                                       GRID_COMM);
 
         if (rank == 0) writeToScreen(generation, globalFittestLength);
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
     for (int i = eliteSize; i < populationSize; i++)
     {
-      Individ child = population.population[i]; // Re-use individ object
+      Individ child = population.individuals[i]; // Re-use individ object
       Individ parent1 = population.selectRandomIndivid(tournamentSize);
       Individ parent2 = population.selectRandomIndivid(tournamentSize);
       breedIndivids(child, parent1, parent2, cities);
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 
     // Replace population with the new generation, leaving elite in place
     for (int i = eliteSize; i < populationSize; i++)
-      population.population[i] = nextGeneration[i];
+      population.individuals[i] = nextGeneration[i];
 
     // --------------------- Sort population ------------------------
     // Sort population in ascending order based on (squared) route length
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
   }
 
   ////////////////// Gather & output final results //////////////////
-  getGlobalFittestRoute(globalFittest, population.population[0], cities, rank, Ntasks, tag,
+  getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
                         GRID_COMM, status);
 
   if (rank == 0)

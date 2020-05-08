@@ -19,7 +19,7 @@
 // New Population object
 Population::Population(const int &popSize)
 {
-  this->population.resize(popSize);
+  this->individuals.resize(popSize);
   this->populationSize = popSize;
 }
 
@@ -34,12 +34,12 @@ void Population::init(std::vector<City> cities, const int &Ncities)
   for (int i = 0; i < this->populationSize; i++)
   {
     std::shuffle(route.begin(), route.end(), rng); // New random route by shuffling cities
-    this->population[i].init(route, cities);
+    this->individuals[i].init(route, cities);
   }
 }
 
 // Sort the population in ascending order based on route length
-void Population::sort() { std::sort(this->population.begin(), this->population.end()); }
+void Population::sort() { std::sort(this->individuals.begin(), this->individuals.end()); }
 
 // Select tournamentSize random individuals from population and save the index of the fittest
 Individ Population::selectRandomIndivid(const int &tournamentSize)
@@ -48,8 +48,8 @@ Individ Population::selectRandomIndivid(const int &tournamentSize)
   for (int i = 0; i < tournamentSize - 1; i++)
   {
     int index = uniformRand(rng) * populationSize;
-    if (this->population[index].routeLength < this->population[bestIndex].routeLength)
+    if (this->individuals[index].routeLength < this->individuals[bestIndex].routeLength)
       bestIndex = index;
   }
-  return this->population[bestIndex];
+  return this->individuals[bestIndex];
 }

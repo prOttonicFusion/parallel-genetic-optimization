@@ -17,7 +17,7 @@
 class Population
 {
   public:
-  std::vector<Individ> population;
+  std::vector<Individ> individuals;
   int populationSize;
 
   /**
@@ -50,7 +50,6 @@ class Population
    */
   Individ selectRandomIndivid(const int &tournamentSize);
 
-      private:
 };
 
 #endif

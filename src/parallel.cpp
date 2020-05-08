@@ -81,13 +81,13 @@ void performMigration(const int &migrationSize, const int &tournamentSize, Popul
     Individ randomIndivid = population.selectRandomIndivid(tournamentSize);
 
     // Send & receive individuals
-    MPI_Sendrecv(randomIndivid.route.data(), Ncities, MPI_INT, destRank, tag,
-                 recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-    MPI_Sendrecv(&randomIndivid.routeLength, 1, MPI_FLOAT, destRank, tag,
-                 &recvdRouteLength, 1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
+    MPI_Sendrecv(randomIndivid.route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
+                 Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+    MPI_Sendrecv(&randomIndivid.routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength, 1,
+                 MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
     // Add route received from neighbor to own population by replacing own least fit indviduals
     // Skip if own least fit are more fit than the new candidates
-    if (recvdRouteLength < population.population[population.populationSize - (i + 1)].routeLength)
-      population.population[population.populationSize - (i + 1)].setRoute(recvdRoute, cities);
+    if (recvdRouteLength < population.individuals[population.populationSize - (i + 1)].routeLength)
+      population.individuals[population.populationSize - (i + 1)].setRoute(recvdRoute, cities);
   }
 }
