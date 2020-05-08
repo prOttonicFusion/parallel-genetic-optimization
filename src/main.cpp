@@ -146,9 +146,9 @@ int main(int argc, char *argv[])
 
     for (int i = eliteSize; i < populationSize; i++)
     {
-      Individ child = population.individuals[i]; // Re-use individ object
       Individ parent1 = population.selectRandomIndivid(tournamentSize);
       Individ parent2 = population.selectRandomIndivid(tournamentSize);
+      Individ child = population.individuals[i]; // Re-use individ object
       breedIndivids(child, parent1, parent2, cities);
       nextGeneration[i] = child;
 
