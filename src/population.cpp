@@ -23,6 +23,7 @@ Population::Population(int popSize)
   this->populationSize = popSize;
 }
 
+// Initialize new population with random individuals
 void Population::init(std::vector<City> cities, int Ncities)
 {
   std::vector<int> route; // Array containing city indices in a specific order
