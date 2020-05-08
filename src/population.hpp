@@ -25,7 +25,7 @@ class Population
    *
    * @param populationSize  [in] Number of individuals in the population
    */
-  Population(int populationSize);
+  Population(const int &populationSize);
 
   /**
    * Initialize Population with random individuals
@@ -33,7 +33,7 @@ class Population
    * @param cities  [in] A vector of city objects
    * @param Ncities  [in] Number of cities that shoud be along one route
    */
-  void init(std::vector<City> cities, int Ncities);
+  void init(std::vector<City> cities, const int &Ncities);
 
   /**
    * Sort population in ascending order based on route length

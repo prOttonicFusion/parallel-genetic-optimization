@@ -17,14 +17,14 @@
 #include <vector>
 
 // New Population object
-Population::Population(int popSize)
+Population::Population(const int &popSize)
 {
   this->population.resize(popSize);
   this->populationSize = popSize;
 }
 
 // Initialize new population with random individuals
-void Population::init(std::vector<City> cities, int Ncities)
+void Population::init(std::vector<City> cities, const int &Ncities)
 {
   std::vector<int> route; // Array containing city indices in a specific order
   route.resize(Ncities);
@@ -48,7 +48,8 @@ Individ Population::selectRandomIndivid(const int &tournamentSize)
   for (int i = 0; i < tournamentSize - 1; i++)
   {
     int index = uniformRand(rng) * populationSize;
-    if (this->population[index].routeLength < this->population[bestIndex].routeLength) bestIndex = index;
+    if (this->population[index].routeLength < this->population[bestIndex].routeLength)
+      bestIndex = index;
   }
   return this->population[bestIndex];
 }
