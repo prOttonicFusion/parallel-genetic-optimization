@@ -180,18 +180,15 @@ int main(int argc, char *argv[])
   ////////////////// Gather & output final results //////////////////
   getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
                         GRID_COMM, status);
-
   if (rank == 0)
   {
-    std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
-    std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
-    std::cout << "Total number of generations: " << generation << std::endl;
-    std::cout << "Length of shortest route:    " << globalFittest.routeLength << std::endl;
-    std::cout << std::endl;
-    std::cout << "Generated a total of "
+    std::cout << "\nFINAL OUTCOME:\n--------------------------------"
+              << "\nTotal number of generations: " << generation
+              << "\nLength of shortest route:    " << globalFittest.routeLength
+              << "\n\nGenerated a total of "
               << (generation * (populationSize - eliteSize) + eliteSize) * Ntasks
-              << " individual routes" << std::endl;
-    std::cout << std::endl;
+              << " individual routes\n"
+              << std::endl;
     writeToOutputFile(generation, globalFittest, cities);
   }
 
