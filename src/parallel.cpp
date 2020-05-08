@@ -78,12 +78,12 @@ void performMigration(const int &migrationSize, const int &tournamentSize, Popul
   for (int i = 0; i < migrationSize; i++)
   {
     // Select random individual to send
-    int index = population.selectRandomIndivid(tournamentSize);
+    Individ randomIndivid = population.selectRandomIndivid(tournamentSize);
 
-    // Send & receive fittest individuals
-    MPI_Sendrecv(population.population[index].route.data(), Ncities, MPI_INT, destRank, tag,
+    // Send & receive individuals
+    MPI_Sendrecv(randomIndivid.route.data(), Ncities, MPI_INT, destRank, tag,
                  recvdRoute.data(), Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
-    MPI_Sendrecv(&population.population[index].routeLength, 1, MPI_FLOAT, destRank, tag,
+    MPI_Sendrecv(&randomIndivid.routeLength, 1, MPI_FLOAT, destRank, tag,
                  &recvdRouteLength, 1, MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
     // Add route received from neighbor to own population by replacing own least fit indviduals
     // Skip if own least fit are more fit than the new candidates

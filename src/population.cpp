@@ -41,7 +41,7 @@ void Population::init(std::vector<City> cities, int Ncities)
 void Population::sort() { std::sort(this->population.begin(), this->population.end()); }
 
 // Select tournamentSize random individuals from population and save the index of the fittest
-int Population::selectRandomIndivid(const int &tournamentSize)
+Individ Population::selectRandomIndivid(const int &tournamentSize)
 {
   int bestIndex = uniformRand(rng) * this->populationSize;
   for (int i = 0; i < tournamentSize - 1; i++)
@@ -49,5 +49,5 @@ int Population::selectRandomIndivid(const int &tournamentSize)
     int index = uniformRand(rng) * populationSize;
     if (this->population[index].routeLength < this->population[bestIndex].routeLength) bestIndex = index;
   }
-  return bestIndex;
+  return this->population[bestIndex];
 }

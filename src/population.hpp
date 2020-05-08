@@ -46,9 +46,9 @@ class Population
    * the fittest out of tournamentSize random individuals
    *
    * @param tournamentSize  [in] Number of individuals to participate in the tournament
-   * @return int The index of the parent in population[]
+   * @return Individ The randomly selected Individ object
    */
-  int selectRandomIndivid(const int &tournamentSize);
+  Individ selectRandomIndivid(const int &tournamentSize);
 
       private:
 };
