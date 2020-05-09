@@ -16,12 +16,12 @@
 
 /**
  * Data structure for storing all properties of a single city (gene)
- * These are: (string) City.name, (float) City.xpos and (float) City.ypos
+ * These are: (int) City.id, (float) City.xpos and (float) City.ypos
  *
  */
 struct City
 {
-  std::string name;
+  int id;
   float xpos;
   float ypos;
 };

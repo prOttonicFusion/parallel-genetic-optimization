@@ -28,7 +28,7 @@ std::string getRouteAsString(const std::vector<int> &route, const std::vector<Ci
   for (int i = 0; i < Ncities; i++)
   {
     int index = route[i];
-    routeStr += cities[index].name;
+    routeStr += std::to_string(cities[index].id);
     if (i < Ncities - 1) routeStr += "-";
   }
   return routeStr;
