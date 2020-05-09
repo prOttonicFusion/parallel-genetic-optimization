@@ -111,7 +111,7 @@ bool parseXYZFile(std::string &coordFile, int &Ncities, std::vector<City> &citie
       break;
     }
 
-    cities[i].name = name;
+    cities[i].id = i;
     cities[i].xpos = x;
     cities[i].ypos = y;
 
