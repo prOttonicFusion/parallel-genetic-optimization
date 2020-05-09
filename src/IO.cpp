@@ -142,12 +142,12 @@ bool writeToOutputFile(int generation, const Individ &fittest, const std::vector
                        bool overWrite)
 {
   std::ostringstream stringStream;
-  std::string bestRouteStr = getRouteAsString(fittest.route, cities);
+  std::string bestRouteStr = getRouteAsString(fittest.route);
   stringStream << "Generation " << generation << ":" << std::endl;
   stringStream << "Length: " << fittest.routeLength << std::endl;
   stringStream << "Route_indices: ";
   for (int i = 0; i < fittest.route.size(); i++)
-    stringStream << fittest.route[i] << " ";
+    stringStream << fittest.route[i].id << " ";
   stringStream << std::endl;
   stringStream << "Route_string: " << bestRouteStr << std::endl;
   return writeToOutputFile(stringStream.str(), overWrite);

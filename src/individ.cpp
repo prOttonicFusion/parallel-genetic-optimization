@@ -19,20 +19,20 @@
 Individ::Individ() {}
 
 // Construct a new Individ object from the provided route
-Individ::Individ(const std::vector<int> &newRoute, const std::vector<City> &cities)
+Individ::Individ(const std::vector<City> &newRoute)
 {
-  this->init(newRoute, cities);
+  this->init(newRoute);
 }
 
 // Initialize Individ with route. Same as setRoute, but also resize the route vector
-void Individ::init(const std::vector<int> &newRoute, const std::vector<City> &cities)
+void Individ::init(const std::vector<City> &newRoute)
 {
-  this->Ncities = cities.size();
-  this->setRoute(newRoute, cities);
+  this->Ncities = newRoute.size();
+  this->setRoute(newRoute);
 }
 
 // Set the route of the Individ object & re-calculate the route length
-void Individ::setRoute(const std::vector<int> &newRoute, const std::vector<City> &cities)
+void Individ::setRoute(const std::vector<City> &newRoute)
 {
   // Copy route to Individ's internal route
   this->route = newRoute;
@@ -41,10 +41,10 @@ void Individ::setRoute(const std::vector<int> &newRoute, const std::vector<City>
   float l = 0.0;
   for (int i = 1; i < this->Ncities; i++)
   {
-    l += distanceBetweenCities(cities[route[i]], cities[route[i - 1]]);
+    l += distanceBetweenCities(route[i], route[i - 1]);
   }
 
-  l += distanceBetweenCities(cities[route[this->Ncities - 1]], cities[route[0]]);
+  l += distanceBetweenCities(route[this->Ncities - 1], route[0]);
   this->routeLength = l;
 }
 
@@ -61,7 +61,7 @@ bool operator<(const Individ &i1, const Individ &i2) { return i1.routeLength < i
 // ==
 bool operator==(const Individ &i1, const Individ &i2)
 {
-  return (i1.routeLength == i2.routeLength && i1.route == i2.route);
+  return (i1.routeLength == i2.routeLength && i1.route.size() == i2.route.size());
 }
 
 // !=
