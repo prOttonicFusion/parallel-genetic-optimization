@@ -35,21 +35,21 @@ class Individ
   /**
    * Construct a new Individ object from the provided route
    *
-   * @param route [in] Int vector of city indices
+   * @param route [in] Vector of City structs
    */
   Individ(const std::vector<City> &route);
 
   /**
    * Initialize Individ with route. Same as setRoute, but also resize the route vector
    *
-   * @param route [in] Int vector of city indices
+   * @param route [in] Vector of City structs
    */
   void init(const std::vector<City> &route);
 
   /**
    * Set the route of the Individ object & re-calculate the route length
    *
-   * @param route [in] Int vector of city indices
+   * @param route [in] Vector of City structs
    */
   void setRoute(const std::vector<City> &route);
 

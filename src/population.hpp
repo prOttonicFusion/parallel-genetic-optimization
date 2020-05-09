@@ -30,8 +30,8 @@ class Population
   /**
    * Initialize Population with random individuals
    *
-   * @param cities  [in] A vector of city objects
-   * @param Ncities  [in] Number of cities that shoud be along one route
+   * @param cities  [in] A vector of City objects
+   * @param Ncities  [in] Number of cities that should be along one route
    */
   void init(std::vector<City> cities, const int &Ncities);
 
