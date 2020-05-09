@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (generation % writeToFilePeriod == 0)
       {
-        getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
+        getGlobalFittestRoute(globalFittest, population.individuals[0], Ncities, rank, Ntasks, tag,
                               GRID_COMM, status);
         if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
       }
@@ -165,11 +165,11 @@ int main(int argc, char *argv[])
       Individ parent1 = population.selectRandomIndivid(tournamentSize);
       Individ parent2 = population.selectRandomIndivid(tournamentSize);
       Individ child = population.individuals[i]; // Re-use individ object
-      breedIndivids(child, parent1, parent2, cities);
+      breedIndivids(child, parent1, parent2);
       nextGeneration[i] = child;
 
       // Mutate
-      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i], cities);
+      if (uniformRand(rng) < mutationProbability) mutateIndivid(nextGeneration[i]);
     }
 
     // Replace population with the new generation, leaving elite in place
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     // Send random individual(s) to closest CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
-      performMigration(migrationSize, tournamentSize, population, cities, Ncities, rank, Ntasks,
+      performMigration(migrationSize, tournamentSize, population, Ncities, rank, Ntasks,
                        tag, GRID_COMM, status);
       population.sort();
     }
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
   }
 
   ////////////////// Gather & output final results //////////////////
-  getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
+  getGlobalFittestRoute(globalFittest, population.individuals[0], Ncities, rank, Ntasks, tag,
                         GRID_COMM, status);
   if (rank == 0)
   {

@@ -26,15 +26,12 @@ Population::Population(const int &popSize)
 // Initialize new population with random individuals
 void Population::init(std::vector<City> cities, const int &Ncities)
 {
-  std::vector<int> route; // Array containing city indices in a specific order
-  route.resize(Ncities);
-  for (int i = 0; i < Ncities; i++)
-    route[i] = i;
+  std::vector<City> route = cities;
 
   for (int i = 0; i < this->populationSize; i++)
   {
     std::shuffle(route.begin(), route.end(), rng); // New random route by shuffling cities
-    this->individuals[i].init(route, cities);
+    this->individuals[i].init(route);
   }
 }
 

@@ -21,14 +21,13 @@ float distanceBetweenCities(const City &city1, const City &city2)
 }
 
 // Convert a route in array-of-indices form to a string of city names
-std::string getRouteAsString(const std::vector<int> &route, const std::vector<City> &cities)
+std::string getRouteAsString(const std::vector<City> &route)
 {
-  int Ncities = cities.size();
+  int Ncities = route.size();
   std::string routeStr;
   for (int i = 0; i < Ncities; i++)
   {
-    int index = route[i];
-    routeStr += std::to_string(cities[index].id);
+    routeStr += std::to_string(route[i].id);
     if (i < Ncities - 1) routeStr += "-";
   }
   return routeStr;

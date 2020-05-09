@@ -22,16 +22,15 @@
  *
  * @param globalFittest  [in/out] The fittest individual globally
  * @param localFittest  [in] The fittest individual locally
- * @param cities  [in] An vector of city objects
+ * @param Ncities  [in] The size of cities
  * @param rank  [in] The id of the current CPU
  * @param Ntasks [in] The total number of CPUs
  * @param tag  [in] MPI messaging tag
  * @param comm  [in] MPI Communicator object
  * @param status [in] MPI_Status
  */
-void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest,
-                           const std::vector<City> &cities, const int &rank, const int &Ntasks,
-                           const int &tag, MPI_Comm &comm, MPI_Status &status);
+void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest, const int &Ncities, const int &rank,
+                           const int &Ntasks, const int &tag, MPI_Comm &comm, MPI_Status &status);
 
 /**
  * Compares the shortest routes on each CPU and determine the globally shortest one
@@ -54,7 +53,6 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
  * @param tournamentSize  [in] Argument for selectRandomIndivid()
  * @param population  [in/out] The population, i.e. an array of Individ objects
  * @param populationSize  [in] Size of population
- * @param cities  [in] The cities as City struct array
  * @param Ncities  [in] The size of cities
  * @param rank  [in] The id of the current CPU
  * @param Ntasks  [in] The total number of CPUs
@@ -63,7 +61,7 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
  * @param status  [in] MPI_Status
  */
 void performMigration(const int &migrationSize, const int &tournamentSize, Population population,
-                      const std::vector<City> &cities, const int &Ncities, const int &rank,
-                      const int &Ntasks, const int &tag, MPI_Comm &GRID_COMM, MPI_Status &status);
+                      const int &Ncities, const int &rank, const int &Ntasks, const int &tag,
+                      MPI_Comm &GRID_COMM, MPI_Status &status);
 
 #endif

@@ -30,17 +30,14 @@
  * @param child [in/out] Child individual (should be initialized prior to breeding)
  * @param parent1 [in] Mother individual
  * @param parent2 [in] Father individual
- * @param cities [in] Array of City structs
  */
-void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2,
-                   const std::vector<City> &cities);
+void breedIndivids(Individ &child, const Individ &parent1, const Individ &parent2);
 
 /**
  * Switch places of two random cities (genes) on an individual's route (genome)
  *
  * @param individ [in/out] The individual to mutate
- * @param cities [in] Array of City structs
  */
-void mutateIndivid(Individ &individ, const std::vector<City> &cities);
+void mutateIndivid(Individ &individ);
 
 #endif

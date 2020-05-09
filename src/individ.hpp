@@ -25,7 +25,7 @@ class Individ
   public:
   int Ncities;            ///< Number of cities along a route
   float routeLength;      ///< The squared total length of route travelled
-  std::vector<int> route; ///< An array containin the visited cities' indices in visiting order
+  std::vector<City> route; ///< An array containin the visited cities' indices in visiting order
 
   /**
    * Construct a new blank Individ object
@@ -36,26 +36,22 @@ class Individ
    * Construct a new Individ object from the provided route
    *
    * @param route [in] Int vector of city indices
-   * @param cities [in] The actual cities as City struct vector
    */
-  Individ(const std::vector<int> &route, const std::vector<City> &cities);
+  Individ(const std::vector<City> &route);
 
   /**
    * Initialize Individ with route. Same as setRoute, but also resize the route vector
    *
    * @param route [in] Int vector of city indices
-   * @param cities [in] The actual cities as City struct vector
    */
-  void init(const std::vector<int> &route, const std::vector<City> &cities);
+  void init(const std::vector<City> &route);
 
   /**
    * Set the route of the Individ object & re-calculate the route length
    *
    * @param route [in] Int vector of city indices
-   * @param cities [in] The actual cities as City struct vector
-   * @param Ncities [in] Number of cities in route
    */
-  void setRoute(const std::vector<int> &route, const std::vector<City> &cities);
+  void setRoute(const std::vector<City> &route);
 
   /**
    * Operator overloadings
