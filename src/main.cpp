@@ -23,7 +23,6 @@
 
 int main(int argc, char *argv[])
 {
-
   std::string coordFile;     // The path of the coordinate file
   int maxGenCount;           // Max. number of generation
   int writeToScreenPeriod;   // Print to screen every this many generations
@@ -91,13 +90,33 @@ int main(int argc, char *argv[])
   writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
   writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
 
+  // Create a MPI serializer for the City struct
+  const int nitems = 3;
+  int blocklengths[nitems] = {1, 1, 1};
+  MPI_Datatype types[nitems] = {MPI_INT, MPI_FLOAT, MPI_FLOAT};
+  MPI_Datatype mpiCityType;
+  MPI_Aint offsets[nitems];
+
+  offsets[0] = offsetof(City, id);
+  offsets[1] = offsetof(City, xpos);
+  offsets[2] = offsetof(City, ypos);
+
+  MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpiCityType);
+  MPI_Type_commit(&mpiCityType);
+
   // Read city coordinates from input file
-  if (!parseXYZFile(coordFile, Ncities, cities))
-  {
-    std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
-    MPI_Finalize();
-    return -1;
-  }
+  if (rank == 0)
+    if (!parseXYZFile(coordFile, Ncities, cities))
+    {
+      std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
+      MPI_Finalize();
+      return -1;
+    }
+
+  MPI_Bcast(&Ncities, 1, MPI_INT, 0, GRID_COMM);
+  cities.resize(Ncities);
+  MPI_Bcast(cities.data(), Ncities, mpiCityType, 0, GRID_COMM);
+  std::cout << rank << " " << cities[0].xpos << " " << cities[0].ypos << " " << cities[Ncities-1].xpos << " " << cities[Ncities-1].ypos << std::endl;
 
   // -------------------- Initialize output file --------------------
   if (rank == 0)
