@@ -14,6 +14,7 @@
 #include "genetics.hpp"
 #include "individ.hpp"
 #include "parallel.hpp"
+#include "population.hpp"
 #include "random.hpp"
 #include <algorithm>
 #include <iostream>
@@ -34,7 +35,6 @@ int main(int argc, char *argv[])
   float mutationProbability; // Probability of offspring mutation
   int tournamentSize;        // The number of individuals to choose new parents from
   int Ncities;               // Number of cities to use in calculations
-  std::vector<int> route;    // Array containing city indices in a specific order
   std::vector<City> cities;  // Array containing all citites
   Individ globalFittest;     // The most fit individual of the combined populations
 
@@ -109,21 +109,10 @@ int main(int argc, char *argv[])
     }
 
   // ----------------- Generate initial population ------------------
-  Individ population[populationSize];
   int eliteSize = (int)(eliteFraction * populationSize); // Number of individuals allowed to breed
-
-  // Initialize route array
-  route.resize(Ncities);
-  for (int i = 0; i < Ncities; i++)
-    route[i] = i;
-
-  for (int i = 0; i < populationSize; i++)
-  {
-    std::shuffle(route.begin(), route.end(), rng); // New random route by shuffling cities
-    population[i].init(route, cities);
-  }
-
-  std::sort(population, population + populationSize); // Ascending order based on route lenght
+  Population population(populationSize);
+  population.init(cities, Ncities);
+  population.sort(); // Sort in ascending order based on route lenght
 
   ////////////////////// Main calculation loop //////////////////////
   int generation = 0;
@@ -134,8 +123,8 @@ int main(int argc, char *argv[])
     if (writeToFilePeriod != 0)
       if (generation % writeToFilePeriod == 0)
       {
-        getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM,
-                              status);
+        getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
+                              GRID_COMM, status);
         if (rank == 0) writeToOutputFile(generation, globalFittest, cities);
       }
 
@@ -145,7 +134,8 @@ int main(int argc, char *argv[])
         float globalFittestLength = globalFittest.routeLength;
         // If we have written to file this gen., there is no need to recalculate globalFittest
         if (generation % writeToFilePeriod != 0)
-          getGlobalFittestRouteLenght(globalFittestLength, population[0], rank, Ntasks, GRID_COMM);
+          getGlobalFittestRouteLenght(globalFittestLength, population.individuals[0], rank, Ntasks,
+                                      GRID_COMM);
 
         if (rank == 0) writeToScreen(generation, globalFittestLength);
       }
@@ -156,10 +146,10 @@ int main(int argc, char *argv[])
 
     for (int i = eliteSize; i < populationSize; i++)
     {
-      Individ child = population[i]; // Re-use individ object
-      int parent1 = selectRandomIndivid(population, populationSize, tournamentSize);
-      int parent2 = selectRandomIndivid(population, populationSize, tournamentSize);
-      breedIndivids(child, population[parent1], population[parent2], cities);
+      Individ parent1 = population.selectRandomIndivid(tournamentSize);
+      Individ parent2 = population.selectRandomIndivid(tournamentSize);
+      Individ child = population.individuals[i]; // Re-use individ object
+      breedIndivids(child, parent1, parent2, cities);
       nextGeneration[i] = child;
 
       // Mutate
@@ -168,19 +158,19 @@ int main(int argc, char *argv[])
 
     // Replace population with the new generation, leaving elite in place
     for (int i = eliteSize; i < populationSize; i++)
-      population[i] = nextGeneration[i];
+      population.individuals[i] = nextGeneration[i];
 
     // --------------------- Sort population ------------------------
     // Sort population in ascending order based on (squared) route length
-    std::sort(population, population + populationSize);
+    population.sort();
 
     // ---------------- Share data with neighbor CPU ----------------
     // Send random individual(s) to closest CPU on the right
     if (generation % migrationPeriod == 0 && generation > 0)
     {
-      performMigration(migrationSize, tournamentSize, population, populationSize, cities, Ncities,
-                       rank, Ntasks, tag, GRID_COMM, status);
-      std::sort(population, population + populationSize);
+      performMigration(migrationSize, tournamentSize, population, cities, Ncities, rank, Ntasks,
+                       tag, GRID_COMM, status);
+      population.sort();
     }
 
     // Increment generation counter
@@ -188,19 +178,17 @@ int main(int argc, char *argv[])
   }
 
   ////////////////// Gather & output final results //////////////////
-  getGlobalFittestRoute(globalFittest, population[0], cities, rank, Ntasks, tag, GRID_COMM, status);
-
+  getGlobalFittestRoute(globalFittest, population.individuals[0], cities, rank, Ntasks, tag,
+                        GRID_COMM, status);
   if (rank == 0)
   {
-    std::string bestRouteStr = getRouteAsString(globalFittest.route, cities);
-    std::cout << "\nFINAL OUTCOME:\n--------------------------------" << std::endl;
-    std::cout << "Total number of generations: " << generation << std::endl;
-    std::cout << "Length of shortest route:    " << globalFittest.routeLength << std::endl;
-    std::cout << std::endl;
-    std::cout << "Generated a total of "
+    std::cout << "\nFINAL OUTCOME:\n--------------------------------"
+              << "\nTotal number of generations: " << generation
+              << "\nLength of shortest route:    " << globalFittest.routeLength
+              << "\n\nGenerated a total of "
               << (generation * (populationSize - eliteSize) + eliteSize) * Ntasks
-              << " individual routes" << std::endl;
-    std::cout << std::endl;
+              << " individual routes\n"
+              << std::endl;
     writeToOutputFile(generation, globalFittest, cities);
   }
 

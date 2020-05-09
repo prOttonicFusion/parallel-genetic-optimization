@@ -18,17 +18,6 @@
 #include <vector>
 
 /**
- * Select randomly an individual from the population using Tournament Selection; i.e. by selecting
- * the fittest out of tournamentSize random individuals
- *
- * @param population  [in] The population, i.e. an array of Individ objects
- * @param populationSize  [in] Size of population
- * @param tournamentSize  [in] Number of individuals to participate in the tournament
- * @return int The index of the parent in population[]
- */
-int selectRandomIndivid(Individ population[], const int &populationSize, const int &tournamentSize);
-
-/**
  * Merge the genome of two individs to produce offspring
  *
  * The genome crossover occurs heurustically:
