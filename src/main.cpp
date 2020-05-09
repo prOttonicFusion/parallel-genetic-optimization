@@ -60,23 +60,20 @@ int main(int argc, char *argv[])
   MPI_Comm GRID_COMM;         // New communicator
   MPI_Cart_create(MPI_COMM_WORLD, ndims, dims, periodic, reorder, &GRID_COMM);
 
+  // Create a MPI serializer for the City struct
+  int blocklengths[3] = {1, 1, 1};
+  MPI_Datatype types[3] = {MPI_INT, MPI_FLOAT, MPI_FLOAT};
+  MPI_Datatype mpi_City;
+  MPI_Aint offsets[3];
+
+  offsets[0] = offsetof(City, id);
+  offsets[1] = offsetof(City, xpos);
+  offsets[2] = offsetof(City, ypos);
+
+  MPI_Type_create_struct(3, blocklengths, offsets, types, &mpi_City);
+  MPI_Type_commit(&mpi_City);
+
   // ------------ Parse input on root CPU & broadcast it ------------
-  if (rank == 0)
-    if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
-                        mutationProbability, tournamentSize))
-    {
-      std::cerr << "Error: Unable to read input file" << std::endl;
-      MPI_Finalize();
-      return -1;
-    }
-
-  MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
-  MPI_Bcast(&migrationSize, 1, MPI_INT, 0, GRID_COMM);
-  MPI_Bcast(&migrationPeriod, 1, MPI_INT, 0, GRID_COMM);
-  MPI_Bcast(&eliteFraction, 1, MPI_FLOAT, 0, GRID_COMM);
-  MPI_Bcast(&tournamentSize, 1, MPI_INT, 0, GRID_COMM);
-  MPI_Bcast(&mutationProbability, 1, MPI_FLOAT, 0, GRID_COMM);
-
   // Parse command line arguments
   if (argc < 3 && rank == 0)
   {
@@ -90,33 +87,33 @@ int main(int argc, char *argv[])
   writeToScreenPeriod = (argc > 3) ? atoi(argv[3]) : 1;
   writeToFilePeriod = (argc > 4) ? atoi(argv[4]) : 1;
 
-  // Create a MPI serializer for the City struct
-  const int nitems = 3;
-  int blocklengths[nitems] = {1, 1, 1};
-  MPI_Datatype types[nitems] = {MPI_INT, MPI_FLOAT, MPI_FLOAT};
-  MPI_Datatype mpiCityType;
-  MPI_Aint offsets[nitems];
-
-  offsets[0] = offsetof(City, id);
-  offsets[1] = offsetof(City, xpos);
-  offsets[2] = offsetof(City, ypos);
-
-  MPI_Type_create_struct(nitems, blocklengths, offsets, types, &mpiCityType);
-  MPI_Type_commit(&mpiCityType);
-
-  // Read city coordinates from input file
   if (rank == 0)
+  {
+    if (!parseInputFile(populationSize, eliteFraction, migrationSize, migrationPeriod,
+                        mutationProbability, tournamentSize))
+    {
+      std::cerr << "Error: Unable to read input file" << std::endl;
+      MPI_Finalize();
+      return -1;
+    }
+
     if (!parseXYZFile(coordFile, Ncities, cities))
     {
       std::cerr << "Error: Unable to read coordinate file '" << coordFile << "'" << std::endl;
       MPI_Finalize();
       return -1;
     }
+  }
 
+  MPI_Bcast(&populationSize, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&migrationSize, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&migrationPeriod, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&eliteFraction, 1, MPI_FLOAT, 0, GRID_COMM);
+  MPI_Bcast(&tournamentSize, 1, MPI_INT, 0, GRID_COMM);
+  MPI_Bcast(&mutationProbability, 1, MPI_FLOAT, 0, GRID_COMM);
   MPI_Bcast(&Ncities, 1, MPI_INT, 0, GRID_COMM);
   cities.resize(Ncities);
-  MPI_Bcast(cities.data(), Ncities, mpiCityType, 0, GRID_COMM);
-  std::cout << rank << " " << cities[0].xpos << " " << cities[0].ypos << " " << cities[Ncities-1].xpos << " " << cities[Ncities-1].ypos << std::endl;
+  MPI_Bcast(cities.data(), Ncities, mpi_City, 0, GRID_COMM);
 
   // -------------------- Initialize output file --------------------
   if (rank == 0)
