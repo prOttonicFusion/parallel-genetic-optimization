@@ -2,14 +2,13 @@
 
 A multiple-deme/stepping-stone parallel solver for the classical Traveling Salesman Problem (TSP).  Written in C++ using the [Open MPI](https://www.open-mpi.org/) Message Passing Interface implementation.
 
-<figure>
-  <img src="{{site.url}}/images/initial_route.png" alt="my alt text"/>
-  <figcaption>Initial route</figcaption>
-</figure>
-<figure>
-  <img src="{{site.url}}/images/final_route.png" alt="my alt text"/>
-  <figcaption>Final route (population of 100, 50 generations)</figcaption>
-</figure>
+| ![space-1.jpg](/images/initial_route.png) | 
+|:--:| 
+| *Initial route* |
+
+| ![space-1.jpg](/images/final_route.png) | 
+|:--:| 
+| *Final route (population of 100, 50 generations)* |
 
 ## Compilation
 
@@ -36,8 +35,3 @@ The results can be visualized using the attached Python script, executed as
 ```
 python3 plotRoute.py <coordinate-file> <output-file>
 ```
-
-## TODO
-
-- Change population from array to STL vector?
-- Move random route generation to within Individ.init()?
