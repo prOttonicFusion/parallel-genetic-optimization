@@ -2,13 +2,9 @@
 
 A multiple-deme/stepping-stone parallel solver for the classical Traveling Salesman Problem (TSP).  Written in C++ using the [Open MPI](https://www.open-mpi.org/) Message Passing Interface implementation.
 
-| ![space-1.jpg](/images/initial_route.png) | 
-|:--:| 
-| *Initial route* |
-
-| ![space-1.jpg](/images/final_route.png) | 
-|:--:| 
-| *Final route (population of 100, 50 generations)* |
+| ![Initial route image](/images/initial_route.png) | ![Final route image](/images/final_route.png) |
+|:--:|:--:| 
+| *Initial route* | *Final route (population of 100, 50 generations)* |
 
 ## Compilation
 
