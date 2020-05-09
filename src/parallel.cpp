@@ -18,16 +18,16 @@
 #include <vector>
 
 // Compares the shortest routes on each CPU and determine the globally shortest one
-void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest, const int &rank,
-                           const int &Ncities, const int &Ntasks, const int &tag, MPI_Comm &comm,
-                           MPI_Status &status)
+void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest, const int &Ncities,
+                           MPI_Datatype mpi_City, const int &rank, const int &Ntasks,
+                           const int &tag, MPI_Comm &comm, MPI_Status &status)
 {
   std::vector<City> recvdRoute(Ncities);
   std::vector<City> localBestRoute = localFittest.route; // Locally best route
   std::vector<Individ> globalFittestCandidates(Ntasks);
 
-      // Send the CPU's local best route to root
-      if (rank != 0) MPI_Send(localBestRoute.data(), Ncities, MPI_FLOAT, 0, tag, comm);
+  // Send the CPU's local best route to root
+  if (rank != 0) MPI_Send(localBestRoute.data(), Ncities, mpi_City, 0, tag, comm);
 
   // Receive each sent route on root, calculate length of the route & compare it to previously
   // received routes
@@ -35,7 +35,7 @@ void getGlobalFittestRoute(Individ &globalFittest, const Individ &localFittest, 
   {
     for (int i = 1; i < Ntasks; i++)
     {
-      MPI_Recv(recvdRoute.data(), Ncities, MPI_FLOAT, i, tag, comm, &status);
+      MPI_Recv(recvdRoute.data(), Ncities, mpi_City, i, tag, comm, &status);
       globalFittestCandidates[i].init(recvdRoute);
     }
     globalFittestCandidates[0].init(localBestRoute);
@@ -64,8 +64,8 @@ void getGlobalFittestRouteLenght(float &globalShortestRouteLength, const Individ
 
 // Copy over migrationSize random individuals from each CPU to its right-side neighbor in a circular
 void performMigration(const int &migrationSize, const int &tournamentSize, Population population,
-                      const int &Ncities, const int &rank, const int &Ntasks, const int &tag,
-                      MPI_Comm &GRID_COMM, MPI_Status &status)
+                      const int &Ncities, MPI_Datatype mpi_City, const int &rank, const int &Ntasks,
+                      const int &tag, MPI_Comm &GRID_COMM, MPI_Status &status)
 {
   std::vector<City> recvdRoute(Ncities);
   float recvdRouteLength;
@@ -80,8 +80,8 @@ void performMigration(const int &migrationSize, const int &tournamentSize, Popul
     Individ randomIndivid = population.selectRandomIndivid(tournamentSize);
 
     // Send & receive individuals
-    MPI_Sendrecv(randomIndivid.route.data(), Ncities, MPI_INT, destRank, tag, recvdRoute.data(),
-                 Ncities, MPI_INT, sourceRank, tag, GRID_COMM, &status);
+    MPI_Sendrecv(randomIndivid.route.data(), Ncities, mpi_City, destRank, tag, recvdRoute.data(),
+                 Ncities, mpi_City, sourceRank, tag, GRID_COMM, &status);
     MPI_Sendrecv(&randomIndivid.routeLength, 1, MPI_FLOAT, destRank, tag, &recvdRouteLength, 1,
                  MPI_FLOAT, sourceRank, tag, GRID_COMM, &status);
     // Add route received from neighbor to own population by replacing own least fit indviduals
