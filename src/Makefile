@@ -15,32 +15,35 @@ CC=mpic++   # Open MPI + GCC
 # Optimization level
 OPT=-O2 
 
+# Compiler flags
+CCOPT= ${OPT} -std=c++11
+
 # Executable name
 EXE=tsp_ga
 
 ${EXE}: individ.o genetics.o IO.o city.o parallel.o population.o main.o
-	${CC} main.o parallel.o population.o IO.o city.o individ.o genetics.o ${OPT} -o ${EXE}
+	${CC} main.o parallel.o population.o IO.o city.o individ.o genetics.o ${CCOPT} -o ${EXE}
 
 city.o:
-	${CC} -c city.cpp ${OPT}
+	${CC} -c city.cpp ${CCOPT}
 
 IO.o:
-	${CC} -c IO.cpp ${OPT}
+	${CC} -c IO.cpp ${CCOPT}
 
 individ.o:
-	${CC} -c individ.cpp ${OPT}
+	${CC} -c individ.cpp ${CCOPT}
 
 genetics.o:
-	${CC} -c genetics.cpp ${OPT}
+	${CC} -c genetics.cpp ${CCOPT}
 
 parallel.o:
-	${CC} -c parallel.cpp ${OPT}
+	${CC} -c parallel.cpp ${CCOPT}
 
 population.o:
-	${CC} -c population.cpp ${OPT}
+	${CC} -c population.cpp ${CCOPT}
 
 main.o:
-	${CC} -c main.cpp ${OPT}
+	${CC} -c main.cpp ${CCOPT}
 
 clean:
 	rm -f *.o
