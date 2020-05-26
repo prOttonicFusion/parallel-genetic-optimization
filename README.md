@@ -4,7 +4,7 @@ A multiple-deme/stepping-stone parallel genetic solver for the classical Traveli
 
 | ![Initial route image](/images/initial_route.png) | ![Final route image](/images/final_route.png) |
 |:--:|:--:| 
-| *Initial route* | *Final route (population of 100, 50 generations)* |
+| *Initial route* | *Final route (population of 100, after 50 generations)* |
 
 ## Compilation
 
