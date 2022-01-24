@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      parallel.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Functions related to parallel communication
  *

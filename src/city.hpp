@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      city.hpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * The City struct and related functions
  *

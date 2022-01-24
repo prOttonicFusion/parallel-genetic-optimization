@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      genetics.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Functions related to genetic operations
  *

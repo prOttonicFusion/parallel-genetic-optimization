@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      IO.hpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Functions for handling input & output
  *

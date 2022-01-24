@@ -3,7 +3,7 @@
 
 #####################################################################
 # @file      performanceTest.py
-# @author    O. Lindblom
+# @author    O. Lindblom (prOttonicFusion)
 #
 # Test the performance of the C++ code using varying numbers of CPUs
 #

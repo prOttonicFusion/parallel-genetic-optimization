@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      random.hpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Random number engine & generators
  *

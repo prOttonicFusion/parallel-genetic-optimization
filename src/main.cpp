@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      main.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * The main file of the Parallel Genetic Algorithm TSP solver
  *

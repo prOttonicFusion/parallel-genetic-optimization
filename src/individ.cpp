@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      individ.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * The Individ class
  *

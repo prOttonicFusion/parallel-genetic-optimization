@@ -3,7 +3,7 @@
 
 #####################################################################
 # @file      generateCities.py
-# @author    O. Lindblom
+# @author    O. Lindblom (prOttonicFusion)
 # 
 # A script for generating random city coordinates
 # 

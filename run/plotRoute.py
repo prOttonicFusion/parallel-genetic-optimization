@@ -3,7 +3,7 @@
 
 #####################################################################
 # @file      plotRoute.py
-# @author    O. Lindblom
+# @author    O. Lindblom (prOttonicFusion)
 #
 # A script for visualizing the results of a TSP simulation
 #

@@ -1,6 +1,6 @@
 /********************************************************************
  * @file      population.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Functions related to the Population class
  *
