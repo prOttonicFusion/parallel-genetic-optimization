@@ -7,8 +7,6 @@
 #
 # Test the performance of the C++ code using varying numbers of CPUs
 #
-# @date      2020-04-13
-# @copyright Copyright (c) 2020
 #####################################################################
 
 import timeit

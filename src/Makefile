@@ -4,8 +4,6 @@
 # 
 # Makefile for the Parallel Genetic Algortihm TSP code
 # 
-# @date      2020-04-13
-# @copyright Copyright (c) 2020
 #####################################################################
 
 # Compiler

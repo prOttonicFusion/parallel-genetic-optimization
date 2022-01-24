@@ -2,10 +2,7 @@
  * @file      individ.cpp
  * @author    O. Lindblom
  *
- * Functions for the Individ class defined in individ.hpp
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * The Individ class
  *
  *******************************************************************/
 

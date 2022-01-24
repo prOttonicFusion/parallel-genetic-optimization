@@ -2,10 +2,7 @@
  * @file      population.hpp
  * @author    O. Lindblom
  *
- * Header file for population.cpp. Contains the Population class
- *
- * @date      2020-05-8
- * @copyright Copyright (c) 2020
+ * Functions related to the Population class
  *
  *******************************************************************/
 

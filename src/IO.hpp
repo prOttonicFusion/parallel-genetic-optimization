@@ -2,10 +2,7 @@
  * @file      IO.hpp
  * @author    O. Lindblom
  *
- * Header file for IO.cpp
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * Functions for handling input & output
  *
  *******************************************************************/
 

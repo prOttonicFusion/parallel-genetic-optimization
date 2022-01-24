@@ -4,9 +4,6 @@
  *
  * The main file of the Parallel Genetic Algorithm TSP solver
  *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
- *
  *******************************************************************/
 
 #include "IO.hpp"

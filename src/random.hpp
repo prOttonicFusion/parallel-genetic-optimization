@@ -2,10 +2,7 @@
  * @file      random.hpp
  * @author    O. Lindblom
  *
- * Header file containing random number engine & generators
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * Random number engine & generators
  *
  *******************************************************************/
 

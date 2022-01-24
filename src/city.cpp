@@ -2,10 +2,7 @@
  * @file      city.cpp
  * @author    O. Lindblom
  *
- * File containing functions related to the City struct
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * Functions related to the City struct
  *
  *******************************************************************/
 

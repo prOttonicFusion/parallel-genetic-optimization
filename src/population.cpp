@@ -4,9 +4,6 @@
  *
  * Functions related to the Population class
  *
- * @date      2020-05-8
- * @copyright Copyright (c) 2020
- *
  *******************************************************************/
 
 #include "population.hpp"

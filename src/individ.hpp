@@ -2,10 +2,7 @@
  * @file      individ.hpp
  * @author    O. Lindblom
  *
- * Header file for individ.cpp. Contains the Individ-class
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * The Individ class
  *
  *******************************************************************/
 
