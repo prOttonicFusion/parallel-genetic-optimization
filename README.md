@@ -6,9 +6,17 @@ A multiple-deme/stepping-stone parallel genetic solver for the classical Traveli
 |:--:|:--:| 
 | *Initial route* | *Final route (population of 100, after 50 generations)* |
 
+## Prerequisites
+- [OpenMPI](https://www.open-mpi.org/)
+- [GCC](https://gcc.gnu.org/)
+- [Make](https://www.gnu.org/software/make/)
+
+For visualization:
+- Python 3
+
 ## Compilation
 
-The program can be compiled using the `Makefile` by simply running
+The program can be compiled using the `Makefile` by running
 
 ```
 make
