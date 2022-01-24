@@ -1,11 +1,8 @@
 /********************************************************************
  * @file      genetics.hpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
- * Header file for genetics.cpp
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * Functions related to genetic operations
  *
  *******************************************************************/
 

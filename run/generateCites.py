@@ -3,12 +3,10 @@
 
 #####################################################################
 # @file      generateCities.py
-# @author    O. Lindblom
+# @author    O. Lindblom (prOttonicFusion)
 # 
 # A script for generating random city coordinates
 # 
-# @date      2020-04-13
-# @copyright Copyright (c) 2020
 #####################################################################
 
 import sys

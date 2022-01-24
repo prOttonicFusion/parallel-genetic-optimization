@@ -1,11 +1,8 @@
 /********************************************************************
  * @file      IO.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Functions for handling input & output
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
  *
  *******************************************************************/
 

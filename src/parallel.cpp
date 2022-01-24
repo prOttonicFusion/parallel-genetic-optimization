@@ -1,11 +1,8 @@
 /********************************************************************
  * @file      parallel.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
- * File containing functions related to parallel communication
- *
- * @date      2020-04-20
- * @copyright Copyright (c) 2020
+ * Functions related to parallel communication
  *
  *******************************************************************/
 

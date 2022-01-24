@@ -1,11 +1,8 @@
 /********************************************************************
  * @file      parallel.hpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
- * Header file containing functions related to parallel communication
- *
- * @date      2020-04-20
- * @copyright Copyright (c) 2020
+ * Functions related to parallel communication
  *
  *******************************************************************/
 #ifndef PARALLEL_H
@@ -18,7 +15,7 @@
 #include <vector>
 
 /**
- * Compares the shortest routes on each CPU and determine the globally shortest one
+ * Compare the shortest routes on each CPU and determine the globally shortest one
  * On the CPU with rank 0, globalFittest will contain the resulting route
  *
  * @param globalFittest  [in/out] The fittest individual globally

@@ -1,11 +1,8 @@
 /********************************************************************
  * @file      city.hpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
- * Header file for declaration of City struct
- *
- * @date      2020-04-13
- * @copyright Copyright (c) 2020
+ * The City struct and related functions
  *
  *******************************************************************/
 

@@ -1,11 +1,8 @@
 /********************************************************************
  * @file      population.cpp
- * @author    O. Lindblom
+ * @author    O. Lindblom (prOttonicFusion)
  *
  * Functions related to the Population class
- *
- * @date      2020-05-8
- * @copyright Copyright (c) 2020
  *
  *******************************************************************/
 
