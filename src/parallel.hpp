@@ -15,7 +15,7 @@
 #include <vector>
 
 /**
- * Compares the shortest routes on each CPU and determine the globally shortest one
+ * Compare the shortest routes on each CPU and determine the globally shortest one
  * On the CPU with rank 0, globalFittest will contain the resulting route
  *
  * @param globalFittest  [in/out] The fittest individual globally
