@@ -12,7 +12,7 @@
 import sys
 import numpy as np
 
-if len(sys.argv) == 4:
+if len(sys.argv) != 3:
     print(
         "Usage: {} <output-file-name> <number-of-cities>".format(sys.argv[0]))
     exit()
