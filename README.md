@@ -13,8 +13,11 @@ The program can be compiled using the `Makefile` by simply running
 ```
 make
 ```
-
 from within the `src/` directory.
+
+The program has been tested with the following OpenMPI/compiler configurations:
+- OpenMPI/2.1.2-GCC-6.4.0-2.28
+- OpenMPI/3.1.3-GCC-8.2.0-2.31.1
 
 ## Running
 
